@@ -1,4 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-  
+
+<form class="text-center" method="post"> 
+    {% csrf_token %}
+
+    <h1> Upload Syllabus: </h1>  
+    <div class="form-group group"> 
+      <label for="prof"> <b>Professor:</b> </label> 
+      <input id="prof" type="text" name="prof" required> <br>
+    </div> 
+    <div class="form-group group"> 
+      <label for="course"> <b>Course:</b> </label> 
+      <input id="course" type="text" name="course" required> <br>
+    </div> 
+    <div class="form-group group"> 
+      <label for="file"> <b>Syllabus:</b> </label> 
+      <input id="file" type="file" name="file" required> <br>
+    </div> 
+    <input class="btn btn-success" type="submit" value="Submit"> <br> <br>
+    <div class="alert alert-danger text-center" style="width: 30%; margin: auto;" role="alert"> Misuse of uploads will be met by a ban! </div>
+    
+  </form> 
+
 {% endblock %}

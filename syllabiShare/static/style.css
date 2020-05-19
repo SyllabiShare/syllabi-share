@@ -2,3 +2,7 @@
 	background-image: url('/static/index.png'); 
 	background-size: cover; 
 } 
+
+.group { 
+	margin: 2%;
+} 
