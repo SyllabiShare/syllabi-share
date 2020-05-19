@@ -1,5 +1,5 @@
 asgiref
-Django
+Django==2.1.5
 django-heroku
 dj-database-url
 gunicorn
