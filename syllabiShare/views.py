@@ -45,6 +45,7 @@ def upload(request):
         entry.course = request.POST['course']
         entry.upvotes = 1
         entry.add_date = timezone.now()
+        entry.save()
         success = True
     return render(request, "upload.html", {'success': success})
 
