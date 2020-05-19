@@ -1,0 +1,11 @@
+asgiref
+Django
+django-heroku
+dj-database-url
+gunicorn
+psycopg2
+requests
+social-auth-app-django
+social-auth-core
+sqlparse
+whitenoise
