@@ -6,8 +6,8 @@ class Submission(models.Model):
     prof = models.TextField()
     course = models.TextField()
     school = models.TextField()
-    upvotes = models.IntegerField
-    add_date = models.DateTimeField('date added', default=timezone.now)
+    syllabus = models.FileField(blank=True)
+    upvotes = models.IntegerField(default = 1)
 
 class School(models.Model):
     school = models.TextField(unique=True, blank=True)

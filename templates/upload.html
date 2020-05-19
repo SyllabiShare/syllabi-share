@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<form id="form-id" method="post">
+<form id="form-id" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <h1 class='text-center'> Upload Syllabus: </h1>
   <div style="width: 35%; margin: auto; display: block;">
