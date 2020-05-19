@@ -1,5 +1,5 @@
 .background-image { 
-	background-image: url('/static/index.png'); 
+	background-image: url('https://syllabussharebucket.s3.amazonaws.com/index.png');
 	background-size: cover; 
 } 
 

@@ -23,6 +23,8 @@ def get_domain(email):
 def index(request):
     template,context = authenticate(request.user)
     if template:
+        if context['loggedIn']:
+            logout(request)
         return render(request,template,context)
     return render(request, "index.html")
 
