@@ -1,6 +1,9 @@
 asgiref
+boto3
 Django
+django-environ
 django-heroku
+django-storages
 dj-database-url
 gunicorn
 psycopg2
@@ -8,4 +11,3 @@ requests
 social-auth-app-django
 social-auth-core
 sqlparse
-whitenoise

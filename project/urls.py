@@ -1,4 +1,4 @@
-"""syllabiShare URL Configuration
+"""project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -19,7 +19,7 @@ from django.conf import settings
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path('sudo/', admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
     path('', include('syllabiShare.urls')),
     path('', include('social_django.urls', namespace='social')),
     path(

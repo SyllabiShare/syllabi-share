@@ -1,18 +1,18 @@
+{% load static %}
 <!doctype html> 
 <html lang="en" style="margin: 0; height: 100%; overflow: hidden">
   <head>
     <meta charset="utf-8">
     <title> Syllabus Share </title>
-    {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="shortcut icon" href="{% static 'favicon.ico' type='image/x-icon' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}' type='image/x-icon' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
   </head>
 
-  <body class="background-image"> 
+  <body style="background-image: url({% static 'index.png' %}); background-size: cover;">
     <div class="text-center"> 
       <br> <br> <br> <br> <br> <br> <br> 
       <b style="top: 30%; font-size: 50px;"> WELCOME TO SYLLABUS SHARE! </b> 

@@ -1,0 +1,21 @@
+.group { 
+	margin: 2%;
+} 
+
+body {
+	margin: 0; 
+	height: 100%; 
+	overflow-y: auto;
+	overscroll-behavior-y: none;
+	overflow-x: hidden;
+}
+
+.dropdown-hidden {
+	display: none;
+  }
+
+.ynbutton {
+	display: inline-block; 
+	margin: auto; 
+	width: 10%;
+}

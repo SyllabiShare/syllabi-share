@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class syllabiShareConfig(AppConfig):
+class SyllabishareConfig(AppConfig):
     name = 'syllabiShare'
