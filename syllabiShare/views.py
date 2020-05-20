@@ -26,7 +26,7 @@ def index(request):
         if context['loggedIn']:
             logout(request)
         return render(request,template,context)
-    return render(request, "index.html")
+    return render(request, "index.html",{'classes':Submission.objects.all()})
 
 def search(request):
     template,context = authenticate(request.user)
