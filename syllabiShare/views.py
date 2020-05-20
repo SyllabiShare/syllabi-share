@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.utils import timezone
-from .models import Submission, School
+from .models import Submission, School, Suggestion
 
 
 def authenticate(user):
@@ -52,6 +52,19 @@ def search(request):
     if template:
         return render(request, template, context)
     return render(request, 'search.html')
+
+
+def suggest(request):
+    (template, context) = authenticate(request.user)
+    if template:
+        return render(request, template, context)
+
+    if request.method == 'POST':
+        suggestion = Suggestion()
+        suggestion.name = request.user
+        suggestion.suggestion_text = request.POST['suggestion']
+        suggestion.save()
+    return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
 
 
 def upload(request):

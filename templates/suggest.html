@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form class="text-center" method="post">
+  {% csrf_token %}
+  <h1>Please leave a suggestion!</h1>
+  <div class="form-group">
+    <label for="suggestion">Suggestion: </label>
+    <input id="suggestion" type="text" name="suggestion">
+  </div>
+  <input class="btn btn-success" type="submit" value="Submit">
+</form>
+
+Existing Suggestions:
+<ul style="column-count: 4;">
+  {%for i in suggestion%}
+  <li>{{i.suggestion_text|truncatechars:30}}</li>
+  {%endfor%}
+</ul>
+
+{% endblock %}

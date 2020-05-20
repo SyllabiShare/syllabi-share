@@ -18,3 +18,9 @@ class School(models.Model):
         self.poster = id
     def review(self):
         self.reviewed = True
+
+class Suggestion(models.Model):
+    name = models.TextField()
+    suggestion_text = models.TextField()
+    def __str__(self):
+        return self.suggestion_text
