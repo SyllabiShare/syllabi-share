@@ -1,6 +1,6 @@
 asgiref
 boto3
-Django==2.1.5
+Django
 django-heroku
 django-storages
 dj-database-url
@@ -10,4 +10,3 @@ requests
 social-auth-app-django
 social-auth-core
 sqlparse
-whitenoise
