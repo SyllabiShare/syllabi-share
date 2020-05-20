@@ -11,3 +11,10 @@ class Submission(models.Model):
 class School(models.Model):
     school = models.TextField(unique=True, blank=True)
     domain = models.TextField(unique=True)
+    poster = models.TextField(blank=True)
+    reviewed = models.BooleanField(default=False)
+    def add_school(self,name,id):
+        self.school = name
+        self.poster = id
+    def review(self):
+        self.reviewed = True
