@@ -1,6 +1,7 @@
 asgiref
 boto3
 Django
+django-environ
 django-heroku
 django-storages
 dj-database-url
