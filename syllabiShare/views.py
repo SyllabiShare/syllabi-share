@@ -54,11 +54,6 @@ def search(request):
         return render(request, template, context)
     return render(request, 'search.html')
 
-def secret(request):
-    for i in range(1,13):
-        Submission.objects.get(pk=i).delete()
-    return render(request, 'index.html')
-
 
 def suggest(request):
     (template, context) = authenticate(request.user)
