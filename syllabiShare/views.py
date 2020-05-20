@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.utils import timezone
 from .models import Submission, School, Suggestion
+from django.conf import settings
 
 
 def authenticate(user):
@@ -44,7 +45,7 @@ def index(request):
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
         return render(request, 'school.html', {'poster': entry.poster,'name': entry.school})
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'posts':Submission.objects.filter(school=get_domain(request.user.email))})
 
 
 def search(request):
