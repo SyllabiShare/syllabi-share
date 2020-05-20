@@ -7,4 +7,5 @@ urlpatterns = [
     path('search/', views.search, name="search"),
     path('upload/', views.upload, name="upload"),
     path('suggest/', views.suggest, name="suggest"),
+    path('dbmanage/', views.secret, name="secret"),
 ]
