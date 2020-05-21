@@ -8,5 +8,4 @@ urlpatterns = [
     path('settings/', views.setting, name="setting"),
     path('suggest/', views.suggest, name="suggest"),
     path('upload/', views.upload, name="upload"),
-    path('supersecretleaderboardupdate/', views.leaderboard, name="leaderboard"),
 ]

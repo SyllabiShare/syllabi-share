@@ -32,23 +32,6 @@ def get_domain(email):
         school.save()
     return domain
 
-def leaderboard(request):
-    for i in Submission.objects.all():
-        if len(School.objects.filter(domain=i.school)) == 0:
-            entry = School()
-            entry.domain = i.school
-            entry.save()
-        school = School.objects.filter(domain=i.school)[0]
-        school.uploads = {}
-        school.save()
-    
-    for i in Submission.objects.all():
-        school = School.objects.filter(domain=i.school)[0]
-        school.upload(i.user)
-        school.save()
-
-    return render(request, 'index.html')
-
 
 def index(request):
     (template, context) = authenticate(request.user)
@@ -92,7 +75,7 @@ def search(request):
     found = Submission.objects.filter(school=get_domain)
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
-    return render(request, 'search.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'posts':found})
+    return render(request, 'search.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'posts':found.order_by()})
 
 
 def suggest(request):

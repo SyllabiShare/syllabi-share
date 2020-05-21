@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
 {% if posts.count == 1 %}
@@ -10,7 +11,8 @@
 <div class="text-center">
   {% for post in posts %}
     <h5>{{post.course}} taught by {{post.prof}}</h5>
-    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe><br><br>
+    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
+    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="padding-bottom: 2%;"></a><br><br>
   {% endfor %}
 </div>
 
@@ -20,7 +22,7 @@
       <th>Leaderboard</th>
     </tr>
     {% for name,number in leaderboard %}
-      <tr>
+      <tr style="text-align: left;">
         <th>{{forloop.counter}}. {{name}} with {{number}} uploads</th>
       </tr>
     {% endfor %}
