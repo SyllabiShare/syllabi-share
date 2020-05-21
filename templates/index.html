@@ -2,15 +2,24 @@
 {% block content %}
 
 {% if posts.count == 1 %}
-  <h4 class="text-center">There is 1 Syllabus for your school!</h4>
+<h4 class="text-center">There is 1 Syllabus for your school!</h4>
 {% else %}
-  <h4 class="text-center">There are {{posts.count}} Syllabi for your school! Add More!</h4>
+<h4 class="text-center">There are {{posts.count}} Syllabi for your school! Add More!</h4>
 {% endif %}
 
 <ul>
   {% for post in posts %}
-    <li>{{post.course}} taught by {{post.prof}} -- <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}">Link</a></li><br>
+  <li>{{post.course}} taught by {{post.prof}} -- <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}">Link</a></li>
+  <br>
   {% endfor %}
 </ul>
 
+<div class="leaderboard">
+  <table> 
+    <tr><th>Leaderboard</th></tr>
+      {% for name,number in leaderboard %}
+      <tr><th>{{name}} with {{number}} uploads</th></tr>
+      {% endfor %}
+  </table>
+</div>
 {% endblock %}

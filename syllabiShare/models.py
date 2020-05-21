@@ -1,4 +1,5 @@
 from django.db import models
+from jsonfield import JSONField
 
 class Submission(models.Model):
     user = models.TextField()
@@ -13,11 +14,20 @@ class School(models.Model):
     domain = models.TextField(unique=True)
     poster = models.TextField(blank=True)
     reviewed = models.BooleanField(default=False)
+    uploads = JSONField(default={})
     def add_school(self,name,id):
         self.school = name
         self.poster = id
     def review(self):
         self.reviewed = True
+    def upload(self,name):
+        if name in self.uploads:
+            self.uploads[name] += 1
+        else:
+            self.uploads[name] = 1
+    def topFive(self,name):
+        return [(i,self.uploads[i]) for i in sorted(self.uploads,reverse=True)[:min(len(self.uploads),5)]]
+        
 
 class Suggestion(models.Model):
     name = models.TextField()

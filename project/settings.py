@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'syllabiShare',
     'social_django',
     'storages',
+    'jsonfield',
 ]
 
 MIDDLEWARE = [

@@ -45,7 +45,7 @@ def index(request):
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
         return render(request, 'school.html', {'poster': entry.poster,'name': entry.school})
-    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'posts':Submission.objects.filter(school=get_domain(request.user.email))})
+    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':School.objects.filter(domain=get_domain(request.user.email))[0].topFive(request.user.username),'posts':Submission.objects.filter(school=get_domain(request.user.email))})
 
 
 def search(request):
@@ -82,6 +82,9 @@ def upload(request):
         entry.upvotes = 1
         entry.syllabus = request.FILES['file']
         entry.save()
+        school = School.objects.filter(domain=entry.school)[0]
+        school.upload(request.user.username)
+        school.save()
         success = True
     return render(request, 'upload.html', {'success': success})
 
