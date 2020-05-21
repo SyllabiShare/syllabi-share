@@ -15,3 +15,4 @@ We use Google OAuth to handle logging into our application, so as long as you ha
 ## Authors
 
 * **Vernon Andrade** - *Development*
+* **Jeremy Tran** - *UX/UI Design*

@@ -6,6 +6,7 @@ django-heroku
 django-storages
 dj-database-url
 gunicorn
+jsonfield
 psycopg2
 requests
 social-auth-app-django
