@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 '''
 
-import os
+from django.conf import settings
 import django_heroku
 import environ
+import os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -162,7 +163,6 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 AWS_LOCATION = ''
 AWS_S3_FILE_OVERWRITE = False
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'project/static'),
 ]

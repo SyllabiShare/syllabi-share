@@ -4,7 +4,9 @@ from . import views
 app_name = 'syllabiShare'
 urlpatterns = [
     path('', views.index, name="index"),
-    path('search/', views.search, name="search"),
-    path('upload/', views.upload, name="upload"),
+    path('about/', views.about, name="about"),
+    path('settings/', views.setting, name="setting"),
     path('suggest/', views.suggest, name="suggest"),
+    path('upload/', views.upload, name="upload"),
+    path('supersecretleaderboardupdate/', views.leaderboard, name="leaderboard"),
 ]

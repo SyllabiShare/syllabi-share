@@ -5,6 +5,15 @@ from .models import Submission, School, Suggestion
 from django.conf import settings
 
 
+def about(request):
+    (template, context) = authenticate(request.user)
+    if template:
+        if context['loggedIn']:
+            logout(request)
+        return render(request, template, context)
+    return render(request, 'about.html')
+
+
 def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False})
@@ -22,6 +31,23 @@ def get_domain(email):
         school.domain = domain
         school.save()
     return domain
+
+def leaderboard(request):
+    for i in Submission.objects.all():
+        if len(School.objects.filter(domain=i.school)) == 0:
+            entry = School()
+            entry.domain = i.school
+            entry.save()
+        school = School.objects.filter(domain=i.school)[0]
+        school.uploads = {}
+        school.save()
+    
+    for i in Submission.objects.all():
+        school = School.objects.filter(domain=i.school)[0]
+        school.upload(i.user)
+        school.save()
+
+    return render(request, 'index.html')
 
 
 def index(request):
@@ -45,14 +71,28 @@ def index(request):
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
         return render(request, 'school.html', {'poster': entry.poster,'name': entry.school})
-    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':School.objects.filter(domain=get_domain(request.user.email))[0].topFive(request.user.username),'posts':Submission.objects.filter(school=get_domain(request.user.email))})
+    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':School.objects.filter(domain=domain)[0].topFive(request.user.username),'posts':Submission.objects.filter(school=domain)})
+
+
+def setting(request):
+    (template, context) = authenticate(request.user)
+    if template:
+        if context['loggedIn']:
+            logout(request)
+        return render(request, template, context)
+    return render(request, 'settings.html')
 
 
 def search(request):
     (template, context) = authenticate(request.user)
     if template:
+        if context['loggedIn']:
+            logout(request)
         return render(request, template, context)
-    return render(request, 'search.html')
+    found = Submission.objects.filter(school=get_domain)
+    if request.method == 'POST':
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
+    return render(request, 'search.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'posts':found})
 
 
 def suggest(request):
