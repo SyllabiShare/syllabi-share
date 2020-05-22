@@ -1,38 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
+
 {% if first %}
-<form method="POST">
-  {% csrf_token %}
-  <div class="form-group group text-center">
-    <h4><b>Wow! It looks like you are the first person from your school to use the app!<br><br>What is the name of your school?:</b></h4>
-    <input style="width:20%;" id="name" type="text" name="name" required> <br>
-  </div>
-  <input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit"> <br> 
-</form>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group group text-center">
+      <h4><b>Wow! It looks like you are the first person from your school to use the app!<br><br>What is the name of your school?:</b></h4>
+      <input style="width:20%;" id="name" type="text" name="name" required> <br>
+    </div>
+    <input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit"> <br> 
+  </form>
 {% else %}
-<form method="POST">
-  {% csrf_token %}
-  <div class="form-group group text-center">
-    <h4><b>Wow! It looks like you are the second person from your school to use the app!<br><br>{{poster}} named the school "{{name}}". Is this accurate?</b></h4>
-    <br>
-    <input class="btn btn-success ynbutton" id='button' type="submit" value="Yes">
-    <span style="visibility: hidden">_____</span>
-</form>
-<input onclick="toggle()" class="btn btn-danger ynbutton" value='No'> 
-<form method="POST">
-  {% csrf_token %}
-<div id="myDropdown" class="dropdown-hidden"><br>
-  <h4><b>Oh thats awkward! What is the real name of your school?<br></b></h4>
-    
-<input style="width:20%;" id="name" type="text" name="name"> <br><br>
-<input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit"> <br> 
-</div>
-</form>
-</div>
-<script>
-  function toggle(){
-      document.getElementById("myDropdown").classList.toggle("dropdown-hidden");
-  }
-</script>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group group text-center">
+      <h4><b>Wow! It looks like you are the second person from your school to use the app!<br><br>{{poster}} named the school "{{name}}". Is this accurate?</b></h4>
+      <br>
+      <input class="btn btn-success ynbutton" id='button' type="submit" value="Yes">
+      <span style="visibility: hidden">_____</span>
+  </form>
+  <input onclick="toggle()" class="btn btn-danger ynbutton" value='No'> 
+  <form method="POST">
+    {% csrf_token %}
+    <div id="myDropdown" class="dropdown-hidden"><br>
+      <h4><b>Oh thats awkward! What is the real name of your school?</b></h4><br>
+      <input style="width:20%;" id="name" type="text" name="name"> <br><br>
+      <input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit">
+    </div>
+  </form>
+  </div>
+  <script>
+    function toggle(){
+        document.getElementById("myDropdown").classList.toggle("dropdown-hidden");
+    }
+  </script>
 {% endif %}
+
 {% endblock %}
