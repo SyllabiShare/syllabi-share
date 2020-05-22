@@ -11,7 +11,7 @@
 
 <div class="text-center" style="width: 60%; margin: auto;">
   {% for dept in posts %}
-  <input onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" value='{{dept.0.dept}}'>
+  <button onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" type="button">{{dept.0.dept}}</button>
   <div class="dropdown-hidden" id="{{dept.0.dept}}" displ>
     {% for post in dept %}
     <br>
@@ -40,6 +40,7 @@
 <script>
   function toggle(dept){
       document.getElementById(dept).classList.toggle("dropdown-hidden");
+      document.getElementById('paypal').classList.toggle("dropdown-hidden");
   }
 </script>
 

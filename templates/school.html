@@ -19,7 +19,7 @@
       <input class="btn btn-success ynbutton" id='button' type="submit" value="Yes">
       <span style="visibility: hidden">_____</span>
   </form>
-  <input onclick="toggle()" class="btn btn-danger ynbutton" value='No'> 
+  <button onclick="toggle()" class="btn btn-danger ynbutton" type="button"> No </button>
   <form method="POST">
     {% csrf_token %}
     <div id="myDropdown" class="dropdown-hidden"><br>
