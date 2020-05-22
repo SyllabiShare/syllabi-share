@@ -22,13 +22,13 @@
       <input style="width:100%;" id="file" type="file" name="file" accept="application/pdf" required> <br>
     </div>
   </div>
-  <input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit"> <br> 
+  <input class="btn btn-success" id='button' style="display: block; margin: auto; margin-bottom: 1%;" type="submit" value="Submit"> 
 </form>
 
 {% if success %}
-<div class="alert alert-success text-center" style="width: 30%; margin: auto;" role="alert"> Addition Successful! </div>
+<div class="alert alert-success text-center" style="width: 40%; margin: auto" role="alert"> Addition Successful! </div>
 {% else %}
-<div id='message' class="alert alert-danger text-center" style="width: 30%; margin: auto;" role="alert"> {{message}} </div>
+<div class="alert alert-danger text-center" style="width: 40%; margin: auto;" role="alert"> {{message}} </div>
 {% endif %}
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 

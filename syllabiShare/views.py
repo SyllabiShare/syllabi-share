@@ -55,7 +55,22 @@ def index(request):
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
         return render(request, 'school.html', {'poster': entry.poster,'name': school})
-    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':entry.topFive(request.user.username),'posts':Submission.objects.filter(school=domain).order_by('course'),'school':school})
+
+    posts = Submission.objects.filter(school=domain).order_by('course')
+    num = len(posts)
+    postsDept = []
+    dept = []
+    if num > 0:
+        last = posts[0].dept
+        dept.append(posts[0])
+        for i in posts:
+            if i.dept != last:
+                postsDept.append(dept)
+                dept = [i]
+            else:
+                dept.append(i)
+        postsDept.append(dept)
+    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':entry.topFive(request.user.username),'posts': postsDept,'school':school,'num':num})
 
 
 def setting(request):
@@ -99,13 +114,17 @@ def upload(request):
     success = False
     message = 'Misuse of uploads will be met by a ban!'
     if request.method == 'POST':
+        course = request.POST['prof'].split()
+        goodProf = len(request.POST['prof'].split()) == 2 and course[0].isalpha() and course[1].isalpha()
         course = request.POST['course'].split()
-        if len(course) == 2 and course[0].isalpha() and course[1].isnumeric():
+        goodCourse = len(course) == 2 and course[0].isalpha() and course[1].isnumeric()
+        if goodProf and goodCourse:
             entry = Submission()
             entry.user = request.user.username
             entry.school = get_domain(request.user.email)
             entry.prof = request.POST['prof']
-            entry.course = request.POST['course']
+            entry.course = request.POST['course'].upper()
+            entry.dept = course[0].upper()
             entry.upvotes = 1
             entry.syllabus = request.FILES['file']
             entry.save()
@@ -113,8 +132,12 @@ def upload(request):
             school.upload(request.user.username)
             school.save()
             success = True
+        elif goodProf:
+            message = 'Course not valid! Try "Mnemonic Number" Format'
+        elif goodCourse:
+            message = 'Professor name not valid! Try "FirstName LastName" Format'
         else:
-            message = 'Course not valid! Try Mnemonic Number'
+            message = 'Input not valid! Try Again'
     return render(request, 'upload.html', {'success': success, 'message': message})
 
 

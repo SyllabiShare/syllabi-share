@@ -2,20 +2,26 @@
 {% load static %}
 {% block content %}
 
-{% if posts.count == 1 %}
-  <h4 class="text-center">There is 1 Syllabus for the {{school}}!</h4>
+{% if num == 1 %}
+<h4 class="text-center">There is 1 Syllabus for the {{school}}!</h4>
 {% else %}
-  <h4 class="text-center">There are {{posts.count}} Syllabi for the {{school}}! Add More!</h4>
+<h4 class="text-center">There are {{num}} Syllabi for the {{school}}! Add More!</h4>
 {% endif %}
 <br>
 
-{% for post in posts %}
-  <div class="text-center">
+<div class="text-center" style="width: 60%; margin: auto;">
+  {% for dept in posts %}
+  <input onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" value='{{dept.0.dept}}'>
+  <div class="dropdown-hidden" id="{{dept.0.dept}}" displ>
+    {% for post in dept %}
+    <br>
     <h5>{{post.course}} taught by {{post.prof}}</h5>
     <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
-    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="margin-bottom: 2%; border:1px solid black;"></a><br>
+    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" class="arrow"></a><br>
+    {% endfor %}
   </div>
-{% endfor %}
+  {% endfor %}
+</div>
 
 <div class="leaderboard">
   <table>
@@ -23,12 +29,18 @@
       <th>Leaderboard</th>
     </tr>
     {% for name,number in leaderboard %}
-      <tr style="text-align: left;">
-        <th>{{forloop.counter}}. {{name}} with {{number}} uploads</th>
-      </tr>
+    <tr style="text-align: left;">
+      <th>{{forloop.counter}}. {{name}} with {{number}} uploads</th>
+    </tr>
     {% endfor %}
   </table>
 </div>
 <a href="/upload"><img class="left" src="{% static 'plus.png' %}"></a>
+
+<script>
+  function toggle(dept){
+      document.getElementById(dept).classList.toggle("dropdown-hidden");
+  }
+</script>
 
 {% endblock %}
