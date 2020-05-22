@@ -9,18 +9,18 @@
 {% endif %}
 <br>
 
-<div class="text-center" style="width: 60%; margin: auto;">
+<div style="width: 60%; height: 90%; margin: auto;" class="text-center">
   {% for dept in posts %}
-  <button onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" type="button">{{dept.0.dept}}</button>
-  <div class="dropdown-hidden" id="{{dept.0.dept}}" displ>
-    {% for post in dept %}
-    <br>
-    <h5>{{post.course}} taught by {{post.prof}}</h5>
-    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
-    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" class="arrow"></a><br>
+    <button onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" style="width: 40%; margin: 2%;" type="button">{{dept.0.dept}}</button>
+    <div class="dropdown-hidden" id="{{dept.0.dept}}">
+      {% for post in dept %}
+      <br>
+      <h5>{{post.course}} taught by {{post.prof}}</h5>
+      <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
+      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" class="arrow"></a><br>
+      {% endfor %}
+    </div>
     {% endfor %}
-  </div>
-  {% endfor %}
 </div>
 
 <div class="leaderboard">
