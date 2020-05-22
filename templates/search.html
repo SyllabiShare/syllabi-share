@@ -11,9 +11,11 @@
     <h4>There are {{posts.count}} Syllabi matching your search at the {{school}}!</h4>
   {% endif %}
   {% for post in posts %}
-    <h5>{{post.course}} taught by {{post.prof}}</h5>
-    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe><br><br>
-    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="margin-bottom: 2%; border:1px solid black;"></a><br>
+    <div class="text-center">
+      <h5>{{post.course}} taught by {{post.prof}}</h5>
+      <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
+      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="margin-bottom: 2%; border:1px solid black;"></a><br>
+    </div>
   {% endfor %}
 </div>
 <a href="/upload"><img class="left" src="{% static 'plus.png' %}"></a>

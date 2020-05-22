@@ -99,7 +99,7 @@ def upload(request):
     success = False
     message = 'Misuse of uploads will be met by a ban!'
     if request.method == 'POST':
-        course = request.POST['course']
+        course = request.POST['course'].split()
         if len(course) == 2 and course[0].isalpha() and course[1].isnumeric():
             entry = Submission()
             entry.user = request.user.username
