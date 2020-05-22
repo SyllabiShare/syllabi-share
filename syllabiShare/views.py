@@ -56,21 +56,14 @@ def index(request):
     elif not entry.reviewed and not user_string == entry.poster:
         return render(request, 'school.html', {'poster': entry.poster,'name': school})
 
-    posts = Submission.objects.filter(school=domain).order_by('course')
-    num = len(posts)
+    posts = Submission.objects.filter(school=domain)
+    dep = set()
+    for i in posts:
+        dep.add(i.dept)
+
     postsDept = []
-    dept = []
-    if num > 0:
-        last = posts[0].dept
-        dept.append(posts[0])
-        for i in posts:
-            if i.dept != last:
-                postsDept.append(dept)
-                dept = [i]
-                last = i.dept
-            else:
-                dept.append(i)
-        postsDept.append(dept)
+    for i in dep:
+        postsDept.append(posts.filter(dept=i))
     return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':entry.topFive(request.user.username),'posts': postsDept,'school':school,'num':num})
 
 
