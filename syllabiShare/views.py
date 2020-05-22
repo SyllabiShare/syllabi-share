@@ -62,8 +62,8 @@ def index(request):
         dep.add(i.dept)
 
     postsDept = []
-    for i in dep:
-        postsDept.append(posts.filter(dept=i))
+    for i in sorted(list(dep)):
+        postsDept.append(posts.filter(dept=i).order_by('course'))
     return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':entry.topFive(request.user.username),'posts': postsDept,'school':school,'num':len(posts)})
 
 

@@ -39,8 +39,11 @@
 
 <script>
   function toggle(dept){
-      document.getElementById(dept).classList.toggle("dropdown-hidden");
-      document.getElementById('paypal').classList.toggle("dropdown-hidden");
+      paypal = document.getElementById('paypal')
+      dep = document.getElementById(dept)
+      if (paypal.classList.contains("dropdown-hidden") && dep.classList.contains("dropdown-hidden")) return;
+      dep.classList.toggle("dropdown-hidden");
+      paypal.classList.toggle("dropdown-hidden");
   }
 </script>
 
