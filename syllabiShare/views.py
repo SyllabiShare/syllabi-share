@@ -67,6 +67,7 @@ def index(request):
             if i.dept != last:
                 postsDept.append(dept)
                 dept = [i]
+                last = i.dept
             else:
                 dept.append(i)
         postsDept.append(dept)
