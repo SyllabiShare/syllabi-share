@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 
 <div class="text-center">
   {% if posts.count == 0 %}
-    <h4>There are no Syllabi matching your search at your school sorry! <br>Try to add them!</h4>
+    <h4>There are no Syllabi matching your search at the {{school}} sorry! <br>Try to add them!</h4>
   {% elif posts.count == 1 %}
-    <h4>There is 1 Syllabus matching your search at your school!</h4>
+    <h4>There is 1 Syllabus matching your search at the {{school}}!</h4>
   {% else %}
-    <h4>There are {{posts.count}} Syllabi matching your search at your school!</h4>
+    <h4>There are {{posts.count}} Syllabi matching your search at the {{school}}!</h4>
   {% endif %}
   {% for post in posts %}
     <h5>{{post.course}} taught by {{post.prof}}</h5>
     <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe><br><br>
+    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="margin-bottom: 2%; border:1px solid black;"></a><br>
   {% endfor %}
 </div>
+<a href="/upload"><img class="left" src="{% static 'plus.png' %}"></a>
 
 {% endblock %}

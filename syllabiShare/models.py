@@ -1,12 +1,13 @@
 from django.db import models
 from jsonfield import JSONField
+from django.conf import settings
 
 class Submission(models.Model):
     user = models.TextField()
     prof = models.TextField()
     course = models.TextField()
     school = models.TextField()
-    syllabus = models.FileField(blank=True, upload_to='uploads/')
+    syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
     upvotes = models.IntegerField(default = 1)
 
 class School(models.Model):

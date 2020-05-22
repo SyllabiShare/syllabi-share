@@ -50,11 +50,12 @@ def index(request):
             entry.review()
         entry.save()
 
-    if not entry.school:
+    school = entry.school
+    if not school:
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
-        return render(request, 'school.html', {'poster': entry.poster,'name': entry.school})
-    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':School.objects.filter(domain=domain)[0].topFive(request.user.username),'posts':Submission.objects.filter(school=domain)})
+        return render(request, 'school.html', {'poster': entry.poster,'name': school})
+    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':entry.topFive(request.user.username),'posts':Submission.objects.filter(school=domain).order_by('course'),'school':school})
 
 
 def setting(request):
@@ -72,10 +73,10 @@ def search(request):
         if context['loggedIn']:
             logout(request)
         return render(request, template, context)
-    found = Submission.objects.filter(school=get_domain)
+    found = Submission.objects.filter(school=get_domain(request.user.email))
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
-    return render(request, 'search.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'posts':found.order_by()})
+    return render(request, 'search.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'posts':found.order_by('course')})
 
 
 def suggest(request):
@@ -96,20 +97,25 @@ def upload(request):
     if template:
         return render(request, template, context)
     success = False
+    message = 'Misuse of uploads will be met by a ban!'
     if request.method == 'POST':
-        entry = Submission()
-        entry.user = request.user.username
-        entry.school = get_domain(request.user.email)
-        entry.prof = request.POST['prof']
-        entry.course = request.POST['course']
-        entry.upvotes = 1
-        entry.syllabus = request.FILES['file']
-        entry.save()
-        school = School.objects.filter(domain=entry.school)[0]
-        school.upload(request.user.username)
-        school.save()
-        success = True
-    return render(request, 'upload.html', {'success': success})
+        course = request.POST['course']
+        if len(course) == 2 and course[0].isalpha() and course[1].isnumeric():
+            entry = Submission()
+            entry.user = request.user.username
+            entry.school = get_domain(request.user.email)
+            entry.prof = request.POST['prof']
+            entry.course = request.POST['course']
+            entry.upvotes = 1
+            entry.syllabus = request.FILES['file']
+            entry.save()
+            school = School.objects.filter(domain=entry.school)[0]
+            school.upload(request.user.username)
+            school.save()
+            success = True
+        else:
+            message = 'Course not valid! Try Mnemonic Number'
+    return render(request, 'upload.html', {'success': success, 'message': message})
 
 
 def view404(request, exception=None):

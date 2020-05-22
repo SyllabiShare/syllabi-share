@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 
 <form class="text-center" method="post">
   {% csrf_token %}
@@ -17,5 +18,6 @@ Existing Suggestions:
   <li>{{i.suggestion_text|truncatechars:30}}</li>
   {%endfor%}
 </ul>
+<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
 {% endblock %}

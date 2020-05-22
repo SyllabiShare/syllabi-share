@@ -3,18 +3,19 @@
 {% block content %}
 
 {% if posts.count == 1 %}
-  <h4 class="text-center">There is 1 Syllabus for your school!</h4>
+  <h4 class="text-center">There is 1 Syllabus for the {{school}}!</h4>
 {% else %}
-  <h4 class="text-center">There are {{posts.count}} Syllabi for your school! Add More!</h4>
+  <h4 class="text-center">There are {{posts.count}} Syllabi for the {{school}}! Add More!</h4>
 {% endif %}
+<br>
 
-<div class="text-center">
-  {% for post in posts %}
+{% for post in posts %}
+  <div class="text-center">
     <h5>{{post.course}} taught by {{post.prof}}</h5>
     <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
-    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="padding-bottom: 2%;"></a><br><br>
-  {% endfor %}
-</div>
+    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="margin-bottom: 2%; border:1px solid black;"></a><br>
+  </div>
+{% endfor %}
 
 <div class="leaderboard">
   <table>
@@ -28,5 +29,6 @@
     {% endfor %}
   </table>
 </div>
+<a href="/upload"><img class="left" src="{% static 'plus.png' %}"></a>
 
 {% endblock %}

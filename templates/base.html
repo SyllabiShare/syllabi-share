@@ -37,10 +37,9 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
           {{user.username}}
           </a>
-          <div class="dropdown-menu">
+          <div class="dropdown-menu dropdown-menu-right" style="text-align: right; min-width: 0;">
             <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a> 
             <a class="dropdown-item" href="/settings">Settings</a>
-            <a class="dropdown-item" href="#">Link 3</a>
           </div>
         </li>
       </ul>

@@ -27,6 +27,15 @@ body {
     width: 64px;
 }
 
+.left {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 64px;
+    width: 64px;
+    padding: 2px;
+}
+
 .leaderboard {
     position: fixed;
     right: 0px;

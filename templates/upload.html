@@ -1,42 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
+
 <form id="form-id" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <h1 class='text-center'> Upload Syllabus: </h1>
   <div style="width: 35%; margin: auto; display: block;">
     <div class="form-group group">
-      <h4 for="prof"> <b>Professor:</b> </h4>
+      <h4 style='float: left;' for="prof"> <b>Professor:</b> </h4>
+      <h4 style='float: right;'> e.g John Doe</b> </h4>
       <input style="width:100%;" id="prof" type="text" name="prof" required> <br>
     </div>
     <div class="form-group group">
-      <h4 for="prof"> <b>Course:</b> </h4>
+      <h4 style='float: left;' for="course"> <b>Course:</b> </h4>
+      <h4 style='float: right;'> e.g CS 2150</b> </h4>
       <input style="width:100%;" id="course" type="text" name="course" required> <br>
     </div>
     <div class="form-group group">
-      <h4 for="prof"> <b>Syllabus:</b> </h4>
+      <h4 style='float: left;' for="file"> <b>Syllabus:</b> </h4>
+      <h4 style='float: right;'> PDFs only</b> </h4>
       <input style="width:100%;" id="file" type="file" name="file" accept="application/pdf" required> <br>
     </div>
   </div>
   <input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit"> <br> 
-  {% if success %}
-  <div class="alert alert-success text-center" style="width: 30%; margin: auto;" role="alert"> Addition Successful! </div>
-  {% else %}
-  <div class="alert alert-danger text-center" style="width: 30%; margin: auto;" role="alert"> Misuse of uploads will be met by a ban! </div>
-  {% endif %}
 </form>
+
+{% if success %}
+<div class="alert alert-success text-center" style="width: 30%; margin: auto;" role="alert"> Addition Successful! </div>
+{% else %}
+<div id='message' class="alert alert-danger text-center" style="width: 30%; margin: auto;" role="alert"> {{message}} </div>
+{% endif %}
+<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
+
 <script type="text/javascript">
   $(function(){
       $("#file").on('change', function(event) {
           var file = event.target.files[0];
-          if(file.size>=2*1024*1024) {
-              alert("Upload PDFs of size less than 2MB please");
-              $("#form-id").get(0).reset(); 
+          if(file.size>=5*1024*1024) {
+              document.getElementById('message').innerHTML = "Upload PDFs of size less than 5MB please";
               return;
           }
-          
           if(!file.type.match('application/pdf.*')) {
-              alert("Upload PDFs only please!");
-              window.location.assign($(location).attr('href'));
+              document.getElementById('message').innerHTML = "Upload PDFs only please!";
               return;
           }
       });
