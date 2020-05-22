@@ -3,15 +3,16 @@ from jsonfield import JSONField
 from django.conf import settings
 
 class Submission(models.Model):
-    user = models.TextField()
-    prof = models.TextField()
-    course = models.TextField()
-    school = models.TextField()
+    user = models.TextField(blank=True)
+    prof = models.TextField(blank=True)
+    dept = models.TextField(blank=True)
+    course = models.TextField(blank=True)
+    school = models.TextField(blank=True)
     syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
     upvotes = models.IntegerField(default = 1)
 
 class School(models.Model):
-    school = models.TextField(unique=True, blank=True)
+    school = models.TextField(blank=True)
     domain = models.TextField(unique=True)
     poster = models.TextField(blank=True)
     reviewed = models.BooleanField(default=False)
