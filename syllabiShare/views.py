@@ -120,6 +120,13 @@ def setting(request):
         if context['loggedIn']:
             logout(request)
         return render(request, template, context)
+
+    if request.method == 'POST':
+        if 'username' in request.POST:
+            if request.user.username == request.POST['username']:
+                logout(request)
+                User.objects.get(username=request.POST['username']).delete()
+                return render(request, 'error.html')
     return render(request, 'settings.html')
 
 

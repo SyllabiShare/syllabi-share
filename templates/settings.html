@@ -2,7 +2,13 @@
 {% block content %}
 {% load static %}
 
->
+<form method="post" style="display:inline-block;">
+  {% csrf_token %}
+  <h4>Please type your username {{user.username}} to delete your account. This is final! </h4>
+  <label for="suggestion">Username: </label>
+  <input id="suggestion" type="text" name="username" required><br>
+  <input class="btn btn-danger" type="submit" name="recalculate" value="Delete Account" />
+</form> <br><br>
 
 <div class="text-center paypal" id='paypal'>
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
