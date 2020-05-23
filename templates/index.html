@@ -11,16 +11,16 @@
 
 <div style="width: 60%; height: 90%; margin: auto;" class="text-center">
   {% for dept in posts %}
-    <button onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" style="width: 40%; margin: 2%;" type="button">{{dept.0.dept}}</button>
-    <div class="dropdown-hidden" id="{{dept.0.dept}}">
-      {% for post in dept %}
-      <br>
-      <h5>{{post.course}} taught by {{post.prof}}</h5>
-      <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
-      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" class="arrow"></a><br>
-      {% endfor %}
-    </div>
+  <button onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" style="width: 40%; margin: 2%;" type="button">{{dept.0.dept}}</button>
+  <div class="dropdown-hidden" id="{{dept.0.dept}}">
+    {% for post in dept %}
+    <br>
+    <h5>{{post.course}} taught by {{post.prof}}</h5>
+    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
+    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" class="arrow"></a><br>
     {% endfor %}
+  </div>
+  {% endfor %}
 </div>
 
 <div class="leaderboard">
@@ -39,11 +39,8 @@
 
 <script>
   function toggle(dept){
-      paypal = document.getElementById('paypal')
-      dep = document.getElementById(dept)
-      if (paypal.classList.contains("dropdown-hidden") && dep.classList.contains("dropdown-hidden")) return;
-      dep.classList.toggle("dropdown-hidden");
-      paypal.classList.toggle("dropdown-hidden");
+    dep = document.getElementById(dept)
+    dep.classList.toggle("dropdown-hidden");
   }
 </script>
 
