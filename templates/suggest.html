@@ -13,9 +13,9 @@
 </form>
 
 Existing Suggestions:
-<ul style="column-count: 4;">
+<ul>
   {%for i in suggestion%}
-  <li>{{i.suggestion_text|truncatechars:30}}</li>
+  <li>{{i.suggestion_text}}</li>
   {%endfor%}
 </ul>
 
