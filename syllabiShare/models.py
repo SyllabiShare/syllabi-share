@@ -34,5 +34,6 @@ class School(models.Model):
 class Suggestion(models.Model):
     name = models.TextField()
     suggestion_text = models.TextField()
+    github_issue = models.TextField(default='')
     def __str__(self):
         return self.suggestion_text

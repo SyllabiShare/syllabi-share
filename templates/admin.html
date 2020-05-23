@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div style="padding-left: 5%;">
+  <h3>Submissions: </h3>
+  {% for i in submissions %}
+  <div style="display: inline-block; width: 100%;">
+    <form method="post">
+      {% csrf_token %}
+      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.course}} -- {{i.dept}} -- {{i.syllabus}} -- {{i.upvotes}}</p>
+      <input name="pk" value="{{i.pk}}" type="hidden"/>
+      <input class="btn btn-danger" type="submit" name="delete" value="Delete" style="float: right;"/>
+    </form>
+  </div>
+  {%endfor%} <br>
+
+  <h3>School: </h3>
+  {% for i in school %}
+    {{i.domain}} -- {{i.school}} -- {{i.reviewed}} -- {{i.uploads}} <br>
+  {%endfor%} <br>
+
+  <h3>Suggestions: </h3>
+  {% for i in suggestions %}
+    <div style="display: inline-block; width: 100%;">
+      <form method="post">
+        {% csrf_token %}
+        <p style="float: left;"> {{i.name}} -- {{i.suggestion_text}} --  <a href='{{i.github_issue}}'>{{i.github_issue}}</a> </p>
+        <input name="pk" value="{{i.pk}}" type="hidden"/>
+        <input class="btn btn-warning" type="submit" name="edit" value="Edit Github Issue" style="float: right;"/>
+        <input name="githubIssue" value="{{i.github_issue}}" style="float: right;" type="text"/>
+      </form>
+    </div>
+  {%endfor%}<br>
+
+  <h3>Users: </h3>
+  {% for i in users %}
+    {{i.username}} -- {{i.first_name}} --  {{i.last_name}}  --  {{i.email}}<br>
+  {%endfor%} <br>
+  
+  <h3>Control Panel: </h3>
+  <div style="display:inline-block;">
+    <form method="post" style="width:200px; display:inline-block;">
+      {% csrf_token %}
+      <input type="submit" name="purge" value="Purge non .edu emails" />
+    </form> 
+    <form method="post" style="width:200px; display:inline-block;">
+      {% csrf_token %}
+      <input type="submit" name="recalculate" value="Recalculate leaderboard" />
+    </form>
+  </div>
+</div>
+<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
+{% endblock %}

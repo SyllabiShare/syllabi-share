@@ -14,12 +14,38 @@ def about(request):
         return render(request, template, context)
     return render(request, 'about.html')
 
+def admin(request):
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            if 'purge' in request.POST:
+                User.objects.exclude(email__contains=".edu").delete()
+            elif 'delete' in request.POST:
+                Submission.objects.get(pk=request.POST['pk']).delete()
+            elif 'edit' in request.POST:
+                edit = Suggestion.objects.get(pk=request.POST['pk'])
+                edit.github_issue = request.POST['githubIssue']
+                edit.save()
+            elif 'recalculate' in request.POST:
+                for i in School.objects.all():
+                    school = School.objects.filter(domain=i.domain)[0]
+                    school.uploads = {}
+                    school.save()
+                for i in Submission.objects.all():
+                    if len(School.objects.filter(domain=i.school)) == 0:
+                        entry = School()
+                        entry.domain = i.school
+                        entry.save()
+                    school = School.objects.filter(domain=i.school)[0]
+                    school.upload(i.user)
+                    school.save()
+        return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
+    return redirect('/')
+
 
 def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False})
     if user.email[-4:] != '.edu':
-        User.objects.exclude(email__contains=".edu").delete()
         return ('error.html', {'loggedIn': True})
     return (False, False)
 
@@ -99,6 +125,8 @@ def suggest(request):
         suggestion = Suggestion()
         suggestion.name = request.user
         suggestion.suggestion_text = request.POST['suggestion']
+        if 'githubLink' in request.POST and 'https://github.com/verndrade/syllabi-share/issues/' in request.POST['githubLink']:
+            suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
     return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
 
