@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from django.utils import timezone
 from .models import Submission, School, Suggestion
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 def about(request):
@@ -18,6 +19,7 @@ def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False})
     if user.email[-4:] != '.edu':
+        User.objects.exclude(email__contains=".edu").delete()
         return ('error.html', {'loggedIn': True})
     return (False, False)
 

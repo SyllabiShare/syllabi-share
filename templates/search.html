@@ -14,7 +14,7 @@
     <div class="text-center">
       <h5>{{post.course}} taught by {{post.prof}}</h5>
       <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
-      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" download><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="margin-bottom: 2%; border:1px solid black;"></a><br>
+      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}"><img src="{% static 'arrow.png' %}" height="2%" width="2%" style="margin-bottom: 2%; border:1px solid black;"></a><br>
     </div>
   {% endfor %}
 </div>
