@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.index, name="index"),
     path('about/', views.about, name="about"),
     path(settings.ADMIN_URL, views.admin, name="admin"),
+    path('privacy/', views.privacy, name="privacy"),
     path('search/', views.search, name="search"),
     path('settings/', views.setting, name="setting"),
     path('suggest/', views.suggest, name="suggest"),

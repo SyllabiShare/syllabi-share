@@ -4,6 +4,7 @@ from django.utils import timezone
 from .models import Submission, School, Suggestion
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.mail import send_mass_mail
 
 
 def about(request):
@@ -25,6 +26,20 @@ def admin(request):
                 edit = Suggestion.objects.get(pk=request.POST['pk'])
                 edit.github_issue = request.POST['githubIssue']
                 edit.save()
+            elif 'sendtestmail' in request.POST:
+                data = [
+                    ("SyllabiShare", request.POST['body'], "syllabishare@gmail.com", ['syllabishare@gmail.com'])
+                ]
+                send_mass_mail(data)
+                return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'emailBody': request.POST['body']})
+            elif 'sendmassmail' in request.POST and 'password' in request.POST and 'body' in request.POST:
+                if request.POST['password'] == settings.EMAIL_PASSWORD:
+                    all_users = User.objects.all()
+                    data = [
+                        ("SyllabiShare", request.POST['body'], "syllabishare@gmail.com", [user.email]) for user in all_users
+                    ]
+                    send_mass_mail(data)
+                    return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
             elif 'recalculate' in request.POST:
                 for i in School.objects.all():
                     school = School.objects.filter(domain=i.domain)[0]
@@ -93,6 +108,10 @@ def index(request):
     for i in sorted(list(dep)):
         postsDept.append(posts.filter(dept=i).order_by('course'))
     return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':entry.topFive(request.user.username),'posts': postsDept,'school':school,'num':len(posts)})
+
+
+def privacy(request):
+    return render(request, 'privacy.html')
 
 
 def setting(request):

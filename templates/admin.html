@@ -2,7 +2,10 @@
 {% block content %}
 {% load static %}
 <div style="padding-left: 5%;">
-  <h3>Submissions: </h3>
+  {% if mailSuccess %}
+  <div class="alert alert-success text-center" style="width: 20%; margin: auto;" role="alert"> Mail Sent! </div>
+  {% endif %}
+  <h3>Submissions: {{submissions.count}} </h3>
   {% for i in submissions %}
   <div style="display: inline-block; width: 100%;">
     <form method="post">
@@ -14,17 +17,17 @@
   </div>
   {%endfor%} <br>
 
-  <h3>School: </h3>
+  <h3>School: {{school.count}} </h3>
   {% for i in school %}
     {{i.domain}} -- {{i.school}} -- {{i.reviewed}} -- {{i.uploads}} <br>
   {%endfor%} <br>
 
-  <h3>Suggestions: </h3>
+  <h3>Suggestions: {{suggestion.count}} </h3>
   {% for i in suggestions %}
     <div style="display: inline-block; width: 100%;">
       <form method="post">
         {% csrf_token %}
-        <p style="float: left;"> {{i.name}} -- {{i.suggestion_text}} --  <a href='{{i.github_issue}}'>{{i.github_issue}}</a> </p>
+        <p style="float: left;"> {{i.name}} -- {{i.suggestion_text|truncatechars:50}} --  <a href='{{i.github_issue}}'>{{i.github_issue}}</a> </p>
         <input name="pk" value="{{i.pk}}" type="hidden"/>
         <input class="btn btn-warning" type="submit" name="edit" value="Edit Github Issue" style="float: right;"/>
         <input name="githubIssue" value="{{i.github_issue}}" style="float: right;" type="text"/>
@@ -32,20 +35,29 @@
     </div>
   {%endfor%}<br>
 
-  <h3>Users: </h3>
+  <h3>Users: {{users.count}}</h3>
   {% for i in users %}
-    {{i.username}} -- {{i.first_name}} --  {{i.last_name}}  --  {{i.email}}<br>
+    {{i.username}} -- {{i.first_name}} {{i.last_name}}  --  {{i.email}}<br>
   {%endfor%} <br>
   
   <h3>Control Panel: </h3>
   <div style="display:inline-block;">
     <form method="post" style="width:200px; display:inline-block;">
       {% csrf_token %}
-      <input type="submit" name="purge" value="Purge non .edu emails" />
-    </form> 
+      <input class="btn btn-danger" type="submit" name="purge" value="Purge non .edu emails" />
+    </form> <br><br>
     <form method="post" style="width:200px; display:inline-block;">
       {% csrf_token %}
-      <input type="submit" name="recalculate" value="Recalculate leaderboard" />
+      <input class="btn btn-danger" type="submit" name="recalculate" value="Recalculate leaderboard" />
+    </form> <br><br>
+    <form method="post" style="width:200px; display:inline-block;">
+      {% csrf_token %}
+      <label for="body">Email Body: </label>
+      <input type="text" name="body" value="{{emailBody}}" /><br>
+      <label for="password">Email Password: </label>
+      <input type="text" name="password" />
+      <input class="btn btn-warning" type="submit" name="sendtestmail" value="Send Test Mail" />
+      <input class="btn btn-danger" type="submit" name="sendmassmail" value="Send Mass Mail" />
     </form>
   </div>
 </div>
