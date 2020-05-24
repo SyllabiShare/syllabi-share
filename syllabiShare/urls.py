@@ -12,4 +12,5 @@ urlpatterns = [
     path('settings/', views.setting, name="setting"),
     path('suggest/', views.suggest, name="suggest"),
     path('upload/', views.upload, name="upload"),
+    path('<slug:dept>/', views.department, name="department"),
 ]

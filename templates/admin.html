@@ -54,8 +54,8 @@
       {% csrf_token %}
       <label for="body">Email Body: </label>
       <input type="text" name="body" value="{{emailBody}}" /><br>
-      <label for="password">Email Password: </label>
-      <input type="text" name="password" />
+      <label for="password">Email Password:</label>
+      <input type="text" name="password" value="" />
       <input class="btn btn-warning" type="submit" name="sendtestmail" value="Send Test Mail" />
       <input class="btn btn-danger" type="submit" name="sendmassmail" value="Send Mass Mail" />
     </form>

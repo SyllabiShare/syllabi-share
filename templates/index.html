@@ -3,23 +3,14 @@
 {% block content %}
 
 {% if num == 1 %}
-<h4 class="text-center">There is 1 Syllabus for the {{school}}!</h4>
+<h4 class="text-center">There is 1 Syllabus for the {{school}}! Add More!</h4>
 {% else %}
 <h4 class="text-center">There are {{num}} Syllabi for the {{school}}! Add More!</h4>
 {% endif %}
-<br>
 
-<div style="width: 60%; height: 90%; margin: auto;" class="text-center">
+<div style="width: 60%; margin: auto;" class="text-center">
   {% for dept in posts %}
-  <button onclick="toggle('{{dept.0.dept}}')" class="btn btn-secondary" style="width: 40%; margin: 2%;" type="button">{{dept.0.dept}}</button>
-  <div class="dropdown-hidden" id="{{dept.0.dept}}">
-    {% for post in dept %}
-    <br>
-    <h5>{{post.course}} taught by {{post.prof}}</h5>
-    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
-    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}"><img src="{% static 'arrow.png' %}" class="arrow"></a><br>
-    {% endfor %}
-  </div>
+  <a class="btn btn-success" href="/{{dept.0.dept}}" style="width: 40%; margin: 2%">{{dept.0.dept}}</a>
   {% endfor %}
 </div>
 
@@ -36,12 +27,5 @@
   </table>
 </div>
 <a href="/upload"><img class="left" src="{% static 'plus.png' %}"></a>
-
-<script>
-  function toggle(dept){
-    dep = document.getElementById(dept)
-    dep.classList.toggle("dropdown-hidden");
-  }
-</script>
 
 {% endblock %}

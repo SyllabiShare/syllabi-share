@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% if posts.count == 1 %}
+<h4 class="text-center">There is 1 Syllabus for {{dept}} courses! Add More!</h4>
+{% else %}
+<h4 class="text-center">There are {{posts.count}} Syllabi for {{posts.0.dept}} courses! Add More!</h4>
+{% endif %}<br>
+
+<div class="text-center">
+  {% for post in posts %}
+  <button onclick="toggle('{{post.course}}')" class="btn btn-success" style="width: 40%;">{{post.course}}</button>
+  <div class="dropdown-hidden" id='{{post.course}}'>
+    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
+    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}"><img src="{% static 'arrow.png' %}" class="arrow"></a><br>
+  </div>
+  {% endfor %}
+</div>
+
+<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
+
+<script>
+  function toggle(course){
+    dep = document.getElementById(course)
+    dep.classList.toggle("dropdown-hidden");
+  }
+</script>
+
+{% endblock %}

@@ -26,12 +26,13 @@ def admin(request):
                 edit = Suggestion.objects.get(pk=request.POST['pk'])
                 edit.github_issue = request.POST['githubIssue']
                 edit.save()
-            elif 'sendtestmail' in request.POST:
-                data = [
-                    ("SyllabiShare", request.POST['body'], "syllabishare@gmail.com", ['syllabishare@gmail.com'])
-                ]
-                send_mass_mail(data)
-                return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'emailBody': request.POST['body']})
+            elif 'sendtestmail' in request.POST and 'password' in request.POST and 'body' in request.POST:
+                if request.POST['password'] == settings.EMAIL_PASSWORD:
+                    data = [
+                        ("SyllabiShare", request.POST['body'], "syllabishare@gmail.com", ['syllabishare@gmail.com'])
+                    ]
+                    send_mass_mail(data)
+                    return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'emailBody': request.POST['body']})
             elif 'sendmassmail' in request.POST and 'password' in request.POST and 'body' in request.POST:
                 if request.POST['password'] == settings.EMAIL_PASSWORD:
                     all_users = User.objects.all()
@@ -107,7 +108,7 @@ def index(request):
     postsDept = []
     for i in sorted(list(dep)):
         postsDept.append(posts.filter(dept=i).order_by('course'))
-    return render(request, 'index.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'leaderboard':entry.topFive(request.user.username),'posts': postsDept,'school':school,'num':len(posts)})
+    return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts': postsDept,'school':school,'num':len(posts)})
 
 
 def privacy(request):
@@ -139,7 +140,7 @@ def search(request):
     found = Submission.objects.filter(school=get_domain(request.user.email))
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
-    return render(request, 'search.html', {'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'posts':found.order_by('course')})
+    return render(request, 'search.html', {'posts':found.order_by('course')})
 
 
 def suggest(request):
@@ -189,6 +190,15 @@ def upload(request):
         else:
             message = 'Input not valid! Try Again'
     return render(request, 'upload.html', {'success': success, 'message': message})
+
+def department(request, dept=None):
+    (template, context) = authenticate(request.user)
+    if template:
+        return render(request, template, context)
+    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper())
+    if not dept or len(posts) == 0:
+        return redirect('/')
+    return render(request, 'department.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
 
 
 def view404(request, exception=None):

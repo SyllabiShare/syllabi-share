@@ -27,7 +27,7 @@ class School(models.Model):
             self.uploads[name] += 1
         else:
             self.uploads[name] = 1
-    def topFive(self,name):
+    def topFive(self):
         return [i for i in sorted(self.uploads.items(), key=lambda x: x[1], reverse=True)[:min(len(self.uploads),5)]]
         
 
