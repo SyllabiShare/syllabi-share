@@ -22,13 +22,13 @@
       <input style="width:100%;" id="file" type="file" name="file" accept="application/pdf" required> <br>
     </div>
   </div>
-  <input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit"> <br> 
+  <input class="btn btn-success" id='button' style="display: block; margin: auto; margin-bottom: 1px;" type="submit" value="Submit"> 
 </form>
 
 {% if success %}
-<div class="alert alert-success text-center" style="width: 30%; margin: auto;" role="alert"> Addition Successful! </div>
+<div id="message" class="alert alert-success text-center" style="width: 40%; margin: auto; margin-top: 5px;" role="alert"> Addition Successful! </div>
 {% else %}
-<div id='message' class="alert alert-danger text-center" style="width: 30%; margin: auto;" role="alert"> {{message}} </div>
+<div id="message" class="alert alert-danger text-center" style="width: 40%; margin: auto; margin-top: 5px;" role="alert"> {{message}} </div>
 {% endif %}
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
@@ -38,10 +38,12 @@
           var file = event.target.files[0];
           if(file.size>=5*1024*1024) {
               document.getElementById('message').innerHTML = "Upload PDFs of size less than 5MB please";
+              $("#form-id").get(0).reset(); 
               return;
           }
           if(!file.type.match('application/pdf.*')) {
               document.getElementById('message').innerHTML = "Upload PDFs only please!";
+              $("#form-id").get(0).reset(); 
               return;
           }
       });

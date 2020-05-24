@@ -13,12 +13,6 @@ body {
     display: none;
 }
 
-.ynbutton {
-    display: inline-block;
-    margin: auto;
-    width: 10%;
-}
-
 .github {
     position: fixed;
     right: 0px;
@@ -36,6 +30,13 @@ body {
     padding: 2px;
 }
 
+.paypal  {
+    position:fixed;
+    bottom:0px;
+    width:100%;
+    z-index:-99;
+}
+
 .leaderboard {
     position: fixed;
     right: 0px;
@@ -46,5 +47,12 @@ body {
 }
 
 table, th, td {
+    border: 1px solid black;
+}
+
+.arrow {
+    height:2%;
+    width:2%;
+    margin-bottom: 2%; 
     border: 1px solid black;
 }

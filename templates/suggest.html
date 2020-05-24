@@ -7,17 +7,33 @@
   <h1>Please leave a suggestion!</h1>
   <div class="form-group">
     <label for="suggestion">Suggestion: </label>
-    <input id="suggestion" type="text" name="suggestion">
+    <input id="suggestion" type="text" name="suggestion" required>
   </div>
-  <input class="btn btn-success" type="submit" value="Submit">
+  <h5>Consider opening a Github issue for me to triage: <a style='color: blueviolet' href='https://github.com/verndrade/syllabi-share/issues'><b><u>HERE</u></b></a></a></h5> 
+  <div class="form-group">
+    <label for="githubLink">Issue (Optional): </label>
+    <input id="githubLink" type="text" name="githubLink">
+  </div>
+  <input class="btn btn-success" type="submit" value="Submit"> <br><br>
 </form>
 
-Existing Suggestions:
-<ul style="column-count: 4;">
+Existing Suggestions (beware, look at the links before you click them, just in case):
+<ul>
   {%for i in suggestion%}
-  <li>{{i.suggestion_text|truncatechars:30}}</li>
+    <li>{{i.suggestion_text}} -- <a href='{{i.github_issue}}'>{{i.github_issue}}</a></li>
   {%endfor%}
 </ul>
+
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
+<div class="text-center paypal" id='paypal'>
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="andradevern@gmail.com" />
+    <input type="hidden" name="item_name" value="Help pay for AWS hosting costs" />
+    <input type="hidden" name="currency_code" value="USD" />
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+  </form>
+  <b>I am once again asking for your finanical support. All money goes towards hosting costs.</b>
+</div>
 
 {% endblock %}

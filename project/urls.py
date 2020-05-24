@@ -13,20 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path(settings.ADMIN_URL, admin.site.urls),
-    path('', include('syllabiShare.urls')),
-    path('', include('social_django.urls', namespace='social')),
     path(
         'logout/',
         LogoutView.as_view(template_name=settings.LOGOUT_REDIRECT_URL),
         name='logout'
         ),
+    path('', include('syllabiShare.urls')),
+    path('', include('social_django.urls', namespace='social')),
 ]
 
 handler404 = 'syllabiShare.views.view404' 
