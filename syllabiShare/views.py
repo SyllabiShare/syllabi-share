@@ -104,11 +104,7 @@ def index(request):
     dep = set()
     for i in posts:
         dep.add(i.dept)
-
-    postsDept = []
-    for i in sorted(list(dep)):
-        postsDept.append(posts.filter(dept=i).order_by('course'))
-    return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts': postsDept,'school':school,'num':len(posts)})
+    return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
 
 
 def privacy(request):
@@ -195,7 +191,7 @@ def department(request, dept=None):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
-    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper())
+    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('course')
     if not dept or len(posts) == 0:
         return redirect('/')
     return render(request, 'department.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
