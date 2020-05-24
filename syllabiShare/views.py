@@ -106,8 +106,7 @@ def index(request):
     if not school:
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
-        pass
-    return render(request, 'school.html', {'poster': entry.poster,'name': school})
+        return render(request, 'school.html', {'poster': entry.poster,'name': school})
 
     posts = Submission.objects.filter(school=domain)
     dep = set()
