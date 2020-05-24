@@ -13,12 +13,6 @@ body {
     display: none;
 }
 
-.ynbutton {
-    display: inline-block;
-    margin: auto;
-    width: 10%;
-}
-
 .github {
     position: fixed;
     right: 0px;

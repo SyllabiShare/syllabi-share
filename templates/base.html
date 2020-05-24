@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
   </head>
+
   <body style="background-image: url({% static 'index.png' %}); background-size: cover;">
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
       <a class="navbar-brand" href="/">SyllabiShare</a>
@@ -44,10 +45,12 @@
         </li>
       </ul>
     </nav>
+
     <div style="padding: 2%">
       {% block content %}
       {% endblock %}
     </div>
+    
     <a href="https://github.com/verndrade/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
   </body>
 </html>

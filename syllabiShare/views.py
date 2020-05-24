@@ -57,13 +57,21 @@ def admin(request):
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
     return redirect('/')
 
-
 def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False})
     if user.email[-4:] != '.edu':
         return ('error.html', {'loggedIn': True})
     return (False, False)
+
+def display(request, dept=None):
+    (template, context) = authenticate(request.user)
+    if template:
+        return render(request, template, context)
+    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('course')
+    if not dept or len(posts) == 0:
+        return redirect('/')
+    return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
 
 
 def get_domain(email):
@@ -98,7 +106,8 @@ def index(request):
     if not school:
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
-        return render(request, 'school.html', {'poster': entry.poster,'name': school})
+        pass
+    return render(request, 'school.html', {'poster': entry.poster,'name': school})
 
     posts = Submission.objects.filter(school=domain)
     dep = set()
@@ -109,6 +118,22 @@ def index(request):
 
 def privacy(request):
     return render(request, 'privacy.html')
+
+
+def search(request):
+    (template, context) = authenticate(request.user)
+    if template:
+        if context['loggedIn']:
+            logout(request)
+        return render(request, template, context)
+    domain = get_domain(request.user.email)
+    found = Submission.objects.filter(school=domain)
+    if request.method == 'POST':
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
+    dep = set()
+    for i in found:
+        dep.add(i.dept)
+    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':School.objects.get(domain=domain).school})
 
 
 def setting(request):
@@ -125,18 +150,6 @@ def setting(request):
                 User.objects.get(username=request.POST['username']).delete()
                 return render(request, 'error.html')
     return render(request, 'settings.html')
-
-
-def search(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
-    found = Submission.objects.filter(school=get_domain(request.user.email))
-    if request.method == 'POST':
-        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
-    return render(request, 'search.html', {'posts':found.order_by('course')})
 
 
 def suggest(request):
@@ -186,15 +199,6 @@ def upload(request):
         else:
             message = 'Input not valid! Try Again'
     return render(request, 'upload.html', {'success': success, 'message': message})
-
-def department(request, dept=None):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
-    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('course')
-    if not dept or len(posts) == 0:
-        return redirect('/')
-    return render(request, 'department.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
 
 
 def view404(request, exception=None):

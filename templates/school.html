@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% if first %}
+{% if penis %}
   <form method="POST">
     {% csrf_token %}
     <div class="form-group group text-center">
@@ -11,15 +11,16 @@
     <input class="btn btn-success" id='button' style="display: block; margin: auto;" type="submit" value="Submit"> <br> 
   </form>
 {% else %}
+  <div class="text-center">
   <form method="POST">
     {% csrf_token %}
-    <div class="form-group group text-center">
-      <h4><b>Wow! It looks like you are the second person from your school to use the app!<br><br>{{poster}} named the school "{{name}}". Is this accurate?</b></h4>
-      <br>
-      <input class="btn btn-success ynbutton" id='button' type="submit" value="Yes">
-      <span style="visibility: hidden">_____</span>
-  </form>
-  <button onclick="toggle()" class="btn btn-danger ynbutton" type="button"> No </button>
+      <h4><b>Wow! It looks like you are the second person from your school to use the app!<br><br>{{poster}} named the school "{{name}}". Is this accurate?</b></h4> <br>
+      <div style="width: 40%; margin: auto;">
+        <input class="btn btn-success" id='button' type="submit" style="float: left; width: 40%;" value="Yes">
+        <button onclick="toggle()" class="btn btn-danger" style="float: right; width: 40%;" type="button"> No </button>
+      </div>
+  </form><br><br>
+
   <form method="POST">
     {% csrf_token %}
     <div id="myDropdown" class="dropdown-hidden"><br>

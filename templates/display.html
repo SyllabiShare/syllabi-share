@@ -2,13 +2,23 @@
 {% load static %}
 {% block content %}
 
-{% if posts.count == 1 %}
-<h4 class="text-center">There is 1 Syllabus for {{dept}} courses! Add More!</h4>
-{% else %}
-<h4 class="text-center">There are {{posts.count}} Syllabi for {{posts.0.dept}} courses! Add More!</h4>
-{% endif %}<br>
-
 <div class="text-center">
+  {% if search %}
+    {% if posts.count == 0 %}
+      <h4>There are no Syllabi matching your search at the {{school}} sorry! <br>Try to add them!</h4>
+    {% elif posts.count == 1 %}
+      <h4>There is 1 Syllabus matching your search at the {{school}}!</h4>
+    {% else %}
+      <h4>There are {{posts.count}} Syllabi matching your search at the {{school}}!</h4>
+    {% endif %}
+  {% else %}  
+    {% if posts.count == 1 %}
+      <h4>There is 1 Syllabus for {{dept}} courses! Add More!</h4>
+    {% else %}
+      <h4>There are {{posts.count}} Syllabi for {{posts.0.dept}} courses! Add More!</h4>
+    {% endif %}
+  {% endif %}<br>
+
   {% for post in posts %}
   <button onclick="toggle('{{post.course}}')" class="btn btn-success" style="width: 40%;">{{post.course}} taught by {{post.prof}}</button>
   <div class="dropdown-hidden" id='{{post.course}}'>

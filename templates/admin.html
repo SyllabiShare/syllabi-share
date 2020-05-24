@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+
 <div style="padding-left: 5%;">
   {% if mailSuccess %}
   <div class="alert alert-success text-center" style="width: 20%; margin: auto;" role="alert"> Mail Sent! </div>
@@ -54,12 +55,13 @@
       {% csrf_token %}
       <label for="body">Email Body: </label>
       <input type="text" name="body" value="{{emailBody}}" /><br>
-      <label for="password">Email Password:</label>
-      <input type="text" name="password" value="" />
+      <label for="key">Email Password:</label>
+      <input type="text" name="key"/>
       <input class="btn btn-warning" type="submit" name="sendtestmail" value="Send Test Mail" />
       <input class="btn btn-danger" type="submit" name="sendmassmail" value="Send Mass Mail" />
     </form>
   </div>
 </div>
+
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 {% endblock %}
