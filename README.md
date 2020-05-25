@@ -32,6 +32,10 @@ The developers of SyllabiShare do not pretend to be perfect and recognize that f
 
 To delete your account click your email at the top right corner of any page. It will open a drop-down menu where you can click Settings. There it will ask you if you want to delete your account and to confirm the deletion of your account by typing your username. Once you have deleted your account you will be redirected to the login screen, which confirms your account was deleted. However, we must keep record of what you have uploaded and when you uploaded it.
 
+### Technical Details
+
+This app was written in Python using the Django Framework and is hosted on Heroku, with files being served through an Amazon Web Services S3 Bucket in Northern Virginia. This will eventually cost money, which is why I will once again ask for your financial support and ask that you click the Donate link at the bottom  of the screen and donate if you are able to. We understand if you can't though, we're all college students here.
+
 ## Authors
 
 * **Vernon Andrade** - *Development*
