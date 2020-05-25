@@ -15,6 +15,9 @@ class School(models.Model):
     school = models.TextField(blank=True)
     domain = models.TextField(unique=True)
     poster = models.TextField(blank=True)
+    takedown = models.BooleanField(default=False)
+    reason = models.TextField(default='')
+    poster = models.TextField(blank=True)
     reviewed = models.BooleanField(default=False)
     uploads = JSONField(default={})
     def add_school(self,name,id):

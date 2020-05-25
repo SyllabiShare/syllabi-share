@@ -22,6 +22,11 @@ def admin(request):
                 User.objects.exclude(email__contains=".edu").delete()
             elif 'delete' in request.POST:
                 Submission.objects.get(pk=request.POST['pk']).delete()
+            elif 'takedown' in request.POST and 'reason' in request.POST:
+                school = School.objects.get(pk=request.POST['pk'])
+                school.takedown = True
+                school.reason = request.POST['reason']
+                school.save()
             elif 'edit' in request.POST:
                 edit = Suggestion.objects.get(pk=request.POST['pk'])
                 edit.github_issue = request.POST['githubIssue']
@@ -62,6 +67,10 @@ def authenticate(user):
         return ('error.html', {'loggedIn': False})
     if user.email[-4:] != '.edu':
         return ('error.html', {'loggedIn': True})
+    domain = get_domain(user.email)
+    school = School.objects.get(domain=domain)
+    if school.takedown:
+        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain':domain})
     return (False, False)
 
 def display(request, dept=None):
