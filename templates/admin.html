@@ -38,6 +38,7 @@
         {% csrf_token %}
         <p style="float: left;"> {{i.name}} -- {{i.suggestion_text|truncatechars:50}} --  <a href='{{i.github_issue}}'>{{i.github_issue}}</a> </p>
         <input name="pk" value="{{i.pk}}" type="hidden"/>
+        <input class="btn btn-danger" type="submit" name="close" value="Close Feedback" style="float: right;"/>
         <input class="btn btn-warning" type="submit" name="edit" value="Edit Github Issue" style="float: right;"/>
         <input name="githubIssue" value="{{i.github_issue}}" style="float: right;" type="text"/>
       </form>

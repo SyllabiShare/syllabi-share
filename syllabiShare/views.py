@@ -22,6 +22,8 @@ def admin(request):
                 User.objects.exclude(email__contains=".edu").delete()
             elif 'delete' in request.POST:
                 Submission.objects.get(pk=request.POST['pk']).delete()
+            elif 'close' in request.POST:
+                Suggestion.objects.get(pk=request.POST['pk']).delete()
             elif 'takedown' in request.POST and 'reason' in request.POST:
                 school = School.objects.get(pk=request.POST['pk'])
                 school.takedown = True
