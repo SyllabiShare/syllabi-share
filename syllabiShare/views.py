@@ -196,15 +196,15 @@ def upload(request):
     success = False
     message = 'Misuse of uploads will be met by a ban!'
     if request.method == 'POST':
-        course = request.POST['prof'].split()
-        goodProf = len(request.POST['prof'].split()) == 2 and course[0].isalpha() and course[1].isalpha()
+        prof = request.POST['prof'].strip().split()
+        goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1]) 
         course = request.POST['course'].split()
         goodCourse = len(course) == 2 and course[0].isalpha() and course[1].isnumeric()
         if goodProf and goodCourse:
             entry = Submission()
             entry.user = request.user.username
             entry.school = get_domain(request.user.email)
-            entry.prof = request.POST['prof']
+            entry.prof = prof[0] + ' ' + prof[1]
             entry.course = request.POST['course'].upper()
             entry.dept = course[0].upper()
             entry.upvotes = 1
