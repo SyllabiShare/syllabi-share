@@ -2,6 +2,11 @@
     margin: 2%;
 }
 
+.profile {
+    margin: 0 auto;
+    padding: 1%;
+}
+
 body {
     margin: 0;
     height: 100%;
@@ -44,10 +49,6 @@ body {
     margin-right: 1%;
     border-style: solid; 
     text-align: center;
-}
-
-table, th, td {
-    border: 1px solid black;
 }
 
 .arrow {

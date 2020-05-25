@@ -18,7 +18,7 @@
     <button class="btn-dark btn" style="font-size: 30px; display: block; margin: auto;"> <b> <a style="color:antiquewhite;" href="{% url 'social:begin' 'google-oauth2' %}"> Please Login with a .edu Email! </a> </b> </button> <br>
     
     <div class="text-center">
-      <h6>By logging in to this website you are agreeing to the <a href="/privacy" style="color: blueviolet"> privacy policy</a></h6> <br>
+      <h6>By logging in to this website you are agreeing to the <a href="/privacy" style="color: purple"> privacy policy </a> and certify that you will only use the material for educational purposes</h6> <br>
       {% if loggedIn %}
       <div class="alert alert-danger" style="width: 20%; margin: auto;" role="alert"> That was not a .edu email!</div>
       {% endif %}
