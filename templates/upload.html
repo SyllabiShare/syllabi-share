@@ -38,8 +38,8 @@
   $(function(){
       $("#file").on('change', function(event) {
           var file = event.target.files[0];
-          if(file.size>=5*1024*1024) {
-              document.getElementById('message').innerHTML = "Upload PDFs of size less than 5MB please";
+          if(file.size>=1024*1024) {
+              document.getElementById('message').innerHTML = "Upload PDFs of size less than 1MB please";
               $("#form-id").get(0).reset(); 
               return;
           }
