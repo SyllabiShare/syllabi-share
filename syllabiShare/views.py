@@ -119,6 +119,20 @@ def privacy(request):
     return render(request, 'privacy.html')
 
 
+def schooladmin(request,school=None):
+    if request.user.is_superuser:
+        try:
+            entry = School.objects.get(domain=school)
+        except:
+            return redirect('/')
+        posts = Submission.objects.filter(school=school)
+        dep = set()
+        for i in posts:
+            dep.add(i.dept)
+        return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
+    return redirect('/')
+
+
 def search(request):
     (template, context) = authenticate(request.user)
     if template:
@@ -202,3 +216,4 @@ def upload(request):
 
 def view404(request, exception=None):
     return redirect('/')
+
