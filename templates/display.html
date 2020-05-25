@@ -15,13 +15,13 @@
     {% if posts.count == 1 %}
       <h4>There is 1 Syllabus for {{dept}} courses! Add More!</h4>
     {% else %}
-      <h4>There are {{posts.count}} Syllabi for {{posts.0.dept}} courses! Add More!</h4>
+      <h4>There are {{posts.count}} Syllabi for {{dept}} courses! Add More!</h4>
     {% endif %}
   {% endif %}<br>
 
   {% for post in posts %}
-  <button onclick="toggle('{{post.course}}')" class="btn btn-success" style="width: 40%;">{{post.course}} taught by {{post.prof}}</button>
-  <div class="dropdown-hidden" id='{{post.course}}'>
+  <button onclick="toggle('{{post.course}}{{post.prof}}')" class="btn btn-success" style="width: 40%;">{{post.course}} taught by {{post.prof}}</button>
+  <div class="dropdown-hidden" id='{{post.course}}{{post.prof}}'>
     <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
     <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}"><img src="{% static 'arrow.png' %}" class="arrow"></a>
   </div><br><br>
