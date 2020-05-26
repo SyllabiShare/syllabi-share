@@ -38,7 +38,7 @@ This app was written in Python using the Django Framework and is hosted on Herok
 
 ## Authors
 
-* **Vernon Andrade** - *Development*
+* **Vernon Andrade** - *Development, Lead*
 * **Robbie B** - *Development*
 * **Peter B** - *Documentation*
 * **Winston Liu** - *Development, UI/UX*
