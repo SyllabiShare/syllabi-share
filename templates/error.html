@@ -1,5 +1,5 @@
 {% load static %}
-<!doctype html> 
+<!doctype html>
 <html lang="en" style="margin: 0; height: 100%; overflow: hidden">
   <head>
     <meta charset="utf-8">
@@ -16,24 +16,14 @@
     <b style="top: 30%; font-size: 50px;"> WELCOME TO SYLLABI SHARE! </b> <br><br>
     <b style="top: 60%; font-size: 30px;"> Learn about your courses here! </b> <br>
     <button class="btn-dark btn" style="font-size: 30px; display: block; margin: auto;"> <b> <a style="color:antiquewhite;" href="{% url 'social:begin' 'google-oauth2' %}"> Please Login with a .edu Email! </a> </b> </button> <br>
-    
+
     <div class="text-center">
       <h6>By logging in to this website you are agreeing to the <a href="/privacy" style="color: purple"> privacy policy </a> and certify that you will only use the material for educational purposes</h6> <br>
       {% if loggedIn %}
       <div class="alert btn-danger" style="width: 20%; margin: auto;" role="alert"> That was not a .edu email!</div>
       {% endif %}
-      <div class="paypal">
-        <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-          <input type="hidden" name="cmd" value="_donations" />
-          <input type="hidden" name="business" value="andradevern@gmail.com" />
-          <input type="hidden" name="item_name" value="Help pay for AWS hosting costs" />
-          <input type="hidden" name="currency_code" value="USD" />
-          <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-        </form>
-        <b>I am once again asking for your finanical support. All money goes towards hosting costs.</b>
-      </div>
     </div>
-    
+
     <a href="https://github.com/verndrade/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
   </body>
 </html>

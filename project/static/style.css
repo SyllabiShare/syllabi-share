@@ -35,11 +35,9 @@ body {
     padding: 2px;
 }
 
-.paypal  {
-    position:fixed;
-    bottom:0px;
-    width:100%;
-    z-index:-99;
+/* Ugh, get rid of this as soon as we move those upload/back/GH buttons somewhere else */
+footer {
+    z-index: -99 !important;
 }
 
 .leaderboard {
@@ -47,13 +45,13 @@ body {
     right: 0px;
     top: 20%;
     margin-right: 1%;
-    border-style: solid; 
+    border-style: solid;
     text-align: center;
 }
 
 .arrow {
     height:2%;
     width:2%;
-    margin-bottom: 2%; 
+    margin-bottom: 2%;
     border: 1px solid black;
 }
