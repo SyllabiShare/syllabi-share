@@ -37,7 +37,7 @@ body {
 
 /* Ugh, get rid of this as soon as we move those upload/back/GH buttons somewhere else */
 footer {
-    z-index: -99 !important;
+    z-index: 1 !important;
 }
 
 .leaderboard {
