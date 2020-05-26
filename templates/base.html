@@ -17,8 +17,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 
-  <body style="background-image: url({% static 'back.png' %}); background-size: cover;">
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  <body style="background-image: url({% static 'back.png' %}); background-size: cover;" class="d-flex flex-column align-items-center vh-100">
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark w-100">
       <a class="navbar-brand" href="/">SyllabiShare</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -55,14 +55,14 @@
       </div>
     </nav>
 
-    <div class="container my-3">
+    <div class="container my-3 flex-fill">
       {% block content %}
       {% endblock %}
     </div>
 
     <a href="https://github.com/verndrade/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
 
-    <footer class="fixed-bottom">
+    <footer>
       {% block footer %}
       {% endblock %}
     </footer>
