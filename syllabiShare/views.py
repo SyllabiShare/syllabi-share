@@ -33,6 +33,12 @@ def admin(request):
                 edit = Suggestion.objects.get(pk=request.POST['pk'])
                 edit.github_issue = request.POST['githubIssue']
                 edit.save()
+            elif 'download' in request.POST:
+                for i in Submission.objects.all():
+                    temp = ''
+                    for field in Submission._meta.fields:               
+                        temp+=str(getattr(i, field.name)) + ','
+                    print(temp)
             elif 'sendtestmail' in request.POST and 'password' in request.POST and 'body' in request.POST:
                 if request.POST['password'] == settings.EMAIL_PASSWORD:
                     data = [
