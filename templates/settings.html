@@ -12,17 +12,10 @@
   <h5>We're sad to see you go, but if you want to come back we will be here!</h5>
 </form> <br><br>
 
-<div class="text-center paypal" id='paypal'>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="andradevern@gmail.com" />
-    <input type="hidden" name="item_name" value="Help pay for AWS hosting costs" />
-    <input type="hidden" name="currency_code" value="USD" />
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-  </form>
-  <b>I am once again asking for your finanical support. All money goes towards hosting costs.</b>
-</div>
-
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
+{% endblock %}
+
+{% block footer %}
+{% include 'paypal.html' %}
 {% endblock %}
