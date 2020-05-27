@@ -25,12 +25,14 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item" style="padding-top:1%">
-            <form action="/search/" method="POST">
+        <ul class="navbar-nav ml-auto d-flex align-items-md-center">
+          <li class="nav-item">
+            {# mt-3, mt-md-0: provide a top margin when we're collapsed but not when expanded #}
+            <form action="/search/" method="POST" class="form-inline mt-2 mt-md-0 ml-md-2 mr-md-5">
               {% csrf_token %}
-              <input style="width:50%;" id="search" type="text" name="search">
-              <input class="btn-success" id='button' type="submit" value="Search">
+              {# d-inline-block & w-auto force the form to be inline at all sizes, since we only have two elements #}
+              <input class="form-control form-control-sm mr-2 d-inline-block w-auto" id="search" type="search" name="search" placeholder="Search">
+              <input class="btn btn-sm btn-outline-success" id="button" type="submit" value="Search">
             </form>
           </li>
           <li class="nav-item">
