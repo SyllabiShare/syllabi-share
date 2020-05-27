@@ -23,14 +23,14 @@
     </div>
   </div>
   <input class="btn btn-success" id='button' style="display: block; margin: auto; margin-bottom: 1px;" type="submit" value="Submit"> 
-</form>
+</form><br>
 
 {% if success %}
-<div id="message" class="alert btn-success text-center" style="width: 40%; margin: auto; margin-top: 5px;" role="alert"> Addition Successful! </div>
+<div id="message" class="alert text-center" style="color: white; border-color: #43a546; background-color: #43a546; width: 40%; margin: auto;" role="alert"> Addition Successful! </div>
 {% else %}
-<div id="message" class="alert btn-danger text-center" style="width: 40%; margin: auto; margin-top: 5px;" role="alert"> {{message}} </div>
-{% endif %} <br>
-<h6 class="text-center"> Please be aware of any policies your school may have about the sharing of syllabi before we get the professor consent system up. <br> By submitting you certify that you have done this</h6>
+<div id="message" class="alert text-center" style="color: white; border-color: #d33840; background-color: #d33840; width: 40%; margin: auto;" role="alert"> {{message}} </div>
+{% endif %} 
+<h6 class="text-center" style="margin-top:5px"> Please be aware of any policies your school may have about the sharing of syllabi before we get the professor consent system up. <br> By submitting you certify that you have done this</h6>
 
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 

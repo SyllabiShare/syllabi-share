@@ -3,12 +3,16 @@
 {% load static %}
 
 <div style="padding-left: 5%;">
+  <a class="btn btn-success" href="#school">School</a>
+  <a class="btn btn-success" href="#suggestions">Suggestions</a>
+  <a class="btn btn-success" href="#users">Users</a>
+  <a class="btn btn-success" href="#panel">Control Panel</a>
   {% if mailSuccess %}
-  <div class="alert btn-success text-center" style="width: 20%; margin: auto;" role="alert"> Mail Sent! </div>
+  <div class="alert text-center" style="width: 20%; margin: auto; color: white; border-color: #43a546; background-color: #43a546;" role="alert"> Mail Sent! </div>
   {% endif %}
   <h3>Submissions: {{submissions.count}} </h3>
   {% for i in submissions %}
-  <div style="display: inline-block; width: 100%;">
+  <div style="display: inline-block; width: 100%;" id='efpjw'>
     <form method="post">
       {% csrf_token %}
       <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.course}} -- {{i.dept}} -- {{i.syllabus}} -- {{i.upvotes}}</p>
@@ -18,6 +22,7 @@
   </div>
   {%endfor%} <br>
 
+  <a name="school"></a>
   <h3>School: {{school.count}} </h3>
   {% for i in school %}
   <div style="display: inline-block; width: 100%;">
@@ -31,6 +36,7 @@
   </div>
   {%endfor%} <br>
 
+  <a name="suggestions"></a>
   <h3>Suggestions: {{suggestions.count}} </h3>
   {% for i in suggestions %}
     <div style="display: inline-block; width: 100%;">
@@ -45,11 +51,13 @@
     </div>
   {%endfor%}<br>
 
+  <a name="users"></a>
   <h3>Users: {{users.count}}</h3>
   {% for i in users %}
     {{i.username}} -- {{i.first_name}} {{i.last_name}}  --  {{i.email}}<br>
   {%endfor%} <br>
   
+  <a name="panel"></a>
   <h3>Control Panel: </h3>
   <div style="display:inline-block;">
     <form method="post" style="width:200px; display:inline-block;">
