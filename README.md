@@ -2,9 +2,9 @@
 
 ### Link: http://syllabi-share.herokuapp.com/
 
-SyllabiShare is a web application created at the University of Virginia after seeing the unmet need of a lot of our students wanting to see a class's syllabus and policies before registering for it 
+SyllabiShare is a web application created at the University of Virginia after seeing the unmet need of a lot of our students wanting to see a class's syllabus and policies before registering for it.
 
-SyllabiShare allows students to share the syllabi of classes with all the other students using the app at their school. This app streamliness the process of choosing which classes to take and be informed. 
+SyllabiShare allows students to share the syllabi of classes with all the other students using the app at their school. This app streamlines the process of choosing which classes to take and be informed along the way.
 
 
 ## Usage
@@ -12,7 +12,9 @@ SyllabiShare allows students to share the syllabi of classes with all the other 
 ### Logging In and Logging Out
 
 SyllabiShare requires a university-provided .edu Google Account to use it. 
+
 Simply click the button that says "Please Login with a .edu Email" and it will take you to the Google login screen. 
+
 To logout, click your username at the top right corner. 
 
 ### Uploading a Syllabus
@@ -28,7 +30,9 @@ _Note: it is up to the uploader to ensure that the users are not violating any p
 
 ### Finding a Syllabus
 
-SyllabiShare sorts syllabi by department so you can find a specific syllabus at the page that corresponds to its department. - Search for syllabi by the course identifiers (CS 2150) or the professor. 
+SyllabiShare sorts syllabi by department so you can find a specific syllabus at the page that corresponds to its department. 
+
+You can also search for syllabi by the course identifiers (CS 2150) or the professor. 
 
 _Note: You might not find a syllabus you desire since SyllabiShare relies on students uploading the syllabi._
 
@@ -53,7 +57,9 @@ The developers of SyllabiShare do not pretend to be perfect and recognize that f
 ### Roadmap:
 
 [ ] Add feature to include course names for syllabus uploads and be searchable
+
 [ ] Add a feature to request syllabi directly from professors
+
 [ ] Implement opt-out leaderboard to give option to users not to display username
 
 ----
