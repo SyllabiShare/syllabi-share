@@ -8,6 +8,8 @@ class Submission(models.Model):
     dept = models.TextField(blank=True)
     course = models.TextField(blank=True)
     school = models.TextField(blank=True)
+    semester = models.TextField(blank=True)
+    year = models.TextField(blank=True)
     syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
     upvotes = models.IntegerField(default = 1)
 

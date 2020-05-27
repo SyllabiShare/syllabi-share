@@ -21,6 +21,20 @@
       <h4 style='float: right;'> PDFs only</b> </h4>
       <input style="width:100%;" id="file" type="file" name="file" accept="application/pdf" required> <br>
     </div>
+    <div class="form-group group">
+      <h4 style='float: left;' for="file"> <b>Semester:</b> </h4>
+      <select name="semester" id="semester" style="margin: 1%;" required>
+        <option value="fall">Fall</option>
+        <option value="spring">Spring</option>
+        <option value="summer">Summer</option>
+      </select>
+      <select name="year" id="year" required>
+        <option value="2020">2020</option>
+        <option value="2019">2019</option>
+        <option value="2018">2018</option>
+        <option value="2017">2017</option>
+      </select>
+    </div>
   </div>
   <input class="btn btn-success" id='button' style="display: block; margin: auto; margin-bottom: 1px;" type="submit" value="Submit"> 
 </form><br>
