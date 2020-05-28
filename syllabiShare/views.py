@@ -153,7 +153,7 @@ def search(request):
     domain = get_domain(request.user.email)
     found = Submission.objects.filter(school=domain)
     if request.method == 'POST':
-        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
@@ -208,6 +208,7 @@ def upload(request):
             entry.school = get_domain(request.user.email)
             entry.prof = prof[0] + ' ' + prof[1]
             entry.course = request.POST['course'].upper()
+            entry.title = request.POST['title']
             entry.dept = course[0].upper()
             entry.upvotes = 1
             entry.syllabus = request.FILES['file']

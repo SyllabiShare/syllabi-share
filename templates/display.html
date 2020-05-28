@@ -14,7 +14,7 @@
   {% endif %}<br>
 
   {% for post in posts %}
-  <button onclick="toggle('{{post.course}}{{post.prof}}')" class="btn btn-success" style="width: 40%;">{{post.course}} taught by {{post.prof}}</button>
+  <button onclick="toggle('{{post.course}}{{post.title}}{{post.prof}}')" class="btn btn-success" style="width: 40%;">{{post.course}} taught by {{post.prof}}</button>
   <div class="dropdown-hidden" id='{{post.course}}{{post.prof}}'>
     <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
     <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}"><img src="{% static 'arrow.png' %}" class="arrow"></a>
