@@ -210,8 +210,11 @@ def upload(request):
             entry.course = request.POST['course'].upper()
             entry.title = request.POST['title']
             entry.dept = course[0].upper()
+            entry.semester = request.POST['semester']
+            entry.year = request.POST['year']
             entry.upvotes = 1
             entry.syllabus = request.FILES['file']
+            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year])
             entry.save()
             school = School.objects.filter(domain=entry.school)[0]
             school.upload(request.user.username)

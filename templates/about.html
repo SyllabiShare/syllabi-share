@@ -17,7 +17,7 @@
     </td>
     <td class="text-center profile">
       <img src="{% static 'winston.jpg' %}" style="border-radius: 50%;"></img>
-      <h3><a style="color:black" href=''>Winston Liu</a></h3>
+      <h3><a style="color:black" href='https://www.linkedin.com/in/winston-liu'>Winston Liu</a></h3>
       <h4>UVA CS '20</h4>
       <h4>Developer</h4>
     </td>
@@ -56,17 +56,11 @@
 <h2> Suggestions </h2>
 <h6>If you have suggestions for how to make this app better or any feedback, please click <a style="color: purple" href="/suggest"> here</a>.</h6>
 <br><br>
-<div class="text-center" id='paypal'>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="andradevern@gmail.com" />
-    <input type="hidden" name="item_name" value="Help pay for AWS hosting costs" />
-    <input type="hidden" name="currency_code" value="USD" />
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-  </form>
-  <b>I am once again asking for your finanical support. All money goes towards hosting costs.</b>
-</div>
 
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
+
+{% endblock %}
+
+{% block footer %}
 
 {% endblock %}
