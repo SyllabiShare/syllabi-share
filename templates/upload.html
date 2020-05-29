@@ -2,38 +2,38 @@
 {% load static %}
 {% block content %}
 
+<h3>Upload syllabus</h3>
 <form id="form-id" method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <h1 class='text-center'> Upload Syllabus: </h1>
-  <div style="width: 35%; margin: auto; display: block;">
-    <div class="form-group group">
-      <h4 style='float: left;' for="prof"> <b>Professor:</b> </h4>
-      <h4 style='float: right;'> e.g John Doe</b> </h4>
-      <input style="width:100%;" id="prof" type="text" name="prof" required> <br>
-    </div>
-    <div class="form-group group">
-      <h4 style='float: left;' for="course"> <b>Course:</b> </h4>
-      <h4 style='float: right;'> e.g CS 4102</b> </h4>
-      <input style="width:100%;" id="course" type="text" name="course" required> <br>
-    </div>
-    <div class="form-group group">
-      <h4 style='float: left;' for="title"> <b>Course Title:</b> </h4>
-      <h4 style='float: right;'> e.g Algorithms</b> </h4>
-      <input style="width:100%;" id="title" type="text" name="title" required> <br>
-    </div>
-    <div class="form-group group">
-      <h4 style='float: left;' for="file"> <b>Syllabus:</b> </h4>
-      <h4 style='float: right;'> PDFs only</b> </h4>
-      <input style="width:100%;" id="file" type="file" name="file" accept="application/pdf" required> <br>
-    </div>
-    <div class="form-group group">
-      <h4 style='float: left;' for="file"> <b>Semester:</b> </h4>
-      <select name="semester" id="semester" style="margin: 1%;" required>
+  <div class="form-group">
+    <label for="prof">Professor</label>
+    <input class="form-control" id="prof" type="text" name="prof" placeholder="John Doe" required>
+  </div>
+  <div class="form-group">
+    <label for="course">Course</label>
+    <input class="form-control" id="course" type="text" name="course" placeholder="CS 2150" required>
+  </div>
+  <div class="form-group group">
+    <h4 style='float: left;' for="title"> <b>Course Title:</b> </h4>
+    <h4 style='float: right;'> e.g Algorithms</b> </h4>
+    <input style="width:100%;" id="title" type="text" name="title" required> <br>
+  </div>
+  <div class="form-group">
+    <label for="file">Syllabus (PDFs only)</label>
+    <input class="form-control-file" id="file" type="file" name="file" accept="application/pdf" required>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <label for="semester">Semester</label>
+      <select class="form-control" name="semester" id="semester" required>
         <option value="fall">Fall</option>
         <option value="spring">Spring</option>
         <option value="summer">Summer</option>
       </select>
-      <select name="year" id="year" required>
+    </div>
+    <div class="form-group col-md-1">
+      <label for="year">Year</label>
+      <select class="form-control" name="year" id="year" required>
         <option value="2020">2020</option>
         <option value="2019">2019</option>
         <option value="2018">2018</option>
@@ -41,15 +41,18 @@
       </select>
     </div>
   </div>
-  <input class="btn btn-success" id='button' style="display: block; margin: auto; margin-bottom: 1px;" type="submit" value="Submit"> 
+  <input class="btn btn-success" type="submit" value="Submit">
 </form><br>
 
 {% if success %}
-<div id="message" class="alert text-center" style="color: white; border-color: #43a546; background-color: #43a546; width: 40%; margin: auto;" role="alert"> Addition Successful! </div>
+<div id="message" class="alert d-inline-block" style="color: white; border-color: #43a546; background-color: #43a546;" role="alert"> Addition Successful! </div>
 {% else %}
-<div id="message" class="alert text-center" style="color: white; border-color: #d33840; background-color: #d33840; width: 40%; margin: auto;" role="alert"> {{message}} </div>
+<div id="message" class="alert d-inline-block" style="color: white; border-color: #d33840; background-color: #d33840;" role="alert"> {{message}} </div>
 {% endif %} 
-<h6 class="text-center" style="margin-top:5px"> Please be aware of any policies your school may have about the sharing of syllabi before we get the professor consent system up. <br> By submitting you certify that you have done this</h6>
+<p>
+  Please be aware of any policies your school may have about the sharing of syllabi before we get the professor consent system up.<br>
+  By uploading a syllabus, you certify that you have done this.
+</p>
 
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
