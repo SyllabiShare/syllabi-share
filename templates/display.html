@@ -14,21 +14,11 @@
   {% endif %}<br>
 
   {% for post in posts %}
-  <button onclick="toggle('{{post.course}}{{post.prof}}')" class="btn btn-success" style="width: 40%;">{{post.course}} taught by {{post.prof}}</button>
-  <div class="dropdown-hidden" id='{{post.course}}{{post.prof}}'>
-    <iframe src="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" width="50%"></iframe>
-    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}"><img src="{% static 'arrow.png' %}" class="arrow"></a>
-  </div><br><br>
+  <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{post.course}} taught by {{post.prof}}</a>
+  <br><br>
   {% endfor %}
 </div>
 
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
-
-<script>
-  function toggle(course){
-    dep = document.getElementById(course)
-    dep.classList.toggle("dropdown-hidden");
-  }
-</script>
 
 {% endblock %}
