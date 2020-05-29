@@ -112,12 +112,15 @@ def index(request):
         else:
             entry.review()
         entry.save()
-
+       
     school = entry.school
     if not school:
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
         return render(request, 'school.html', {'name': school})
+    
+    if len(Submission.objects.filter(school=get_domain(request.user.email))) == 0:
+        return render(request, 'upload.html', {'message':'Misuse of uploads will be met by a ban!'})
 
     posts = Submission.objects.filter(school=domain)
     dep = set()
