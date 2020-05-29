@@ -7,6 +7,7 @@ class Submission(models.Model):
     prof = models.TextField(blank=True)
     dept = models.TextField(blank=True)
     course = models.TextField(blank=True)
+    title = models.TextField(blank=True)
     school = models.TextField(blank=True)
     semester = models.TextField(blank=True)
     year = models.TextField(blank=True)
