@@ -2,11 +2,7 @@
 {% load static %}
 {% block content %}
 
-{% if num == 1 %}
-<h4 class="text-center">There is 1 Syllabus for the {{school}}! Add More!</h4>
-{% else %}
-<h4 class="text-center">There are {{num}} Syllabi for the {{school}}! Add More!</h4>
-{% endif %}
+<h4 class="text-center">There {{num|pluralize:"is,are"}} {{num}} Syllab{{num|pluralize:"us,i"}} for the {{school}}! Add More!</h4>
 
 <div style="width: 60%; margin: auto;" class="text-center">
   {% for dept in posts %}
@@ -15,7 +11,7 @@
 </div>
 
 <div class="leaderboard">
-  <table>
+  <table style="border: 1px solid black;">
     <tr>
       <th>Leaderboard</th>
     </tr>

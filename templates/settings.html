@@ -2,26 +2,19 @@
 {% block content %}
 {% load static %}
 
-<form method="post" style="display:inline-block;">
-  {% csrf_token %}
-  <h4>Please type your username {{user.username}} to delete your account. This is final! </h4>
-  <label for="suggestion">Username: </label>
-  <input id="suggestion" type="text" name="username" required><br>
-  <input class="btn btn-danger" type="submit" name="recalculate" value="Delete Account" />
-  <h5>If you enter your username correctly, and the deletion goes through, you will be redirected to the login page</h5>
-  <h5>We're sad to see you go, but if you want to come back we will be here!</h5>
-</form> <br><br>
+<h3>Settings</h3>
 
-<div class="text-center paypal" id='paypal'>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="andradevern@gmail.com" />
-    <input type="hidden" name="item_name" value="Help pay for AWS hosting costs" />
-    <input type="hidden" name="currency_code" value="USD" />
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-  </form>
-  <b>I am once again asking for your finanical support. All money goes towards hosting costs.</b>
-</div>
+<h4>Delete account</h4>
+<form method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="suggestion">Username</label>
+    <input class="form-control" id="suggestion" type="text" name="username" required>
+    <small class="form-text{# text-muted #}">Enter your username ({{ user.username }}) to confirm account deletion</small>
+  </div>
+  <input class="btn btn-danger" type="submit" name="recalculate" value="Delete account">
+  <p class="mt-2">We're sad to see you go, but if you want to come back we will still be here!</p>
+</form>
 
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 

@@ -22,6 +22,13 @@ def admin(request):
                 User.objects.exclude(email__contains=".edu").delete()
             elif 'delete' in request.POST:
                 Submission.objects.get(pk=request.POST['pk']).delete()
+            elif 'close' in request.POST:
+                Suggestion.objects.get(pk=request.POST['pk']).delete()
+            elif 'takedown' in request.POST and 'reason' in request.POST:
+                school = School.objects.get(pk=request.POST['pk'])
+                school.takedown = True
+                school.reason = request.POST['reason']
+                school.save()
             elif 'edit' in request.POST:
                 edit = Suggestion.objects.get(pk=request.POST['pk'])
                 edit.github_issue = request.POST['githubIssue']
@@ -62,6 +69,10 @@ def authenticate(user):
         return ('error.html', {'loggedIn': False})
     if user.email[-4:] != '.edu':
         return ('error.html', {'loggedIn': True})
+    domain = get_domain(user.email)
+    school = School.objects.get(domain=domain)
+    if school.takedown:
+        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain':domain})
     return (False, False)
 
 def display(request, dept=None):
@@ -101,12 +112,15 @@ def index(request):
         else:
             entry.review()
         entry.save()
-
+       
     school = entry.school
     if not school:
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
-        return render(request, 'school.html', {'poster': entry.poster,'name': school})
+        return render(request, 'school.html', {'name': school})
+    
+    if len(Submission.objects.filter(school=get_domain(request.user.email))) == 0:
+        return render(request, 'upload.html', {'message':'Misuse of uploads will be met by a ban!'})
 
     posts = Submission.objects.filter(school=domain)
     dep = set()
@@ -119,6 +133,20 @@ def privacy(request):
     return render(request, 'privacy.html')
 
 
+def schooladmin(request,school=None):
+    if request.user.is_superuser:
+        try:
+            entry = School.objects.get(domain=school)
+        except:
+            return redirect('/')
+        posts = Submission.objects.filter(school=school)
+        dep = set()
+        for i in posts:
+            dep.add(i.dept)
+        return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
+    return redirect('/')
+
+
 def search(request):
     (template, context) = authenticate(request.user)
     if template:
@@ -128,7 +156,7 @@ def search(request):
     domain = get_domain(request.user.email)
     found = Submission.objects.filter(school=domain)
     if request.method == 'POST':
-        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search'])
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
@@ -173,19 +201,23 @@ def upload(request):
     success = False
     message = 'Misuse of uploads will be met by a ban!'
     if request.method == 'POST':
-        course = request.POST['prof'].split()
-        goodProf = len(request.POST['prof'].split()) == 2 and course[0].isalpha() and course[1].isalpha()
+        prof = request.POST['prof'].strip().split()
+        goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1]) 
         course = request.POST['course'].split()
         goodCourse = len(course) == 2 and course[0].isalpha() and course[1].isnumeric()
         if goodProf and goodCourse:
             entry = Submission()
             entry.user = request.user.username
             entry.school = get_domain(request.user.email)
-            entry.prof = request.POST['prof']
+            entry.prof = prof[0] + ' ' + prof[1]
             entry.course = request.POST['course'].upper()
+            entry.title = request.POST['title']
             entry.dept = course[0].upper()
+            entry.semester = request.POST['semester']
+            entry.year = request.POST['year']
             entry.upvotes = 1
             entry.syllabus = request.FILES['file']
+            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year]) + '.pdf'
             entry.save()
             school = School.objects.filter(domain=entry.school)[0]
             school.upload(request.user.username)
@@ -202,3 +234,4 @@ def upload(request):
 
 def view404(request, exception=None):
     return redirect('/')
+

@@ -1,0 +1,20 @@
+{% load static %}
+<!doctype html> 
+<html lang="en" style="margin: 0; height: 100%; overflow: hidden">
+  <head>
+    <meta charset="utf-8">
+    <title> Syllabi Share </title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  </head>
+
+  <body style="background-image: url({% static 'back.png' %}); background-size: cover;" class="text-center"> <br><br><br><br>
+    <b style="top: 30%; font-size: 50px;"> Sorry SyllabiShare is not available for {{domain}} emails! </b> <br><br>
+    <b style="top: 60%; font-size: 30px;"> {{reason}} </b> <br>
+    <a href="https://github.com/verndrade/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
+  </body>
+</html>
