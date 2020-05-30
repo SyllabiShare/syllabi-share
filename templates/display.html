@@ -13,9 +13,12 @@
     <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} for {{dept}} courses! Add More!</h4>
   {% endif %}<br>
 
-  {% for post in posts %}
-  <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{post.course}} taught by {{post.prof}}</a>
-  <br><br>
+  {% for course, semesters in courses.items %}
+    {% for semester, syllabi in semesters.items %}
+      {% for syllabus in syllabi %}
+        <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{syllabus.syllabus}}" class="btn btn-success" target="_blank">{{ course }} ({{ syllabus.semester }} {{ syllabus.year }}) taught by {{ syllabus.prof }}</a>
+      {% endfor %}
+    {% endfor %}
   {% endfor %}
 </div>
 

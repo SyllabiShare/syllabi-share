@@ -82,7 +82,20 @@ def display(request, dept=None):
     posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('course')
     if not dept or len(posts) == 0:
         return redirect('/')
-    return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
+
+    # So uh, this seems a little inefficient...
+    # The mapping is {'CS 2150': {'fall2020': {syllabi...}, 'spring2020': {syllabi...}}, 'CS 4414': ...}
+    courses = {}
+    for course in set(posts.values_list('course', flat=True)):
+        semesters = {}
+        syllabi = posts.filter(course=course)
+        for syllabus in syllabi:
+            if syllabus.semester + syllabus.year in semesters:
+                semesters[syllabus.semester + syllabus.year].append(syllabus)
+            else:
+                semesters[syllabus.semester + syllabus.year] = [syllabus]
+        courses[course] = semesters
+    return render(request, 'display.html', {'courses': courses, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
 
 
 def get_domain(email):
