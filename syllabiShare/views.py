@@ -217,7 +217,7 @@ def upload(request):
             entry.year = request.POST['year']
             entry.upvotes = 1
             entry.syllabus = request.FILES['file']
-            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year])
+            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year]) + '.pdf'
             entry.save()
             school = School.objects.filter(domain=entry.school)[0]
             school.upload(request.user.username)
