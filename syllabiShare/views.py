@@ -79,7 +79,7 @@ def display(request, dept=None):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
-    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('course')
+    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('number')
     if not dept or len(posts) == 0:
         return redirect('/')
     return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
