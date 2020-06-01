@@ -199,33 +199,27 @@ def upload(request):
     message = 'Misuse of uploads will be met by a ban!'
     if request.method == 'POST':
         prof = request.POST['prof'].strip().split()
-        goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1]) 
-        course = request.POST['course'].split()
-        goodCourse = len(course) == 2 and course[0].isalpha() and course[1].isnumeric()
-        if goodProf and goodCourse:
+        goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1])
+        if goodProf:
             entry = Submission()
             entry.user = request.user.username
             entry.school = get_domain(request.user.email)
             entry.prof = prof[0] + ' ' + prof[1]
-            entry.course = request.POST['course'].upper()
             entry.title = request.POST['title']
-            entry.dept = course[0].upper()
+            entry.dept = request.POST['dept'].upper()
+            entry.number = request.POST['number']
             entry.semester = request.POST['semester']
             entry.year = request.POST['year']
             entry.upvotes = 1
             entry.syllabus = request.FILES['file']
-            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year])
+            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), entry.dept.lower(), entry.number, entry.semester, entry.year])
             entry.save()
             school = School.objects.filter(domain=entry.school)[0]
             school.upload(request.user.username)
             school.save()
             success = True
-        elif goodProf:
-            message = 'Course not valid! Try "Mnemonic Number" Format'
-        elif goodCourse:
-            message = 'Professor name not valid! Try "FirstName LastName" Format'
         else:
-            message = 'Input not valid! Try Again'
+            message = 'Professor name not valid! Try "FirstName LastName" Format'
     return render(request, 'upload.html', {'success': success, 'message': message})
 
 
