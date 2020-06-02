@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from jsonfield import JSONField
 from django.conf import settings
 
@@ -22,7 +23,7 @@ class School(models.Model):
         else:
             self.uploads[name] = 1
     def topFive(self):
-        return [i for i in sorted(self.uploads.items(), key=lambda x: x[1], reverse=True)[:min(len(self.uploads),5)]]
+        return self.userprofile_set.annotate(submissions=Count('user__submission')).order_by('-submissions')[:5]
 
 
 class Submission(models.Model):
