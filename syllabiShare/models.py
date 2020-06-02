@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from jsonfield import JSONField
 from django.conf import settings
@@ -26,7 +27,7 @@ class School(models.Model):
 
 
 class Submission(models.Model):
-    user = models.TextField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     prof = models.TextField(blank=True)
     dept = models.TextField(blank=True)
     course = models.TextField(blank=True)

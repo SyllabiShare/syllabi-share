@@ -55,7 +55,7 @@ def admin(request):
                     school.save()
                 for i in Submission.objects.all():
                     school = i.school
-                    school.upload(i.user)
+                    school.upload(i.user.username)
                     school.save()
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
     return redirect('/')
@@ -100,18 +100,17 @@ def index(request):
         return render(request, template, context)
     domain = get_domain(request.user.email)
     school = School.objects.get(domain=domain)
-    user_string = str(request.user)
 
     if request.method == 'POST':
         if 'name' in request.POST:
-            school.add_school(request.POST['name'], user_string)
+            school.add_school(request.POST['name'], request.user.username)
         else:
             school.review()
         school.save()
 
     if not school.name:
         return render(request, 'school.html', {'first': True})
-    elif not school.reviewed and not user_string == school.creator:
+    elif not school.reviewed and not request.user.username == school.creator:
         return render(request, 'school.html', {'name': school.name})
 
     posts = Submission.objects.filter(school=school).filter(hidden=False)
@@ -204,7 +203,7 @@ def upload(request):
         goodCourse = len(course) == 2 and course[0].isalpha() and course[1].isnumeric()
         if goodProf and goodCourse:
             entry = Submission()
-            entry.user = request.user.username
+            entry.user = request.user
             entry.school = School.objects.get(domain=get_domain(request.user.email))
             entry.prof = prof[0] + ' ' + prof[1]
             entry.course = request.POST['course'].upper()
