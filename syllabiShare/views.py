@@ -54,11 +54,7 @@ def admin(request):
                     school.uploads = {}
                     school.save()
                 for i in Submission.objects.all():
-                    if len(School.objects.filter(domain=i.school)) == 0:
-                        entry = School()
-                        entry.domain = i.school
-                        entry.save()
-                    school = School.objects.filter(domain=i.school)[0]
+                    school = i.school
                     school.upload(i.user)
                     school.save()
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
@@ -79,7 +75,7 @@ def display(request, dept=None):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
-    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).filter(hidden=False).order_by('course')
+    posts = Submission.objects.filter(school__domain=get_domain(request.user.email)).filter(dept=dept.upper()).filter(hidden=False).order_by('course')
     if not dept or len(posts) == 0:
         return redirect('/')
     return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
@@ -118,7 +114,7 @@ def index(request):
     elif not school.reviewed and not user_string == school.creator:
         return render(request, 'school.html', {'name': school.name})
 
-    posts = Submission.objects.filter(school=domain).filter(hidden=False)
+    posts = Submission.objects.filter(school=school).filter(hidden=False)
     
     if len(posts) == 0:
         return render(request, 'upload.html', {'message':'Misuse of uploads will be met by a ban!'})
@@ -133,17 +129,18 @@ def privacy(request):
     return render(request, 'privacy.html')
 
 
-def schooladmin(request,school=None):
+def schooladmin(request,domain=None):
     if request.user.is_superuser:
+        school = None
         try:
-            entry = School.objects.get(domain=school)
+            school = School.objects.get(domain=domain)
         except:
             return redirect('/')
         posts = Submission.objects.filter(school=school).filter(hidden=False)
         dep = set()
         for i in posts:
             dep.add(i.dept)
-        return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
+        return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':domain,'num':len(posts)})
     return redirect('/')
 
 
@@ -154,7 +151,7 @@ def search(request):
             logout(request)
         return render(request, template, context)
     domain = get_domain(request.user.email)
-    found = Submission.objects.filter(school=domain).filter(hidden=False)
+    found = Submission.objects.filter(school__domain=domain).filter(hidden=False)
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
@@ -208,7 +205,7 @@ def upload(request):
         if goodProf and goodCourse:
             entry = Submission()
             entry.user = request.user.username
-            entry.school = get_domain(request.user.email)
+            entry.school = School.objects.get(domain=get_domain(request.user.email))
             entry.prof = prof[0] + ' ' + prof[1]
             entry.course = request.POST['course'].upper()
             entry.title = request.POST['title']
@@ -220,7 +217,7 @@ def upload(request):
             entry.syllabus = request.FILES['file']
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year]) + '.pdf'
             entry.save()
-            school = School.objects.filter(domain=entry.school)[0]
+            school = entry.school
             school.upload(request.user.username)
             school.save()
             success = True

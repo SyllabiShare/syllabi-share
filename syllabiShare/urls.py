@@ -13,5 +13,5 @@ urlpatterns = [
     path('suggest/', views.suggest, name="suggest"),
     path('upload/', views.upload, name="upload"),
     path('<slug:dept>/', views.display, name="display"),
-    path('view/<slug:school>/', views.schooladmin, name="schooladmin"),
+    path('view/<slug:domain>/', views.schooladmin, name="schooladmin"),
 ]
