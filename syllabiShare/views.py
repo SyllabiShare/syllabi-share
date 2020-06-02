@@ -79,7 +79,7 @@ def display(request, dept=None):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
-    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('course')
+    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).filter(hidden=False).order_by('course')
     if not dept or len(posts) == 0:
         return redirect('/')
     return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
@@ -118,11 +118,12 @@ def index(request):
         return render(request, 'school.html', {'first': True})
     elif not entry.reviewed and not user_string == entry.poster:
         return render(request, 'school.html', {'name': school})
+
+    posts = Submission.objects.filter(school=domain).filter(hidden=False)
     
-    if len(Submission.objects.filter(school=get_domain(request.user.email))) == 0:
+    if len(posts) == 0:
         return render(request, 'upload.html', {'message':'Misuse of uploads will be met by a ban!'})
 
-    posts = Submission.objects.filter(school=domain)
     dep = set()
     for i in posts:
         dep.add(i.dept)
@@ -139,7 +140,7 @@ def schooladmin(request,school=None):
             entry = School.objects.get(domain=school)
         except:
             return redirect('/')
-        posts = Submission.objects.filter(school=school)
+        posts = Submission.objects.filter(school=school).filter(hidden=False)
         dep = set()
         for i in posts:
             dep.add(i.dept)
@@ -154,7 +155,7 @@ def search(request):
             logout(request)
         return render(request, template, context)
     domain = get_domain(request.user.email)
-    found = Submission.objects.filter(school=domain)
+    found = Submission.objects.filter(school=domain).filter(hidden=False)
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
@@ -224,6 +225,7 @@ def upload(request):
             entry.semester = request.POST['semester']
             entry.year = request.POST['year']
             entry.upvotes = 1
+            entry.hidden = True
             entry.syllabus = request.FILES['file']
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year]) + '.pdf'
             entry.save()

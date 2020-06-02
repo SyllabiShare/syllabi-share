@@ -10,6 +10,7 @@ class Submission(models.Model):
     title = models.TextField(blank=True)
     school = models.TextField(blank=True)
     semester = models.TextField(blank=True)
+    hidden = models.TextField(default=True)
     year = models.TextField(blank=True)
     syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
     upvotes = models.IntegerField(default = 1)
