@@ -49,13 +49,12 @@ def admin(request):
                     send_mass_mail(data)
                     return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
             elif 'recalculate' in request.POST:
-                for i in School.objects.all():
-                    school = School.objects.filter(domain=i.domain)[0]
+                for school in School.objects.all():
                     school.uploads = {}
                     school.save()
-                for i in Submission.objects.all():
-                    school = i.school
-                    school.upload(i.user.username)
+                for submission in Submission.objects.all():
+                    school = submission.school
+                    school.upload(submission.user.username)
                     school.save()
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
     return redirect('/')
@@ -65,31 +64,20 @@ def authenticate(user):
         return ('error.html', {'loggedIn': False})
     if user.email[-4:] != '.edu':
         return ('error.html', {'loggedIn': True})
-    domain = get_domain(user.email)
-    school = School.objects.get(domain=domain)
+
+    school = user.profile.school
     if school.takedown:
-        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain':domain})
+        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
     return (False, False)
 
 def display(request, dept=None):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
-    posts = Submission.objects.filter(school__domain=get_domain(request.user.email)).filter(dept=dept.upper()).filter(hidden=False).order_by('course')
+    posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('course')
     if not dept or len(posts) == 0:
         return redirect('/')
     return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
-
-
-def get_domain(email):
-    start = email.index('@') + 1
-    end = email.index('.edu')
-    domain = email[start:end]
-    if len(School.objects.filter(domain=domain)) == 0:
-        school = School()
-        school.domain = domain
-        school.save()
-    return domain
 
 
 def index(request):
@@ -98,9 +86,8 @@ def index(request):
         if context['loggedIn']:
             logout(request)
         return render(request, template, context)
-    domain = get_domain(request.user.email)
-    school = School.objects.get(domain=domain)
 
+    school = request.user.profile.school
     if request.method == 'POST':
         if 'name' in request.POST:
             school.add_school(request.POST['name'], request.user.username)
@@ -149,14 +136,14 @@ def search(request):
         if context['loggedIn']:
             logout(request)
         return render(request, template, context)
-    domain = get_domain(request.user.email)
-    found = Submission.objects.filter(school__domain=domain).filter(hidden=False)
+
+    found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
-    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':School.objects.get(domain=domain).name})
+    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':request.user.profile.school.name})
 
 
 def setting(request):
@@ -204,7 +191,7 @@ def upload(request):
         if goodProf and goodCourse:
             entry = Submission()
             entry.user = request.user
-            entry.school = School.objects.get(domain=get_domain(request.user.email))
+            entry.school = request.user.profile.school
             entry.prof = prof[0] + ' ' + prof[1]
             entry.course = request.POST['course'].upper()
             entry.title = request.POST['title']
