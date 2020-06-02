@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models import Count
-from jsonfield import JSONField
 from django.conf import settings
 
 
@@ -11,17 +10,11 @@ class School(models.Model):
     takedown = models.BooleanField(default=False)
     reason = models.TextField(default='')
     reviewed = models.BooleanField(default=False)
-    uploads = JSONField(default={})
     def add_school(self,name,id):
         self.name = name
         self.creator = id
     def review(self):
         self.reviewed = True
-    def upload(self,name):
-        if name in self.uploads:
-            self.uploads[name] += 1
-        else:
-            self.uploads[name] = 1
     def topFive(self):
         return self.userprofile_set.annotate(submissions=Count('user__submission')).order_by('-submissions')[:5]
 

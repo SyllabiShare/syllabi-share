@@ -48,14 +48,6 @@ def admin(request):
                     ]
                     send_mass_mail(data)
                     return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
-            elif 'recalculate' in request.POST:
-                for school in School.objects.all():
-                    school.uploads = {}
-                    school.save()
-                for submission in Submission.objects.all():
-                    school = submission.school
-                    school.upload(submission.user.username)
-                    school.save()
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
     return redirect('/')
 
@@ -203,9 +195,6 @@ def upload(request):
             entry.syllabus = request.FILES['file']
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year]) + '.pdf'
             entry.save()
-            school = entry.school
-            school.upload(request.user.username)
-            school.save()
             success = True
         elif goodProf:
             message = 'Course not valid! Try "Mnemonic Number" Format'
