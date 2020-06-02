@@ -16,17 +16,16 @@ class Submission(models.Model):
     upvotes = models.IntegerField(default = 1)
 
 class School(models.Model):
-    school = models.TextField(blank=True)
+    name = models.TextField(blank=True)
     domain = models.TextField(unique=True)
-    poster = models.TextField(blank=True)
+    creator = models.TextField(blank=True)
     takedown = models.BooleanField(default=False)
     reason = models.TextField(default='')
-    poster = models.TextField(blank=True)
     reviewed = models.BooleanField(default=False)
     uploads = JSONField(default={})
     def add_school(self,name,id):
-        self.school = name
-        self.poster = id
+        self.name = name
+        self.creator = id
     def review(self):
         self.reviewed = True
     def upload(self,name):

@@ -103,21 +103,20 @@ def index(request):
             logout(request)
         return render(request, template, context)
     domain = get_domain(request.user.email)
-    entry = School.objects.get(domain=domain)
+    school = School.objects.get(domain=domain)
     user_string = str(request.user)
 
     if request.method == 'POST':
         if 'name' in request.POST:
-            entry.add_school(request.POST['name'], user_string)
+            school.add_school(request.POST['name'], user_string)
         else:
-            entry.review()
-        entry.save()
-       
-    school = entry.school
-    if not school:
+            school.review()
+        school.save()
+
+    if not school.name:
         return render(request, 'school.html', {'first': True})
-    elif not entry.reviewed and not user_string == entry.poster:
-        return render(request, 'school.html', {'name': school})
+    elif not school.reviewed and not user_string == school.creator:
+        return render(request, 'school.html', {'name': school.name})
 
     posts = Submission.objects.filter(school=domain).filter(hidden=False)
     
@@ -127,7 +126,7 @@ def index(request):
     dep = set()
     for i in posts:
         dep.add(i.dept)
-    return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
+    return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts)})
 
 
 def privacy(request):
@@ -161,7 +160,7 @@ def search(request):
     dep = set()
     for i in found:
         dep.add(i.dept)
-    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':School.objects.get(domain=domain).school})
+    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':School.objects.get(domain=domain).name})
 
 
 def setting(request):
