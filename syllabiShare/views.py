@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.utils import timezone
-from .models import Submission, School, Suggestion
+from .models import Submission, School, Suggestion, Settings
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mass_mail
@@ -176,6 +176,14 @@ def setting(request):
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
                 return render(request, 'error.html')
+        
+    if request.method == 'GET':
+        if 'opt-out' in request.GET:
+            settings = Settings()
+            settings.user = request.user
+            settings.optOut = True
+            settings.save()
+
     return render(request, 'settings.html')
 
 

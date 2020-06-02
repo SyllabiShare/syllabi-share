@@ -14,6 +14,10 @@ class Submission(models.Model):
     syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
     upvotes = models.IntegerField(default = 1)
 
+class Settings(models.Model):
+    user = models.TextField(blank=True)
+    optOut = models.BooleanField(default=False)
+
 class School(models.Model):
     school = models.TextField(blank=True)
     domain = models.TextField(unique=True)
@@ -23,6 +27,7 @@ class School(models.Model):
     poster = models.TextField(blank=True)
     reviewed = models.BooleanField(default=False)
     uploads = JSONField(default={})
+    settings = models.ForeignKey(Settings, default=False, on_delete=models.CASCADE)
     def add_school(self,name,id):
         self.school = name
         self.poster = id
@@ -34,8 +39,7 @@ class School(models.Model):
         else:
             self.uploads[name] = 1
     def topFive(self):
-        return [i for i in sorted(self.uploads.items(), key=lambda x: x[1], reverse=True)[:min(len(self.uploads),5)]]
-        
+        return [i for i in sorted(self.uploads.items(), key=lambda x: x[1], reverse=True)[:min(len(self.uploads),5)] & self.settings.optOut != True ]
 
 class Suggestion(models.Model):
     name = models.TextField()

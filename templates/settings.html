@@ -4,6 +4,15 @@
 
 <h3>Settings</h3>
 
+<h4>Opt-out of Leaderboard</h4>
+<form method="get">
+  {% csrf_token %}
+  <div class="form-group">
+    <input class="form-control" id="opt-out" type="checkbox" name="opt-out">
+  </div>
+</form>
+<br>
+
 <h4>Delete account</h4>
 <form method="post">
   {% csrf_token %}
