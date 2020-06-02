@@ -4,9 +4,10 @@ from django.db import migrations
 
 
 def populate_user_fk_for_submission(apps, schema_editor):
+    User = apps.get_model(*settings.AUTH_USER_MODEL.split('.'))
     Submission = apps.get_model('syllabiShare', 'Submission')
     for submission in Submission.objects.all():
-        submission.user_fk_temp = settings.AUTH_USER_MODEL.objects.get(username=submission.user)
+        submission.user_fk_temp = User.objects.get(username=submission.user)
         submission.save()
 
 

@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db import models
 from jsonfield import JSONField
 from django.conf import settings
@@ -27,7 +26,7 @@ class School(models.Model):
 
 
 class Submission(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     prof = models.TextField(blank=True)
     dept = models.TextField(blank=True)
     course = models.TextField(blank=True)
@@ -38,6 +37,11 @@ class Submission(models.Model):
     year = models.TextField(blank=True)
     syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
     upvotes = models.IntegerField(default = 1)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
 
 
 class Suggestion(models.Model):
