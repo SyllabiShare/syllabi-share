@@ -120,9 +120,9 @@ def index(request):
         return render(request, 'school.html', {'name': school})
 
     posts = Submission.objects.filter(school=domain).filter(hidden=False)
-    
+
     if len(posts) == 0:
-        return render(request, 'upload.html', {'message':'Misuse of uploads will be met by a ban!'})
+        return redirect('syllabiShare:upload')
 
     dep = set()
     for i in posts:
