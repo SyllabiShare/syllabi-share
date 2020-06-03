@@ -54,7 +54,7 @@ def admin(request):
 def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False})
-    if user.email[-4:] != '.edu':
+    if not user.profile.school:
         return ('error.html', {'loggedIn': True})
 
     school = user.profile.school

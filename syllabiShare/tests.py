@@ -14,7 +14,7 @@ class LoginTestCase(TestCase):
 
     def test_login_with_edu_email(self):
         response = str(self.client1.get('/').content)
-        self.assertTrue('Welcome' in response)
+        self.assertTrue('Wow!' in response)
         self.assertFalse('That was not a .edu email!' in response)
 
     def test_login_without_edu_email(self):
