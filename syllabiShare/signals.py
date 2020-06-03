@@ -11,7 +11,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         start = instance.email.index('@') + 1
         end = instance.email.index('.edu')
         domain = instance.email[start:end]
-        UserProfile.objects.create(user=instance, school=School.objects.get_or_create(domain=domain))
+        UserProfile.objects.create(user=instance, school=School.objects.get_or_create(domain=domain)[0])
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
