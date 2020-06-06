@@ -15,7 +15,7 @@
   <div style="display: inline-block; width: 100%;" id='efpjw'>
     <form method="post">
       {% csrf_token %}
-      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.course}} -- {{i.dept}} -- {{i.syllabus}} -- {{i.upvotes}}</p>
+      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.course}} -- {{i.dept}} -- {{i.syllabus}} -- {{i.upvotes}} -- Hidden: {{i.hidden}}</p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="delete" value="Delete" style="float: right;"/>
     </form>
@@ -28,7 +28,7 @@
   <div style="display: inline-block; width: 100%;">
     <form method="post">
       {% csrf_token %}
-      <p style="float: left;"> {{i.domain}} -- {{i.school}} -- {{i.reviewed}} -- {{i.uploads}} -- {{i.takedown}} -- {{i.reason}}<br> </p>
+      <p style="float: left;"> {{i.domain}} -- {{i.school}} -- Reviewed: {{i.reviewed}} -- {{i.uploads}} -- Takedown: {{i.takedown}} -- {{i.reason}}<br> </p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="takedown" value="Takedown" style="float: right;"/>
       <input name="reason" style="float: right;" type="text"  value="{{i.reason}}"/>
