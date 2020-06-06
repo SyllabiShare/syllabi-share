@@ -3,7 +3,7 @@
 {% block content %}
 
 <h3>Upload syllabus</h3>
-<form id="form-id" method="post" enctype="multipart/form-data">
+<form id="form-id" action="/upload/" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="form-group">
     <label for="prof">Professor</label>
