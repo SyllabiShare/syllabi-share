@@ -8,11 +8,6 @@ from django.core.mail import send_mass_mail
 
 
 def about(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
     return render(request, 'about.html')
 
 def admin(request):
