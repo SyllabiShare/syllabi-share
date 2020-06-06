@@ -18,6 +18,7 @@
       <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.course}} -- {{i.dept}} -- {{i.syllabus}} -- {{i.upvotes}} -- Hidden: {{i.hidden}}</p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="delete" value="Delete" style="float: right;"/>
+      <input class="btn btn-warning" type="submit" name="toggleHide" value="Toggle Hide" style="float: right;"/>
     </form>
   </div>
   {%endfor%} <br>

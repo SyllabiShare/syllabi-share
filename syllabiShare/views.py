@@ -22,6 +22,10 @@ def admin(request):
                 User.objects.exclude(email__contains=".edu").delete()
             elif 'delete' in request.POST:
                 Submission.objects.get(pk=request.POST['pk']).delete()
+            elif 'toggleHide' in request.POST:
+                submission = Submission.objects.get(pk=request.POST['pk'])
+                submission.toggleHidden()
+                submission.save()
             elif 'close' in request.POST:
                 Suggestion.objects.get(pk=request.POST['pk']).delete()
             elif 'takedown' in request.POST and 'reason' in request.POST:
