@@ -189,7 +189,7 @@ def suggest(request):
         suggestion = Suggestion()
         suggestion.name = request.user
         suggestion.suggestion_text = request.POST['suggestion']
-        if 'githubLink' in request.POST and 'https://github.com/verndrade/syllabi-share/issues/' in request.POST['githubLink']:
+        if 'githubLink' in request.POST and 'https://github.com/SyllabiShare/syllabi-share/issues/' in request.POST['githubLink']:
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
     return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
