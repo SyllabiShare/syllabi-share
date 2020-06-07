@@ -27,10 +27,13 @@ class Submission(models.Model):
     title = models.TextField(blank=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     semester = models.TextField(blank=True)
-    hidden = models.TextField(default=True)
+    hidden = models.BooleanField(default=True)
     year = models.TextField(blank=True)
     syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
     upvotes = models.IntegerField(default = 1)
+    def toggleHidden(self):
+        self.hidden = not self.hidden
+
 
 
 class UserProfile(models.Model):

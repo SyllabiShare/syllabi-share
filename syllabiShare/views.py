@@ -22,6 +22,10 @@ def admin(request):
                 User.objects.exclude(email__contains=".edu").delete()
             elif 'delete' in request.POST:
                 Submission.objects.get(pk=request.POST['pk']).delete()
+            elif 'toggleHide' in request.POST:
+                submission = Submission.objects.get(pk=request.POST['pk'])
+                submission.toggleHidden()
+                submission.save()
             elif 'close' in request.POST:
                 Suggestion.objects.get(pk=request.POST['pk']).delete()
             elif 'takedown' in request.POST and 'reason' in request.POST:
@@ -163,7 +167,7 @@ def suggest(request):
         suggestion = Suggestion()
         suggestion.name = request.user
         suggestion.suggestion_text = request.POST['suggestion']
-        if 'githubLink' in request.POST and 'https://github.com/verndrade/syllabi-share/issues/' in request.POST['githubLink']:
+        if 'githubLink' in request.POST and 'https://github.com/SyllabiShare/syllabi-share/issues/' in request.POST['githubLink']:
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
     return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
