@@ -14,7 +14,7 @@
   {% endif %}<br>
 
   {% for post in posts %}
-  <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{post.course}} taught by {{post.prof}}</a>
+  <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a>
   <br><br>
   {% endfor %}
 </div>
