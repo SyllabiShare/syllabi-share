@@ -2,28 +2,30 @@
 {% load static %}
 {% block content %}
 
-<h3>Upload syllabus</h3>
+<h3>Upload Syllabus</h3>
 <form id="form-id" action="/upload/" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="form-group">
-    <label for="prof">Professor</label>
+    <label for="prof"><b>Professor</b></label>
     <input class="form-control" id="prof" type="text" name="prof" placeholder="John Doe" required>
-  </div>
-  <div class="form-group">
-    <label for="course">Course</label>
-    <input class="form-control" id="course" type="text" name="course" placeholder="CS 4102" required>
-  </div>
-  <div class="form-group">
-    <label for="title">Title</label>
-    <input class="form-control" id="title" type="text" name="title" placeholder="Algorithms" required>
-  </div>
-  <div class="form-group">
-    <label for="file">Syllabus (PDFs only)</label>
-    <input class="form-control-file" id="file" type="file" name="file" accept="application/pdf" required>
   </div>
   <div class="form-row">
     <div class="form-group col-md-2">
-      <label for="semester">Semester</label>
+      <label for="dept"><b>Department</b></label>
+      <input class="form-control" id="dept" type="text" name="dept" placeholder="CS" required>
+    </div>
+    <div class="form-group col-md-1">
+      <label for="number"><b>Number</b></label>
+      <input class="form-control" id="number" type="number" name="number" placeholder="4102" required>
+    </div>
+    <div class="form-group col-md">
+      <label for="title"><b>Title</b></label>
+      <input class="form-control" id="title" type="text" name="title" placeholder="Algorithms" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <label for="semester"><b>Semester</b></label>
       <select class="form-control" name="semester" id="semester" required>
         <option value="fall">Fall</option>
         <option value="spring">Spring</option>
@@ -31,27 +33,32 @@
       </select>
     </div>
     <div class="form-group col-md-1">
-      <label for="year">Year</label>
+      <label for="year"><b>Year</b></label>
       <select class="form-control" name="year" id="year" required>
-        <option value="2020">2020</option>
-        <option value="2019">2019</option>
-        <option value="2018">2018</option>
-        <option value="2017">2017</option>
+        <option value="2020">2019</option>
+        <option value="2019">2020</option>
       </select>
+    </div>
+    <div class="form-group col-md" style="padding: 2% 0 0 2%;">
+      <b>Please be aware of any policies your school may have about the sharing of syllabi.<br> By uploading a syllabus, you certify that you have done this and there is no problem with it.</b>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-3">
+      <label for="file"><b>Syllabus (PDFs only)</b></label>
+      <input class="form-control-file" id="file" type="file" name="file" accept="application/pdf" required>
     </div>
   </div>
   <input class="btn btn-success" type="submit" value="Submit">
-</form><br>
+</form>
 
-{% if success %}
-<div id="message" class="alert d-inline-block" style="color: white; border-color: #43a546; background-color: #43a546;" role="alert"> Addition Successful! </div>
-{% else %}
-<div id="message" class="alert d-inline-block" style="color: white; border-color: #d33840; background-color: #d33840;" role="alert"> {{message}} </div>
-{% endif %} 
-<p>
-  Please be aware of any policies your school may have about the sharing of syllabi before we get the professor consent system up.<br>
-  By uploading a syllabus, you certify that you have done this.
-</p>
+<div class="text-center">
+  {% if success %}
+  <div id="message" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #43a546; background-color: #43a546;" role="alert"> Addition Successful! </div>
+  {% else %}
+  <div id="message" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #d33840; background-color: #d33840;" role="alert"> {{message}} </div>
+  {% endif %} 
+</div>
 
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
