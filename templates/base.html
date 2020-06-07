@@ -35,14 +35,12 @@
               <input class="btn btn-sm btn-outline-success" id="button" type="submit" value="Search">
             </form>
           </li>
-          {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="/upload">upload</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/suggest">feedback</a>
           </li>
-          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="/about">about</a>
           </li>
@@ -51,12 +49,8 @@
               {{user.username}}
             </a>
             <div class="dropdown-menu dropdown-menu-right" style="min-width: 0;">
-              {% if user.is_authenticated %}
                 <a class="dropdown-item" href="/settings">Settings</a>
                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-              {% else %}
-                <a class="dropdown-item" href="{% url 'social:begin' 'google-oauth2' %}"> Login </a>
-              {% endif %}
             </div>
           </li>
         </ul>
