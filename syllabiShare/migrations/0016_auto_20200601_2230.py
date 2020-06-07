@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('syllabiShare', '0015_submission_hidden'),
+        ('syllabiShare', '0016_auto_20200606_1401'),
     ]
 
     operations = [
