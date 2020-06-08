@@ -8,11 +8,6 @@ from django.core.mail import send_mass_mail
 
 
 def about(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
     return render(request, 'about.html')
 
 def admin(request):
@@ -214,7 +209,7 @@ def upload(request):
             entry.school = get_domain(request.user.email)
             entry.prof = prof[0] + ' ' + prof[1]
             entry.title = request.POST['title']
-            entry.dept = request.POST['dept'].upper()
+            entry.dept = request.POST['dept'].strip().upper()
             entry.number = request.POST['number']
             entry.semester = request.POST['semester']
             entry.year = request.POST['year']
