@@ -15,14 +15,14 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.conf import settings
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, LoginView
+from syllabiShare.views import SignUpView, ActivateAccount
 
 urlpatterns = [
-    path(
-        'logout/',
-        LogoutView.as_view(template_name=settings.LOGOUT_REDIRECT_URL),
-        name='logout'
-        ),
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
+    path('login/', LoginView.as_view(redirect_authenticated_user=True, template_name='login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='error.html'), name='logout'),
     path('', include('syllabiShare.urls')),
     path('', include('social_django.urls', namespace='social')),
 ]
