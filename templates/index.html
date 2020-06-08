@@ -15,9 +15,9 @@
     <tr>
       <th>Leaderboard</th>
     </tr>
-    {% for name,number in leaderboard %}
+    {% for profile in leaderboard %}
     <tr style="text-align: left;">
-      <th>{{forloop.counter}}. {{name}} with {{number}} uploads</th>
+      <th>{{ forloop.counter }}. {{ profile.user.username }} with {{ profile.submissions }} uploads</th>
     </tr>
     {% endfor %}
   </table>

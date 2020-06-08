@@ -67,10 +67,6 @@
     </form> <br><br>
     <form method="post" style="width:200px; display:inline-block;">
       {% csrf_token %}
-      <input class="btn btn-danger" type="submit" name="recalculate" value="Recalculate leaderboard" />
-    </form> <br><br>
-    <form method="post" style="width:200px; display:inline-block;">
-      {% csrf_token %}
       <label for="body">Email Body: </label>
       <input type="text" name="body" value="{{emailBody}}" /><br>
       <label for="key">Email Password:</label>
