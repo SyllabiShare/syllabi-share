@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('syllabiShare', '0019_merge_20200607_1535'),
+        ('syllabiShare', '0029_merge_20200607_2054'),
     ]
 
     operations = [
