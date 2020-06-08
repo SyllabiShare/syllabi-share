@@ -1,6 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-from jsonfield import JSONField
+from django.db.models import Count
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -16,13 +16,29 @@ def update_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
         instance.profile.save()
 
+class School(models.Model):
+    name = models.TextField(blank=True)
+    domain = models.TextField(unique=True)
+    creator = models.TextField(blank=True)
+    takedown = models.BooleanField(default=False)
+    reason = models.TextField(default='')
+    reviewed = models.BooleanField(default=False)
+    def add_school(self,name,id):
+        self.name = name
+        self.creator = id
+    def review(self):
+        self.reviewed = True
+    def topFive(self):
+        return self.userprofile_set.annotate(submissions=Count('user__submission')).order_by('-submissions')[:5]
+
+
 class Submission(models.Model):
-    user = models.TextField(blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     prof = models.TextField(blank=True)
     dept = models.TextField(blank=True)
     number = models.IntegerField(blank=True, validators=[MinValueValidator(0)])
     title = models.TextField(blank=True)
-    school = models.TextField(blank=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
     semester = models.TextField(blank=True)
     hidden = models.BooleanField(default=True)
     year = models.TextField(blank=True)
@@ -32,28 +48,11 @@ class Submission(models.Model):
         self.hidden = not self.hidden
 
 
-class School(models.Model):
-    school = models.TextField(blank=True)
-    domain = models.TextField(unique=True)
-    poster = models.TextField(blank=True)
-    takedown = models.BooleanField(default=False)
-    reason = models.TextField(default='')
-    poster = models.TextField(blank=True)
-    reviewed = models.BooleanField(default=False)
-    uploads = JSONField(default={})
-    def add_school(self,name,id):
-        self.school = name
-        self.poster = id
-    def review(self):
-        self.reviewed = True
-    def upload(self,name):
-        if name in self.uploads:
-            self.uploads[name] += 1
-        else:
-            self.uploads[name] = 1
-    def topFive(self):
-        return [i for i in sorted(self.uploads.items(), key=lambda x: x[1], reverse=True)[:min(len(self.uploads),5)]]
-        
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    school = models.ForeignKey(School, null=True, on_delete=models.CASCADE)
+
 
 class Suggestion(models.Model):
     name = models.TextField()

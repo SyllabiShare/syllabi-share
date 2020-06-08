@@ -15,7 +15,7 @@
   <div style="display: inline-block; width: 100%;" id='efpjw'>
     <form method="post">
       {% csrf_token %}
-      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.course}} -- {{i.dept}} -- {{i.syllabus}} -- {{i.upvotes}} -- Hidden: {{i.hidden}}</p>
+      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.dept}} {{i.number}} -- {{i.syllabus}} -- {{i.upvotes}} -- Hidden: {{i.hidden}}</p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="delete" value="Delete" style="float: right;"/>
       <input class="btn btn-warning" type="submit" name="toggleHide" value="Toggle Hide" style="float: right;"/>
@@ -64,10 +64,6 @@
     <form method="post" style="width:200px; display:inline-block;">
       {% csrf_token %}
       <input class="btn btn-danger" type="submit" name="purge" value="Purge non .edu emails" />
-    </form> <br><br>
-    <form method="post" style="width:200px; display:inline-block;">
-      {% csrf_token %}
-      <input class="btn btn-danger" type="submit" name="recalculate" value="Recalculate leaderboard" />
     </form> <br><br>
     <form method="post" style="width:200px; display:inline-block;">
       {% csrf_token %}

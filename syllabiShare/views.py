@@ -62,11 +62,6 @@ class SignUpView(View):
         return render(request, self.template_name, {'form': form})
 
 def about(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
     return render(request, 'about.html')
 
 def admin(request):
@@ -106,52 +101,28 @@ def admin(request):
                     ]
                     send_mass_mail(data)
                     return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
-            elif 'recalculate' in request.POST:
-                for i in School.objects.all():
-                    school = School.objects.filter(domain=i.domain)[0]
-                    school.uploads = {}
-                    school.save()
-                for i in Submission.objects.all():
-                    if len(School.objects.filter(domain=i.school)) == 0:
-                        entry = School()
-                        entry.domain = i.school
-                        entry.save()
-                    school = School.objects.filter(domain=i.school)[0]
-                    school.upload(i.user)
-                    school.save()
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
     return redirect('/')
 
 def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False})
-    if user.email[-4:] != '.edu':
+    if not user.profile.school:
         return ('error.html', {'loggedIn': True})
-    domain = get_domain(user.email)
-    school = School.objects.get(domain=domain)
+
+    school = user.profile.school
     if school.takedown:
-        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain':domain})
+        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
     return (False, False)
 
 def display(request, dept=None):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
-    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
+    posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
     if not dept or len(posts) == 0:
         return redirect('/')
     return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
-
-
-def get_domain(email):
-    start = email.index('@') + 1
-    end = email.index('.edu')
-    domain = email[start:end]
-    if len(School.objects.filter(domain=domain)) == 0:
-        school = School()
-        school.domain = domain
-        school.save()
-    return domain
 
 
 def index(request):
@@ -160,49 +131,46 @@ def index(request):
         if context['loggedIn']:
             logout(request)
         return render(request, template, context)
-    domain = get_domain(request.user.email)
-    entry = School.objects.get(domain=domain)
-    user_string = str(request.user)
 
+    school = request.user.profile.school
     if request.method == 'POST':
         if 'name' in request.POST:
-            entry.add_school(request.POST['name'], user_string)
+            school.add_school(request.POST['name'], request.user.username)
         else:
-            entry.review()
-        entry.save()
-       
-    school = entry.school
-    if not school:
+            school.review()
+        school.save()
+
+    if not school.name:
         return render(request, 'school.html', {'first': True})
-    elif not entry.reviewed and not user_string == entry.poster:
-        return render(request, 'school.html', {'name': school})
+    elif not school.reviewed and not request.user.username == school.creator:
+        return render(request, 'school.html', {'name': school.name})
 
-    posts = Submission.objects.filter(school=domain).filter(hidden=False)
-
+    posts = Submission.objects.filter(school=school).filter(hidden=False)
     if len(posts) == 0:
         return redirect('syllabiShare:upload')
 
     dep = set()
     for i in posts:
         dep.add(i.dept)
-    return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
+    return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts)})
 
 
 def privacy(request):
     return render(request, 'privacy.html')
 
 
-def schooladmin(request,school=None):
+def schooladmin(request,domain=None):
     if request.user.is_superuser:
+        school = None
         try:
-            entry = School.objects.get(domain=school)
+            school = School.objects.get(domain=domain)
         except:
             return redirect('/')
         posts = Submission.objects.filter(school=school).filter(hidden=False)
         dep = set()
         for i in posts:
             dep.add(i.dept)
-        return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
+        return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':domain,'num':len(posts)})
     return redirect('/')
 
 
@@ -212,14 +180,14 @@ def search(request):
         if context['loggedIn']:
             logout(request)
         return render(request, template, context)
-    domain = get_domain(request.user.email)
-    found = Submission.objects.filter(school=domain).filter(hidden=False)
+
+    found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
-    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':School.objects.get(domain=domain).school})
+    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':request.user.profile.school.name})
 
 
 def setting(request):
@@ -264,11 +232,11 @@ def upload(request):
         goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1])
         if goodProf:
             entry = Submission()
-            entry.user = request.user.username
-            entry.school = get_domain(request.user.email)
+            entry.user = request.user
+            entry.school = request.user.profile.school
             entry.prof = prof[0] + ' ' + prof[1]
             entry.title = request.POST['title']
-            entry.dept = request.POST['dept'].upper()
+            entry.dept = request.POST['dept'].strip().upper()
             entry.number = request.POST['number']
             entry.semester = request.POST['semester']
             entry.year = request.POST['year']
@@ -277,9 +245,6 @@ def upload(request):
             entry.syllabus = request.FILES['file']
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), entry.dept.lower(), entry.number, entry.semester, entry.year]) + '.pdf'
             entry.save()
-            school = School.objects.filter(domain=entry.school)[0]
-            school.upload(request.user.username)
-            school.save()
             success = True
         else:
             message = 'Professor name not valid! Try "FirstName LastName" Format'
