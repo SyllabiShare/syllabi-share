@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
 
+from crispy_forms.helper import FormHelper
+
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False)
@@ -24,3 +26,11 @@ class SignUpForm(UserCreationForm):
             'password1', 
             'password2', 
         ]
+
+    @property
+    def helper(self):
+        helper = FormHelper(self)
+        helper.form_tag = False
+        helper.use_custom_control = False
+
+        return helper
