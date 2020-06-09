@@ -15,8 +15,9 @@
   <body style="background-image: url({% static 'back.png' %}); background-size: cover;" class="text-center"> <br><br><br><br><br><br>
     <b style="top: 30%; font-size: 50px;"> WELCOME TO SYLLABI SHARE! </b> <br><br>
     <b style="top: 60%; font-size: 30px;"> Learn about your courses here! </b> <br><br>
-    <div class="alert d-inline-block" style="display: inline-block; border-color: grey; background-color: grey;" role="alert"> <b style="font-size: 30px;"> Please <a href="/signup" style="color:navy"> Register</a> with a .edu Email or <a style="color:navy" href="/login">  Log In! </a> </b> </div><br> <br>
 
+    <a class="btn btn-lg btn-primary" href="{% url 'login' %}">Login</a>
+    <p><small>No account? <a href="{% url 'signup' %}">Create one now</a></small></p>
     <div class="text-center">
       <h6>By logging in to this website you are agreeing to the <a href="/privacy" style="color: purple"> privacy policy </a> and certify that you will only use the material for educational purposes</h6>
       <br>
