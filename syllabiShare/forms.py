@@ -8,8 +8,10 @@ class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     email = forms.EmailField(help_text='Enter a .edu email address',
-                             validators=[RegexValidator(r'.*\.edu$', message='Email address must end in .edu')],
-                             widget=forms.EmailInput(attrs={'pattern': r'.*\.edu$',
+                             # RegexValidator matches on an arbitrary subset
+                             validators=[RegexValidator(r'\.edu$', message='Email address must end in .edu')],
+                             # pattern matches as if wrapped between ^...$
+                             widget=forms.EmailInput(attrs={'pattern': r'.*\.edu',
                                                             'title': 'Email address must end in .edu'}))
 
     class Meta:
