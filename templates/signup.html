@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 
 {% block content %} 
-    <h2>Sign Up Page</h2>
+    <h3>Signup</h3>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-        <br><br>
-        <a href="/">Home</a>
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-primary">Register</button>
     </form>
 {% endblock content %}

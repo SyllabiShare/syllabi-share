@@ -39,14 +39,16 @@ class ActivateAccount(View):
 class SignUpView(View):
     form_class = SignUpForm
     template_name = 'signup.html'
+
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False # Deactivate account till it is confirmed
+            user.is_active = False  # Deactivate account till it is confirmed
             user.save()
             current_site = get_current_site(request)
             subject = 'Activate Your SyllabiShare Account'

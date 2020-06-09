@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'syllabiShare',
+    'crispy_forms',
     'storages',
     'jsonfield',
     'six',
@@ -83,6 +84,7 @@ TEMPLATES = [
     },
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 WSGI_APPLICATION = 'project.wsgi.application'
 

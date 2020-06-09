@@ -1,6 +1,7 @@
 asgiref
 boto3
 Django
+django-crispy-forms
 django-environ
 django-heroku
 django-storages
