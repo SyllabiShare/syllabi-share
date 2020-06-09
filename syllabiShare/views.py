@@ -109,8 +109,6 @@ def admin(request):
 def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False})
-    if not user.profile.school:
-        return ('error.html', {'loggedIn': True})
 
     school = user.profile.school
     if school.takedown:
