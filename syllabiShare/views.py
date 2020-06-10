@@ -48,6 +48,7 @@ class SignUpView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            user.username = user.email
             user.is_active = False  # Deactivate account till it is confirmed
             user.save()
             current_site = get_current_site(request)
@@ -59,7 +60,7 @@ class SignUpView(View):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject, message)
-            messages.success(request, ('Please confirm your email to complete registration.'))
+            messages.success(request, 'Please confirm your email to complete registration.')
             return redirect('login')
         return render(request, self.template_name, {'form': form})
 

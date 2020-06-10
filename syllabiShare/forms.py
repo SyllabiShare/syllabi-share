@@ -19,12 +19,11 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-            'username', 
-            'first_name', 
-            'last_name', 
-            'email', 
-            'password1', 
-            'password2', 
+            'email',
+            'first_name',
+            'last_name',
+            'password1',
+            'password2',
         ]
 
     @property
@@ -36,7 +35,15 @@ class SignUpForm(UserCreationForm):
         return helper
 
 
+# Hack around AuthenticationForm to treat their email as their username
 class LoginForm(AuthenticationForm):
+    username = forms.EmailField()
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request, *args, **kwargs)
+        self.fields['username'].label = 'Email'
+        self.fields['username'].verbose_name = 'email'
+
     @property
     def helper(self):
         helper = FormHelper(self)
