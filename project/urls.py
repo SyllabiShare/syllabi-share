@@ -25,7 +25,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(authentication_form=LoginForm,
                                      redirect_authenticated_user=True,
                                      template_name='login.html'), name='login'),
-    path('logout/', LogoutView.as_view(template_name='error.html'), name='logout'),
+    path('logout/', LogoutView.as_view(template_name='landing.html'), name='logout'),
     path('', include('syllabiShare.urls')),
 ]
 

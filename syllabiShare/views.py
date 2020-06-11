@@ -109,7 +109,7 @@ def admin(request):
 
 def authenticate(user):
     if not user.is_authenticated:
-        return ('error.html', {'form': SimpleSignUpForm()})
+        return ('landing.html', {'form': SimpleSignUpForm()})
 
     school = user.profile.school
     if school.takedown:
@@ -197,7 +197,7 @@ def setting(request):
             if request.user.username == request.POST['username']:
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
-                return render(request, 'error.html')
+                return render(request, 'landing.html')
     return render(request, 'settings.html')
 
 
