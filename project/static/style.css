@@ -55,3 +55,18 @@ footer {
     margin-bottom: 2%;
     border: 1px solid black;
 }
+
+.success, .warning {
+    display: inline-block;
+    color: white;
+}
+
+.success {
+    border-color: #43a546;
+    background-color: #43a546;
+}
+
+.warning {
+    border-color: #d33840;
+    background-color: #d33840;
+}
