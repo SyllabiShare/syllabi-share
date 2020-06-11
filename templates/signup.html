@@ -1,10 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'landing.html' %}
 {% load crispy_forms_tags %}
 
 {% block content %} 
-    <h3>Signup</h3>
-    <form method="post">
-        {% crispy form %}
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
+<h3>Create account</h3>
+<form method="post">
+    {% crispy form %}
+    <button type="submit" class="btn btn-primary">Create account</button>
+</form>
+<div class="text-muted mt-2"><small>
+  By creating an account, you agree to the <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
+  and certify that you will only use the material for educational purposes.
+</small></div>
 {% endblock content %}
