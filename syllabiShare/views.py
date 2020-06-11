@@ -111,10 +111,9 @@ def authenticate(user):
     if not user.is_authenticated:
         return ('error.html', {'loggedIn': False, 'form': SimpleSignUpForm()})
 
-    # FIXME
     school = user.profile.school
     if school.takedown:
-        return ('sorry.html', {'loggedIn': True, 'form': LoginForm(), 'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
+        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
     return (False, False)
 
 def display(request, dept=None):
