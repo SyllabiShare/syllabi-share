@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.validators import RegexValidator
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Row, Column
 
 
 class SimpleSignUpForm(UserCreationForm):
@@ -44,6 +45,21 @@ class SignUpForm(SimpleSignUpForm):
             'password1',
             'password2',
         ]
+
+    @property
+    def helper(self):
+        helper = super().helper
+        helper.layout = Layout(
+            'email',
+            Row(
+                Column('first_name'),
+                Column('last_name'),
+            ),
+            'password1',
+            'password2',
+        )
+
+        return helper
 
 
 # Hack around AuthenticationForm to treat their email as their username
