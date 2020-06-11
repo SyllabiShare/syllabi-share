@@ -109,11 +109,11 @@ def admin(request):
 
 def authenticate(user):
     if not user.is_authenticated:
-        return ('error.html', {'loggedIn': False, 'form': SimpleSignUpForm()})
+        return ('error.html', {'form': SimpleSignUpForm()})
 
     school = user.profile.school
     if school.takedown:
-        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
+        return ('sorry.html', {'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
     return (False, False)
 
 def display(request, dept=None):
@@ -129,8 +129,6 @@ def display(request, dept=None):
 def index(request):
     (template, context) = authenticate(request.user)
     if template:
-        if context['loggedIn']:
-            logout(request)
         return render(request, template, context)
 
     school = request.user.profile.school
@@ -178,8 +176,6 @@ def schooladmin(request,domain=None):
 def search(request):
     (template, context) = authenticate(request.user)
     if template:
-        if context['loggedIn']:
-            logout(request)
         return render(request, template, context)
 
     found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
@@ -194,8 +190,6 @@ def search(request):
 def setting(request):
     (template, context) = authenticate(request.user)
     if template:
-        if context['loggedIn']:
-            logout(request)
         return render(request, template, context)
 
     if request.method == 'POST':
