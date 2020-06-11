@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'storages',
     'jsonfield',
-    'six',
 ]
 
 MIDDLEWARE = [
