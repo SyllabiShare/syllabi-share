@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 
+<div class="text-center">
+  {% if success %}
+  <div id="message-success" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #43a546; background-color: #43a546;" role="alert"> Syllabus successfully added to <a href="#" style="color:#caffcb">this page</a>. Thank you!</div>
+  {% endif %} 
+</div>
+
 <h3>Upload Syllabus</h3>
 <form id="form-id" action="/upload/" method="post" enctype="multipart/form-data">
   {% csrf_token %}
@@ -30,7 +36,7 @@
         <option value="fall">Fall</option>
         <option value="spring">Spring</option>
         <option value="summer">Summer</option>
-        <option value="summer">January</option>
+        <option value="january">January</option>
       </select>
     </div>
     <div class="form-group col-md-2">
@@ -44,20 +50,22 @@
       <b>Please be aware of any policies your school may have about the sharing of syllabi.<br> By uploading a syllabus, you certify that you have done this and there is no problem with it.</b>
     </div>
   </div>
-  <div class="form-group">
-    <label for="file"><b>Syllabus (PDFs only)</b></label>
-    <input class="form-control-file" id="file" type="file" name="file" accept="application/pdf" required>
-  </div>
-  <input class="btn btn-success" type="submit" value="Submit">
-</form>
 
-<div class="text-center">
-  {% if success %}
-  <div id="message" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #43a546; background-color: #43a546;" role="alert"> Addition Successful! </div>
-  {% else %}
-  <div id="message" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #d33840; background-color: #d33840;" role="alert"> {{message}} </div>
-  {% endif %} 
-</div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="file"><b>Syllabus (PDFs only)</b></label>
+      <input class="form-control-file" id="file" type="file" name="file" accept="application/pdf" required>
+    </div>
+    <div class="form-group col-md">
+      <div id="message" class="alert d-inline-block" style="display: none !important;  color: white; border-color: #d33840; background-color: #d33840;" role="alert"> </div>
+    </div>
+  </div>
+
+  <div id="message-warning" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #d33840; background-color: #d33840;" role="alert"> Misuse of uploads will be met by a ban!</div>
+
+  <div><input class="btn btn-success" type="submit" value="Submit"></div>
+  
+</form>
 
 <a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
@@ -66,12 +74,14 @@
       $("#file").on('change', function(event) {
           var file = event.target.files[0];
           if(file.size>=5*1024*1024) {
-              document.getElementById('message').innerHTML = "Upload PDFs of size less than 1MB please";
+              document.getElementById('message').innerHTML = "Please upload PDFs smaller than 5 MB.";
+              document.getElementById('message').style.display = "inline-block";
               $("#form-id").get(0).reset(); 
               return;
           }
           if(!file.type.match('application/pdf.*')) {
-              document.getElementById('message').innerHTML = "Upload PDFs only please!";
+              document.getElementById('message').innerHTML = "PDFs only, please!";
+              document.getElementById('message').style.display = "inline-block";
               $("#form-id").get(0).reset(); 
               return;
           }
