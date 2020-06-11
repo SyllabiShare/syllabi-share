@@ -195,7 +195,10 @@ def upload(request):
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), entry.dept.lower(), entry.number, entry.semester, entry.year]) + '.pdf'
             entry.save()
             # success = True
-            messages.success(request, 'Syllabus successfully added to <a href="#" style="color:#caffcb">this page</a>. Thank you!')
+            messages.success(request, 'Syllabus successfully added. Thank you!')
+            # if we want to keep users on this page, then maybe we could add
+            # a courtesy link directly to the department page that has the
+            # newly-uploaded syllabus
         else:
             # message = 'Professor name not valid! Try "FirstName LastName" Format'
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
