@@ -69,7 +69,7 @@ The developers of SyllabiShare do not pretend to be perfect and recognize that f
 - Language & Framework: **Python, Django**
 - Webapp Hosting:  **Heroku**, 
 - Files Storage: **AWS S3** Bucket (Northern Virginia)
-- User Authenication: **Google OAuth**
+- User Auethnication: **Google OAuth**
 
 These service providers will eventually cost money, which is why we humbly ask for your financial support. 
 Please support us by clicking `Donate link` at the bottom of the screen if you are able to. 
