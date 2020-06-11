@@ -1,29 +1,30 @@
+{% extends 'landing.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
-<!doctype html>
-<html lang="en" style="margin: 0; height: 100%; overflow: hidden">
-  <head>
-    <meta charset="utf-8">
-    <title> Syllabi Share </title>
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  </head>
 
-  <body style="background-image: url({% static 'back.png' %}); background-size: cover;" class="text-center"> <br><br><br><br><br><br>
-    <b style="top: 30%; font-size: 50px;"> WELCOME TO SYLLABI SHARE! </b> <br><br>
-    <b style="top: 60%; font-size: 30px;"> Learn about your courses here! </b> <br><br>
-
-    <a class="btn btn-lg btn-primary" href="{% url 'login' %}">Login</a>
-    <p><small>No account? <a href="{% url 'signup' %}">Create one now</a></small></p>
-    <div class="text-center">
-      <h6>By logging in to this website you are agreeing to the <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a> and certify that you will only use the material for educational purposes</h6>
-      <br>
-      <h6>Learn more about SyllabiShare <a href="{% url 'syllabiShare:about' %}">here</a>!</h6>
-      <br>
+{% block content %}
+  <div class="row">
+    <div class="col-md-6">
+      <h1 class="display-4">Simplifying course selection</h1>
+      <p class="lead">
+        SyllabiShare provides you with the syllabi you need to make an informed choice about the courses you want to take.
+        Upload syllabi to help others as you benefit from the collaborative efforts of all.
+      </p>
     </div>
-    <a href="https://github.com/SyllabiShare/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
-  </body>
-</html>
+    <div class="col-md-6 my-auto">
+      <div class="rounded bg-light p-3">
+        <form action="{% url 'login' %}" method="post">
+          {% crispy form %}
+          <button type="submit" class="btn btn-primary">Login</button>
+          <p class="d-inline ml-2"><small>No account? <a href="{% url 'signup' %}">Create one now</a></small></p>
+        </form>
+        <div class="text-muted mt-3"><small>
+          By logging in, you agree to the <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
+          and certify that you will only use the material for educational purposes.
+        </small></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/SyllabiShare/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
+{% endblock %}
