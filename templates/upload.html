@@ -2,11 +2,19 @@
 {% load static %}
 {% block content %}
 
-<div class="text-center">
-  {% if success %}
-  <div id="message-success" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #43a546; background-color: #43a546;" role="alert"> Syllabus successfully added to <a href="#" style="color:#caffcb">this page</a>. Thank you!</div>
-  {% endif %} 
-</div>
+{% if messages %}
+  {% for message in messages %}
+    <div class="text-center">
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+      <div class="alert d-inline-block success" role="alert">
+      {% else %}
+      <div class="alert d-inline-block warning" role="alert">
+      {% endif %}
+        {{ message }}
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
 
 <h3>Upload Syllabus</h3>
 <form id="form-id" action="/upload/" method="post" enctype="multipart/form-data">
@@ -57,11 +65,11 @@
       <input class="form-control-file" id="file" type="file" name="file" accept="application/pdf" required>
     </div>
     <div class="form-group col-md">
-      <div id="message" class="alert d-inline-block" style="display: none !important;  color: white; border-color: #d33840; background-color: #d33840;" role="alert"> </div>
+      <div id="message" class="alert d-inline-block warning" style="display: none !important;" role="alert"> </div>
     </div>
   </div>
 
-  <div id="message-warning" class="alert d-inline-block" style="display: inline-block; color: white; border-color: #d33840; background-color: #d33840;" role="alert"> Misuse of uploads will be met by a ban!</div>
+  <div id="message-warning" class="alert d-inline-block warning" role="alert">Misuse of uploads will be met by a ban!</div>
 
   <div><input class="btn btn-success" type="submit" value="Submit"></div>
   
