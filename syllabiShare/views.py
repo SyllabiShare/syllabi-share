@@ -1,4 +1,4 @@
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, LoginForm, SimpleSignUpForm
 from .models import Submission, School, Suggestion
 from .tokens import account_activation_token
 from django.conf import settings
@@ -109,7 +109,7 @@ def admin(request):
 
 def authenticate(user):
     if not user.is_authenticated:
-        return ('error.html', {'loggedIn': False, 'form': LoginForm()})
+        return ('error.html', {'loggedIn': False, 'form': SimpleSignUpForm()})
 
     # FIXME
     school = user.profile.school

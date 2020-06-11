@@ -13,13 +13,13 @@
     </div>
     <div class="col-md-6 my-auto">
       <div class="rounded bg-light p-3">
-        <form action="{% url 'login' %}" method="post">
+        <form action="{% url 'signup' %}" method="post">
           {% crispy form %}
-          <button type="submit" class="btn btn-primary">Login</button>
-          <p class="d-inline ml-2"><small>No account? <a href="{% url 'signup' %}">Create one now</a></small></p>
+          <button type="submit" class="btn btn-primary">Create account</button>
+          <p class="d-inline ml-2"><small>Already have an account? <a href="{% url 'login' %}">Login</a></small></p>
         </form>
         <div class="text-muted mt-3"><small>
-          By logging in, you agree to the <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
+          By creating an account, you agree to the <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
           and certify that you will only use the material for educational purposes.
         </small></div>
       </div>
