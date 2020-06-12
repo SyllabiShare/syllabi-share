@@ -17,11 +17,11 @@ from django.urls import path, include
 from django.contrib.auth.views import LogoutView, LoginView
 
 from syllabiShare.forms import LoginForm
-from syllabiShare.views import SignUpView, ActivateAccount
+from syllabiShare import views
 
 urlpatterns = [
-    path('signup/', SignUpView.as_view(), name='signup'),
-    path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
+    path('signup/', views.SignUpView.as_view(), name='signup'),
+    path('activate/<uidb64>/<token>/', views.ActivateAccount.as_view(), name='activate'),
     path('login/', LoginView.as_view(authentication_form=LoginForm,
                                      redirect_authenticated_user=True,
                                      template_name='login.html'), name='login'),

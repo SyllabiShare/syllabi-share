@@ -60,9 +60,9 @@ class SignUpView(View):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject, message)
-            messages.success(request, 'Please confirm your email to complete registration.')
-            return redirect('login')
+            return render(request, 'confirm-account.html', {'email': user.email})
         return render(request, self.template_name, {'form': form})
+
 
 def about(request):
     return render(request, 'about.html')
