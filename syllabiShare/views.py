@@ -62,7 +62,7 @@ class SignUpView(View):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject, message)
-            return render(request, 'confirm-account.html', {'email': user.email})
+            return render(request, 'confirm-account.html', {'host': settings.EMAIL_HOST_USER, 'email': user.email})
         return render(request, self.template_name, {'form': form})
 
 
