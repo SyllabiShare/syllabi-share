@@ -4,8 +4,8 @@
 {% block content %} 
 <h3>Sign in</h3>
 <form method="post">
-    {% crispy form %}
-    <button type="submit" class="btn btn-primary">Sign in</button>
+  {% crispy form %}
+  <button type="submit" class="btn btn-primary">Sign in</button>
   <p class="d-inline ml-2"><small><a href="{% url 'password_reset' %}">Forgot your password?</a></small></p>
 </form>
 {% endblock %}
