@@ -117,8 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# AllowAllUsers lets us show custom messages via LoginForm when is_active is False
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
 )
 
 LOGIN_URL = '/login/'

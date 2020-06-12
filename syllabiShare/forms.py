@@ -79,6 +79,13 @@ class LoginForm(AuthenticationForm):
         self.fields['username'].label = 'Email'
         self.fields['username'].verbose_name = 'email'
 
+    # TODO: Allow them to resend the confirmation email (https://stackoverflow.com/a/17557554/5661593)
+    def confirm_login_allowed(self, user):
+        if not user.profile.email_confirmed:
+            raise forms.ValidationError('This account has not been confirmed.', code='unconfirmed')
+
+        super().confirm_login_allowed(user)
+
     @property
     def helper(self):
         helper = FormHelper(self)

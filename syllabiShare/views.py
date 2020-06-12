@@ -29,11 +29,11 @@ class ActivateAccount(View):
             user.profile.email_confirmed = True
             user.save()
             login(request, user)
-            messages.success(request, ('Your account have been confirmed.'))
-            return redirect('/')
+            messages.success(request, 'Your account has been confirmed')
+            return redirect('syllabiShare:index')
         else:
-            messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
-            return redirect('/')
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used')
+            return redirect('syllabiShare:index')
 
 
 class SignUpView(View):
