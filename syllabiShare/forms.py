@@ -82,7 +82,7 @@ class LoginForm(AuthenticationForm):
     # TODO: Allow them to resend the confirmation email (https://stackoverflow.com/a/17557554/5661593)
     def confirm_login_allowed(self, user):
         if not user.profile.email_confirmed:
-            raise forms.ValidationError('This account has not been confirmed.', code='unconfirmed')
+            raise forms.ValidationError('Please confirm your email before logging in.', code='unconfirmed')
 
         super().confirm_login_allowed(user)
 
