@@ -15,6 +15,14 @@ class SimpleSignUpForm(UserCreationForm):
                              widget=forms.EmailInput(attrs={'pattern': r'.*\.edu',
                                                             'title': 'Email address must end in .edu'}))
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('%(email)s already has an account',
+                                        code='duplicate_email',
+                                        params={'email': email})
+        return email
+
     class Meta:
         model = User
         fields = [
