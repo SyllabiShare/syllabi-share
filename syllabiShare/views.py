@@ -1,4 +1,4 @@
-from .forms import SignUpForm, LoginForm, SimpleSignUpForm
+from .forms import SignUpForm, SimpleSignUpForm
 from .models import Submission, School, Suggestion
 from .tokens import account_activation_token
 from django.conf import settings
@@ -32,6 +32,8 @@ class ActivateAccount(View):
             messages.success(request, 'Your account has been confirmed')
             return redirect('syllabiShare:index')
         else:
+            # TODO: Throwing them back to the home page doesn't seem too helpful here.
+            # They should have a way of regenerating an email.
             messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used')
             return redirect('syllabiShare:index')
 
