@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mass_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -215,17 +216,14 @@ def suggest(request):
         if 'githubLink' in request.POST and 'https://github.com/SyllabiShare/syllabi-share/issues/' in request.POST['githubLink']:
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
+        return HttpResponseRedirect("/suggest") # prevents re-post on refresh problem
     return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
 
 
-# TODO: guard against refreshing if it resends a POST request
 def upload(request):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
-    # success = False
-    # message = 'Misuse of uploads will be met by a ban!'
-    # above message is now hardcoded into upload.html and stays there permanently
     if request.method == 'POST':
         prof = request.POST['prof'].strip().split()
         goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1])
@@ -244,15 +242,10 @@ def upload(request):
             entry.syllabus = request.FILES['file']
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), entry.dept.lower(), entry.number, entry.semester, entry.year]) + '.pdf'
             entry.save()
-            # success = True
             messages.success(request, 'Syllabus successfully added. Thank you!')
-            # if we want to keep users on this page, then maybe we could add
-            # a courtesy link directly to the department page that has the
-            # newly-uploaded syllabus
         else:
-            # message = 'Professor name not valid! Try "FirstName LastName" Format'
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
-    # return render(request, 'upload.html', {'success': success, 'message': message})
+        return HttpResponseRedirect("/upload") # prevents re-post on refresh problem
     return render(request, 'upload.html')
 
 
