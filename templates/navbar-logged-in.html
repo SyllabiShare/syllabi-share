@@ -1,3 +1,4 @@
+{% load upToCharacter %}
 <nav class="navbar navbar-expand-md bg-dark navbar-dark w-100">
   <a class="navbar-brand" href="/">SyllabiShare</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +27,7 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-          {{user.username}}
+          {{user.username | upToCharacter:"@"}}
         </a>
         <div class="dropdown-menu dropdown-menu-right" style="min-width: 0;">
             <a class="dropdown-item" href="/settings">Settings</a>
