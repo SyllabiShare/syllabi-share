@@ -24,7 +24,8 @@
     <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a>
     {% csrf_token %}
     <input name="pk" value="{{post.pk}}" type="hidden"/>
-    {% if saved %}
+    
+    {% if post in user.profile.saved.all %}
     <input class="btn btn-sm btn-secondary" id="button" name="unsave" type="submit" value="Unsave">
     {% else %}
     <input class="btn btn-sm btn-secondary" id="button" name="save" type="submit" value="Save">

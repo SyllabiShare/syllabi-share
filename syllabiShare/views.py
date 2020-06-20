@@ -130,6 +130,8 @@ def display(request, dept=None):
     if request.method == 'POST':
         if 'save' in request.POST:
             request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+        if 'unsave' in request.POST:
+            request.user.profile.saved.remove(Submission.objects.get(pk=request.POST['pk']))
 
     posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
     if not dept or len(posts) == 0:
@@ -194,7 +196,7 @@ def saved(request):
 
     found = request.user.profile.saved.filter(hidden=False)
 
-    return render(request, 'display.html', {'posts':found.order_by('dept','number'), 'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'saved': True,'school':request.user.profile.school.name})
+    return render(request, 'display.html', {'posts':found.order_by('dept','number'), 'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'saved': True, 'school':request.user.profile.school.name})
 
 
 def search(request):
