@@ -36,10 +36,10 @@ class Submission(models.Model):
         self.hidden = not self.hidden
 
 
-
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
-    school = models.ForeignKey(School, null=True, on_delete=models.CASCADE)
+    email_confirmed = models.BooleanField(default=False)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
 
 
 class Suggestion(models.Model):

@@ -14,17 +14,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
-from django.conf import settings
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
+
+from syllabiShare.forms import LoginForm
+from syllabiShare import views
 
 urlpatterns = [
-    path(
-        'logout/',
-        LogoutView.as_view(template_name=settings.LOGOUT_REDIRECT_URL),
-        name='logout'
-        ),
+    path('signup/', views.SignUpView.as_view(), name='signup'),
+    path('activate/<uidb64>/<token>/', views.ActivateAccount.as_view(), name='activate'),
+    path('login/', auth_views.LoginView.as_view(authentication_form=LoginForm,
+                                                redirect_authenticated_user=True,
+                                                template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='landing.html'), name='logout'),
+    path('registration/', include([
+        path('', auth_views.PasswordResetView.as_view(), name='password_reset'),
+        path('done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+        path('<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+        path('complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    ])),
     path('', include('syllabiShare.urls')),
-    path('', include('social_django.urls', namespace='social')),
 ]
 
-handler404 = 'syllabiShare.views.view404' 
+handler404 = 'syllabiShare.views.view404'

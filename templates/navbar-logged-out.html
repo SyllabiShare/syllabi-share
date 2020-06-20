@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark w-100">
+  <a class="navbar-brand" href="/">SyllabiShare</a>
+
+  <a class="d-md-none ml-auto text-light nav-link mr-3" href="{% url 'signup' %}">sign up</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto d-flex align-items-md-center">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="{% url 'syllabiShare:about' %}">about</a>
+      </li>
+      {# technically this should be display: list-item but d-md-list-item doesn't exist, so #}
+      <li class="nav-item mr-2 d-none d-md-block">
+        <a class="text-light nav-link" href="{% url 'signup' %}">sign up</a>
+      </li>
+      <li class="nav-item">
+        <a class="text-light nav-link" href="{% url 'login' %}">sign in</a>
+      </li>
+    </ul>
+  </div>
+</nav>

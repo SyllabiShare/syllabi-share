@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-6 my-auto">
+      <h1 class="display-4">Simplifying course selection</h1>
+      <p class="lead">
+        SyllabiShare provides you with the syllabi you need to make an informed choice about the courses you want to take.
+        Upload syllabi to help others as you benefit from the collaborative efforts of all.
+      </p>
+    </div>
+    <div class="col-md-6 my-auto">
+      <div class="rounded bg-light p-3" style="margin-top: 10%;">
+        <form action="{% url 'signup' %}" method="post">
+          {% crispy form %}
+          <button type="submit" class="btn btn-primary">Create account</button>
+          <p class="d-lg-inline ml-lg-2"><small>Already have an account? <a href="{% url 'login' %}">Sign in</a></small></p>
+        </form>
+        <div class="text-muted mt-3"><small>
+          By creating an account, you agree to the <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
+          and certify that you will only use the material for educational purposes.
+        </small></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://github.com/SyllabiShare/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
+{% endblock %}
