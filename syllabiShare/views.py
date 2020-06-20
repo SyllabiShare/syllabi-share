@@ -70,6 +70,7 @@ class SignUpView(View):
 def about(request):
     return render(request, 'about.html')
 
+
 def admin(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -110,6 +111,7 @@ def admin(request):
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
     return redirect('/')
 
+
 def authenticate(user):
     if not user.is_authenticated:
         return ('landing.html', {'form': SimpleSignUpForm()})
@@ -119,10 +121,16 @@ def authenticate(user):
         return ('sorry.html', {'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
     return (False, False)
 
+
 def display(request, dept=None):
     (template, context) = authenticate(request.user)
     if template:
         return render(request, template, context)
+
+    if request.method == 'POST':
+        if 'save' in request.POST:
+            request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+
     posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
     if not dept or len(posts) == 0:
         return redirect('/')
@@ -176,6 +184,19 @@ def schooladmin(request,domain=None):
     return redirect('/')
 
 
+def saved(request):
+    (template, context) = authenticate(request.user)
+    if template:
+        return render(request, template, context)
+
+    if 'unsave' in request.POST:
+        request.user.profile.saved.remove(Submission.objects.get(pk=request.POST['pk']))
+
+    found = request.user.profile.saved.filter(hidden=False)
+
+    return render(request, 'display.html', {'posts':found.order_by('dept','number'), 'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'saved': True,'school':request.user.profile.school.name})
+
+
 def search(request):
     (template, context) = authenticate(request.user)
     if template:
@@ -183,11 +204,13 @@ def search(request):
 
     found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
-        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
+        if 'save' in request.POST:
+            request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(dept__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
-    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':request.user.profile.school.name})
+    return render(request, 'display.html', {'posts':found.order_by('dept','number'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':request.user.profile.school.name})
 
 
 def setting(request):

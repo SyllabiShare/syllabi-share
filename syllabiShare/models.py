@@ -40,6 +40,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     email_confirmed = models.BooleanField(default=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
+    saved = models.ManyToManyField(Submission)
 
 
 class Suggestion(models.Model):

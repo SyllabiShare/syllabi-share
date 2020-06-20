@@ -1,21 +1,35 @@
-{% extends 'base-deprecated.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 
 <div class="text-center">
-  {% if search %}
+  {% if saved %}
     {% if posts.count == 0 %}
-      <h4>There are no Syllabi matching your search at the {{school}} sorry! <br>Try to add them!</h4>
+      <h4>You have no saved syllabi sorry!<br>Try to save some!</h4>
     {% else %}
-      <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} matching your search at the {{school}}!</h4>
+      <h4>You have {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} saved!</h4>
+    {% endif %}
+  {% elif search %}
+    {% if posts.count == 0 %}
+      <h4>There are no Syllabi matching your search sorry! <br>Try to add some!</h4>
+    {% else %}
+      <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} matching your search!</h4>
     {% endif %}
   {% else %}
     <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} for {{dept}} courses! Add More!</h4>
   {% endif %}<br>
 
   {% for post in posts %}
-  <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a>
-  <br><br>
+  <form method="POST">
+    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a>
+    {% csrf_token %}
+    <input name="pk" value="{{post.pk}}" type="hidden"/>
+    {% if saved %}
+    <input class="btn btn-sm btn-secondary" id="button" name="unsave" type="submit" value="Unsave">
+    {% else %}
+    <input class="btn btn-sm btn-secondary" id="button" name="save" type="submit" value="Save">
+    {% endif %}
+  </form><br>
   {% endfor %}
 </div>
 
