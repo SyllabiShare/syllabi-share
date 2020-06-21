@@ -1,3 +1,59 @@
+/* for reference:
+ * blue bg (currently an image) is #82d5d9
+ * navbar color is --gray-dark which is #343a40
+*/
+
+/* overwriting base bootstrap colors */
+:root {
+    /* AAA compliant with white text: */
+    --success: #006702;
+    --danger: #b40029;
+}
+
+/* overwriting nav css */
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: white;
+}
+
+.navbar-brand {
+    /* originally, only top and bottom set to this value */
+    padding: .3125rem;
+}
+
+/* overwriting for submit buttons; AA for white text and current blue bg */
+.btn-success {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+/* our search button */
+input[value="Search"] {
+    /* meets AA for small text against --gray-dark */
+    color: #42bb57;
+    border-color: #42bb57;
+}
+
+/* better link and interactive element discoverability */
+a:not(.nav-link) {
+    font-weight: bold;
+    color: #002899; /* meets AA against current blue bg */
+}
+
+:focus {
+    outline: 0.1rem solid; /* color set to text color or already specified */
+    box-shadow: 0 0 0.2rem 0.2rem; /* color set to text color or already specified */
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.1rem var(--blue),
+                0 0 0.3rem 0.3rem white;
+}
+
+
 .group {
     margin: 2%;
 }
@@ -62,11 +118,11 @@ footer {
 }
 
 .success {
-    border-color: #43a546;
-    background-color: #43a546;
+    border-color: var(--success);
+    background-color: var(--success);
 }
 
 .warning {
-    border-color: #d33840;
-    background-color: #d33840;
+    border-color: var(--danger);
+    background-color: var(--danger);
 }
