@@ -30,12 +30,12 @@ class ActivateAccount(View):
             user.profile.email_confirmed = True
             user.save()
             login(request, user)
-            messages.success(request, 'Your account has been confirmed')
+            messages.success(request, 'Your account has been confirmed.')
             return redirect('syllabiShare:index')
         else:
             # TODO: Throwing them back to the home page doesn't seem too helpful here.
             # They should have a way of regenerating an email.
-            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used')
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
             return redirect('syllabiShare:index')
 
 
