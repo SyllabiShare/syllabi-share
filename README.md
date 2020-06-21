@@ -76,7 +76,10 @@ Please support us by clicking `Donate link` at the bottom of the screen if you a
 
 ## Authors
 
-* **Vernon Andrade** - *Development, Lead*
+* **Vernon Andrade** - *Development Lead, Founder*
+* **Winston Liu** - *Development, UI/UX*
+* **Sarah Meng** - *Development, UI/UX*
+* **Madison Flynn** - *Development*
 * **Robbie B** - *Development*
 * **Peter B** - *Documentation*
-* **Winston Liu** - *Development, UI/UX*
+
