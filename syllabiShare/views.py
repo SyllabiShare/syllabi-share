@@ -200,7 +200,7 @@ def setting(request):
             if request.user.username == request.POST['username']:
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
-                return render(request, 'landing.html')
+                return render(request, 'landing.html', {'form': SimpleSignUpForm()})
     return render(request, 'settings.html')
 
 
