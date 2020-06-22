@@ -1,20 +1,23 @@
-from .forms import SignUpForm, SimpleSignUpForm
-from .models import Submission, School, Suggestion
-from .tokens import account_activation_token
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mass_mail
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy
-from django.utils import timezone
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import View, UpdateView
+from django.views.generic import View
+
+from .forms import SignUpForm, SimpleSignUpForm
+from .models import Submission, School, Suggestion
+from .tokens import account_activation_token
+
+
+def takedown_check(user):
+    return not user.profile.school.takedown
 
 
 class ActivateAccount(View):
@@ -70,6 +73,8 @@ class SignUpView(View):
 def about(request):
     return render(request, 'about.html')
 
+
+@login_required
 def admin(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -108,31 +113,25 @@ def admin(request):
                     send_mass_mail(data)
                     return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
-    return redirect('/')
+    return redirect('syllabiShare:index')
 
-def authenticate(user):
-    if not user.is_authenticated:
-        return ('landing.html', {'form': SimpleSignUpForm()})
 
-    school = user.profile.school
-    if school.takedown:
-        return ('sorry.html', {'reason': school.reason, 'domain': user.email[user.email.index('@') + 1:]})
-    return (False, False)
-
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def display(request, dept=None):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
     posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
     if not dept or len(posts) == 0:
-        return redirect('/')
+        return redirect('syllabiShare:index')
     return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
 
 
+# This one can't use the decorators because it needs to differentiate between landing & index
 def index(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
+    if not request.user.is_authenticated:
+        return render(request, 'landing.html', {'form': SimpleSignUpForm()})
+
+    if not takedown_check(request.user):
+        return redirect('syllabiShare:takedown')
 
     school = request.user.profile.school
     if request.method == 'POST':
@@ -157,30 +156,39 @@ def index(request):
     return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts)})
 
 
+def takedown(request):
+    # Make sure this request is legit
+    if request.user.is_authenticated and request.user.profile.school.takedown:
+        return render(request, 'sorry.html',
+                      {'reason': request.user.profile.school.reason,
+                       'domain': request.user.email[request.user.email.index('@') + 1:]})
+
+    # No? Redirect them to the index
+    return redirect('syllabiShare:index')
+
+
 def privacy(request):
     return render(request, 'privacy.html')
 
 
-def schooladmin(request,domain=None):
+@login_required
+def schooladmin(request, domain=None):
     if request.user.is_superuser:
-        school = None
         try:
             school = School.objects.get(domain=domain)
         except:
-            return redirect('/')
+            return redirect('syllabiShare:index')
         posts = Submission.objects.filter(school=school).filter(hidden=False)
         dep = set()
         for i in posts:
             dep.add(i.dept)
         return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':domain,'num':len(posts)})
-    return redirect('/')
+    return redirect('syllabiShare:index')
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def search(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
-
     found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
@@ -190,25 +198,21 @@ def search(request):
     return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':request.user.profile.school.name})
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def setting(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
-
     if request.method == 'POST':
         if 'username' in request.POST:
             if request.user.username == request.POST['username']:
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
-                return render(request, 'landing.html', {'form': SimpleSignUpForm()})
+                return redirect('syllabiShare:index')
     return render(request, 'settings.html')
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def suggest(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
-
     if request.method == 'POST':
         suggestion = Suggestion()
         suggestion.name = request.user
@@ -216,14 +220,13 @@ def suggest(request):
         if 'githubLink' in request.POST and 'https://github.com/SyllabiShare/syllabi-share/issues/' in request.POST['githubLink']:
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
-        return HttpResponseRedirect("/suggest") # prevents re-post on refresh problem
+        return redirect("syllabiShare:suggest")  # prevents re-post on refresh problem
     return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def upload(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
     if request.method == 'POST':
         prof = request.POST['prof'].strip().split()
         goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1])
@@ -245,10 +248,10 @@ def upload(request):
             messages.success(request, 'Syllabus successfully added. Thank you!')
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
-        return HttpResponseRedirect("/upload") # prevents re-post on refresh problem
+        return redirect("syllabiShare:upload")  # prevents re-post on refresh problem
     return render(request, 'upload.html')
 
 
 def view404(request, exception=None):
-    return redirect('/')
+    return redirect('syllabiShare:index')
 

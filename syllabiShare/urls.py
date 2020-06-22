@@ -5,6 +5,7 @@ from django.conf import settings
 app_name = 'syllabiShare'
 urlpatterns = [
     path('', views.index, name="index"),
+    path('takedown', views.takedown, name="takedown"),
     path('about/', views.about, name="about"),
     path(settings.ADMIN_URL, views.admin, name="admin"),
     path('privacy/', views.privacy, name="privacy"),
