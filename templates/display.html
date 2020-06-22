@@ -2,8 +2,22 @@
 {% load static %}
 {% block content %}
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">{{school}}</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><!--
+   -->{% if search_string %}<!-- workaround for those extra spaces
+   -->Search results for "{{search_string}}"<!--
+   -->{% else %}<!--
+   -->{{dept}}<!--
+   -->{% endif %}<!--
+ --></li>
+  </ol>
+</nav>
+
+
 <div class="text-center">
-  {% if search %}
+  {% if search_string %}
     {% if posts.count == 0 %}
       <h4>Unfortunately, there are no syllabi matching your search at the {{school}}.</h4>
       <a href="/upload">Do you have any syllabi to add?</a>?

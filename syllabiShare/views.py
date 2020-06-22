@@ -183,11 +183,16 @@ def search(request):
 
     found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
-        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
+        if len(request.POST['search']) == 0:
+            messages.error(request, "You didn't enter anything to search!")
+            return HttpResponseRedirect("/")
+        if 'save' in request.POST:
+            request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(dept__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
-    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':request.user.profile.school.name})
+    return render(request, 'display.html', {'posts':found.order_by('dept', 'number'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search_string': request.POST['search'],'school':request.user.profile.school.name})
 
 
 def setting(request):

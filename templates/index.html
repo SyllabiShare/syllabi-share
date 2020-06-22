@@ -2,7 +2,15 @@
 {% load static %}
 {% block content %}
 
-<h4 class="text-center">There {{num|pluralize:"is,are"}} {{num}} syllab{{num|pluralize:"us,i"}} for the {{school}}! Would you like to <a href="/upload">add a syllabus</a>?</h4>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><a href="/">{{school}}</a></li>
+  </ol>
+</nav>
+
+<h4 class="text-center">There {{num|pluralize:"is,are"}} {{num}} syllab{{num|pluralize:"us,i"}} for the {{school}}!</h4>
+
+<p class="text-center">Would you like to <a href="/upload">add a syllabus</a>?</p>
 
 <div style="width: 60%; margin: auto;" class="text-center">
   {% for dept in posts %}
