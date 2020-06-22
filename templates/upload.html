@@ -2,20 +2,6 @@
 {% load static %}
 {% block content %}
 
-{% if messages %}
-  {% for message in messages %}
-    <div class="text-center">
-      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-      <div class="alert d-inline-block success" role="alert">
-      {% else %}
-      <div class="alert d-inline-block warning" role="alert">
-      {% endif %}
-        {{ message }}
-      </div>
-    </div>
-  {% endfor %}
-{% endif %}
-
 <h3>Upload Syllabus</h3>
 <form id="form-id" action="/upload/" method="post" enctype="multipart/form-data">
   {% csrf_token %}

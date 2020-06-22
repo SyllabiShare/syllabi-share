@@ -25,6 +25,20 @@
     {% endif %}
 
     <div class="container my-3 flex-fill">
+      {% if messages %}
+      {% for message in messages %}
+        <div class="text-center">
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+          <div class="alert d-inline-block success" role="alert">
+          {% else %}
+          <div class="alert d-inline-block warning" role="alert">
+          {% endif %}
+            {{ message }}
+          </div>
+        </div>
+      {% endfor %}
+      {% endif %}
+
       {% block content %}
       {% endblock %}
     </div>
