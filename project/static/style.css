@@ -38,10 +38,16 @@ input[value="Search"] {
 }
 
 /* better link and interactive element discoverability */
-a:not(.nav-link) {
+a {
     font-weight: bold;
     color: #002899; /* meets AA against current blue bg */
 }
+
+nav a {
+    font-weight: normal;
+    color: inherit;
+}
+/* and above we see the power of cascading */
 
 :focus {
     outline: 0.1rem solid; /* color set to text color or already specified */
