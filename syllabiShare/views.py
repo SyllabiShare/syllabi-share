@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mass_mail
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
@@ -173,9 +172,8 @@ def privacy(request):
 
 
 @login_required
-def schooladmin(request,domain=None):
+def schooladmin(request, domain=None):
     if request.user.is_superuser:
-        school = None
         try:
             school = School.objects.get(domain=domain)
         except:
@@ -222,7 +220,7 @@ def suggest(request):
         if 'githubLink' in request.POST and 'https://github.com/SyllabiShare/syllabi-share/issues/' in request.POST['githubLink']:
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
-        return HttpResponseRedirect("/suggest") # prevents re-post on refresh problem
+        return redirect("syllabiShare:suggest")  # prevents re-post on refresh problem
     return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
 
 
@@ -250,7 +248,7 @@ def upload(request):
             messages.success(request, 'Syllabus successfully added. Thank you!')
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
-        return HttpResponseRedirect("/upload") # prevents re-post on refresh problem
+        return redirect("syllabiShare:upload")  # prevents re-post on refresh problem
     return render(request, 'upload.html')
 
 
