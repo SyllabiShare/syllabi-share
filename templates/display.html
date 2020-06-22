@@ -20,15 +20,14 @@
   {% if search_string %}
     {% if posts.count == 0 %}
       <h4>Unfortunately, there are no syllabi matching your search at the {{school}}.</h4>
-      <a href="/upload">Do you have any syllabi to add?</a>?
     {% else %}
       <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} syllab{{posts.count|pluralize:"us,i"}} matching your search at the {{school}}!</h4>
     {% endif %}
   {% else %}
-    <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} syllab{{posts.count|pluralize:"us,i"}} for {{dept}} courses!</h4>
-      {% if posts.count == 0 %}
-        Would you like to <a href="/upload">add a syllabus</a>?
-      {% endif %}
+    <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} syllab{{posts.count|pluralize:"us,i"}} for {{posts.count|pluralize:"a,"}} {{dept}} course{{posts.count|pluralize:",s"}}!</h4>
+  {% endif %}
+  {% if posts.count == 0 %}
+    Would you like to <a href="/upload">add a syllabus</a>?
   {% endif %}<br>
 
   {% for post in posts %}

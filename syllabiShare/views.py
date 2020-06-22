@@ -247,7 +247,7 @@ def upload(request):
             entry.syllabus = request.FILES['file']
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), entry.dept.lower(), entry.number, entry.semester, entry.year]) + '.pdf'
             entry.save()
-            messages.success(request, 'Syllabus successfully added. Thank you!')
+            messages.success(request, 'Syllabus successfully added. It will show up when we receive approval from the professor. Thank you!')
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
         return HttpResponseRedirect("/upload") # prevents re-post on refresh problem
