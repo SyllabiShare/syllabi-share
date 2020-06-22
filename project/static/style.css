@@ -10,7 +10,7 @@
     --danger: #b40029;
 }
 
-/* overwriting nav css */
+/* overwriting main navbar's css */
 .navbar-dark .navbar-nav .nav-link {
     color: white;
 }
@@ -22,6 +22,19 @@
 .navbar-brand {
     /* originally, only top and bottom set to this value */
     padding: .3125rem;
+}
+
+/* overwriting for breadcrumbs */
+.breadcrumb {
+    background-color: #B2E5E9;
+}
+
+.breadcrumb-item {
+    color: var(--gray-dark);
+}
+
+.breadcrumb-item.active {
+    color: black;
 }
 
 /* overwriting for submit buttons; AA for white text and current blue bg */
