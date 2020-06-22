@@ -118,6 +118,7 @@ footer {
     border: 1px solid black;
 }
 
+/* for messages */
 .success, .warning {
     display: inline-block;
     color: white;
