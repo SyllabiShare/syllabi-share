@@ -26,6 +26,8 @@ urlpatterns = [
                                                 redirect_authenticated_user=True,
                                                 template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='landing.html'), name='logout'),
+    path('resend/', views.confirm_account, name='resend_confirmation'),
+    path('resend/done', views.confirm_account_done, name='resend_confirmation_done'),
     path('registration/', include([
         path('', auth_views.PasswordResetView.as_view(), name='password_reset'),
         path('done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
