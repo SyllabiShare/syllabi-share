@@ -36,8 +36,6 @@ class ActivateAccount(View):
             messages.success(request, 'Your account has been confirmed')
             return redirect('syllabiShare:index')
         else:
-            # TODO: Throwing them back to the home page doesn't seem too helpful here.
-            # They should have a way of regenerating an email.
             messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used')
             return redirect('syllabiShare:index')
 
@@ -69,7 +67,11 @@ def confirm_account(request):
         try:
             user = User.objects.get(email=email)
             if not user.profile.email_confirmed:
-                send_confirmation_email(user, request)
+                if user.profile.confirmations_sent < 3:
+                    send_confirmation_email(user, request)
+                else:
+                    # ...unless they start spamming
+                    return render(request, 'too-many-confirmations.html', {'email': settings.EMAIL_HOST_USER})
         except User.DoesNotExist:
             pass
 
@@ -98,6 +100,9 @@ def send_confirmation_email(user, request):
         'token': account_activation_token.make_token(user),
     })
     user.email_user(subject, message)
+
+    user.profile.confirmations_sent += 1
+    user.save()
 
 
 def about(request):

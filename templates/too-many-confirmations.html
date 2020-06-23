@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="d-flex flex-fill flex-column align-items-center justify-content-center">
+  <h1 class="display-4 mb-3 text-center">Email limit reached</h1>
+  <div class="text-center">
+    <p>Too many confirmation emails have been sent for this account.</p>
+    <p>Please contact an administrator at {{ email|urlize }} to manually activate your account.</p>
+  </div>
+</div>
+{% endblock %}
