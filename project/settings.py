@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'storages',
     'jsonfield',
+    'sass_processor',
 ]
 
 MIDDLEWARE = [
@@ -157,6 +158,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 AWS_LOCATION = ''
 AWS_S3_FILE_OVERWRITE = False
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'project/static'),
 ]
