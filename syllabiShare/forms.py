@@ -4,12 +4,11 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.validators import RegexValidator
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
-class SimpleSignUpForm(UserCreationForm):
+class SignUpForm(UserCreationForm):
     email = forms.EmailField(help_text='Enter a .edu email address',
                              # RegexValidator matches on an arbitrary subset
                              validators=[RegexValidator(r'\.edu$', message='Email address must end in .edu')],
@@ -38,36 +37,6 @@ class SimpleSignUpForm(UserCreationForm):
         helper = FormHelper(self)
         helper.form_tag = False
         helper.use_custom_control = False
-
-        return helper
-
-
-class SignUpForm(SimpleSignUpForm):
-    first_name = forms.CharField(max_length=30, required=False)
-    last_name = forms.CharField(max_length=30, required=False)
-
-    class Meta:
-        model = User
-        fields = [
-            'email',
-            'first_name',
-            'last_name',
-            'password1',
-            'password2',
-        ]
-
-    @property
-    def helper(self):
-        helper = super().helper
-        helper.layout = Layout(
-            'email',
-            Row(
-                Column('first_name'),
-                Column('last_name'),
-            ),
-            'password1',
-            'password2',
-        )
 
         return helper
 

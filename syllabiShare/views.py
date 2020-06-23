@@ -11,7 +11,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import View
 
-from .forms import SignUpForm, SimpleSignUpForm, ConfirmationEmailForm
+from .forms import SignUpForm, ConfirmationEmailForm
 from .models import Submission, School, Suggestion
 from .tokens import account_activation_token
 
@@ -163,7 +163,7 @@ def display(request, dept=None):
 # This one can't use the decorators because it needs to differentiate between landing & index
 def index(request):
     if not request.user.is_authenticated:
-        return render(request, 'landing.html', {'form': SimpleSignUpForm()})
+        return render(request, 'landing.html', {'form': SignUpForm()})
 
     if not takedown_check(request.user):
         return redirect('syllabiShare:takedown')
