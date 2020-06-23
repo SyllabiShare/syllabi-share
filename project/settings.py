@@ -162,14 +162,14 @@ AWS_S3_FILE_OVERWRITE = False
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'project/static'),
 ]
-STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-STATICFILES_STORAGE  = 'storages.backends.s3boto3.S3Boto3Storage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'sass_processor.finders.CssFinder',
 ]
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATICFILES_STORAGE = 'sass_processor.storage.SassS3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'sass_processor.storage.SassS3Boto3Storage'
 
 UPLOAD_TO = env('UPLOAD_TO')
 
