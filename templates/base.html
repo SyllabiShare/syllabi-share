@@ -42,7 +42,7 @@
       {% endfor %}
     {% endif %}
     {# form is specifically the sign-up form #}
-    {% if form.errors %}
+    {% if form.errors and signup %}
       {# manually copying style from sign in error #}
       <div class="alert alert-block alert-danger" role="alert">Your account was not created due to the following errors:
         <ul class="m-0">

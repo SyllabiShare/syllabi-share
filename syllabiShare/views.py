@@ -69,7 +69,7 @@ class SignUpView(View):
                 })
                 user.email_user(subject, message)
                 return render(request, 'confirm-account.html', {'host': settings.EMAIL_HOST_USER, 'email': user.email})
-            return render(request, self.template_name, {'form': form})
+            return render(request, self.template_name, {'form': form, 'signup': True})
         return redirect('syllabiShare:index')
 
 
