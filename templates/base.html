@@ -27,6 +27,7 @@
   {% endif %}
 
   <div class="container my-3">
+    {# messages is used generally #}
     {% if messages %}
       {% for message in messages %}
         <div class="text-center">
@@ -39,6 +40,19 @@
           </div>
         </div>
       {% endfor %}
+    {% endif %}
+    {# form is specifically the sign-up form #}
+    {% if form.errors %}
+      {# manually copying style from sign in error #}
+      <div class="alert alert-block alert-danger" role="alert">Your account was not created due to the following errors:
+        <ul class="m-0">
+          {% for input in form %}
+          {% for error in input.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
     {% endif %}
 
     {% block content %}
