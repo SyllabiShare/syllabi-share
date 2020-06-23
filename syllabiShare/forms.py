@@ -1,7 +1,9 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from crispy_forms.helper import FormHelper
 
@@ -48,12 +50,24 @@ class LoginForm(AuthenticationForm):
         self.fields['username'].label = 'Email'
         self.fields['username'].verbose_name = 'email'
 
-    # TODO: Allow them to resend the confirmation email (https://stackoverflow.com/a/17557554/5661593)
     def confirm_login_allowed(self, user):
         if not user.profile.email_confirmed:
-            raise forms.ValidationError('Please confirm your email before signing in.', code='unconfirmed')
+            raise forms.ValidationError(mark_safe("Please confirm your email before signing in. Didn't receive an "
+                                                  f'email? <a href="{reverse("resend_confirmation")}">Send it again</a>'), code='unconfirmed')
 
         super().confirm_login_allowed(user)
+
+    @property
+    def helper(self):
+        helper = FormHelper(self)
+        helper.form_tag = False
+        helper.use_custom_control = False
+
+        return helper
+
+
+class ConfirmationEmailForm(forms.Form):
+    email = forms.EmailField()
 
     @property
     def helper(self):

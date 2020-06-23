@@ -11,7 +11,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import View
 
-from .forms import SignUpForm
+from .forms import SignUpForm, ConfirmationEmailForm
 from .models import Submission, School, Suggestion
 from .tokens import account_activation_token
 
@@ -36,8 +36,6 @@ class ActivateAccount(View):
             messages.success(request, 'Your account has been confirmed')
             return redirect('syllabiShare:index')
         else:
-            # TODO: Throwing them back to the home page doesn't seem too helpful here.
-            # They should have a way of regenerating an email.
             messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used')
             return redirect('syllabiShare:index')
 
@@ -57,17 +55,54 @@ class SignUpView(View):
             user.username = user.email
             user.is_active = False  # Deactivate account till it is confirmed
             user.save()
-            current_site = get_current_site(request)
-            subject = 'Activate Your SyllabiShare Account'
-            message = render_to_string('emails/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
+            send_confirmation_email(user, request)
             return render(request, 'confirm-account.html', {'host': settings.EMAIL_HOST_USER, 'email': user.email})
         return render(request, self.template_name, {'form': form})
+
+
+def confirm_account(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        # Do not leak user account info -- always pretend we send an email, even if we don't
+        try:
+            user = User.objects.get(email=email)
+            if not user.profile.email_confirmed:
+                if user.profile.confirmations_sent < 3:
+                    send_confirmation_email(user, request)
+                else:
+                    # ...unless they start spamming
+                    return render(request, 'too-many-confirmations.html', {'email': settings.EMAIL_HOST_USER})
+        except User.DoesNotExist:
+            pass
+
+        return redirect('resend_confirmation_done')
+    else:
+        if request.user.is_authenticated:
+            return redirect('syllabiShare:index')
+
+        return render(request, 'resend-confirmation-email.html', {'form': ConfirmationEmailForm()})
+
+
+def confirm_account_done(request):
+    if request.user.is_authenticated:
+        return redirect('syllabiShare:index')
+
+    return render(request, 'resend-done.html')
+
+
+def send_confirmation_email(user, request):
+    current_site = get_current_site(request)
+    subject = 'Activate Your SyllabiShare Account'
+    message = render_to_string('emails/account_confirmation_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+    })
+    user.email_user(subject, message)
+
+    user.profile.confirmations_sent += 1
+    user.save()
 
 
 def about(request):
