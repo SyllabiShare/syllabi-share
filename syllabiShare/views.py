@@ -44,27 +44,33 @@ class SignUpView(View):
     template_name = 'signup.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        (template, context) = authenticate(request.user)
+        if template:
+            form = self.form_class()
+            return render(request, self.template_name, {'form': form})
+        return redirect('syllabiShare:index')
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.email
-            user.is_active = False  # Deactivate account till it is confirmed
-            user.save()
-            current_site = get_current_site(request)
-            subject = 'Activate Your SyllabiShare Account'
-            message = render_to_string('emails/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return render(request, 'confirm-account.html', {'host': settings.EMAIL_HOST_USER, 'email': user.email})
-        return render(request, self.template_name, {'form': form})
+        (template, context) = authenticate(request.user)
+        if template:
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.username = user.email
+                user.is_active = False  # Deactivate account till it is confirmed
+                user.save()
+                current_site = get_current_site(request)
+                subject = 'Activate Your SyllabiShare Account'
+                message = render_to_string('emails/account_activation_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': account_activation_token.make_token(user),
+                })
+                user.email_user(subject, message)
+                return render(request, 'confirm-account.html', {'host': settings.EMAIL_HOST_USER, 'email': user.email})
+            return render(request, self.template_name, {'form': form})
+        return redirect('syllabiShare:index')
 
 
 def about(request):

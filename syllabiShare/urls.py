@@ -10,6 +10,7 @@ urlpatterns = [
     path('privacy/', views.privacy, name="privacy"),
     path('search/', views.search, name="search"),
     path('settings/', views.setting, name="setting"),
+    path('signup/', views.SignUpView.as_view(), name="signup"),
     path('suggest/', views.suggest, name="suggest"),
     path('upload/', views.upload, name="upload"),
     path('<slug:dept>/', views.display, name="display"),
