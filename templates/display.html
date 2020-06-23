@@ -18,19 +18,22 @@
   {% else %}
     <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} for {{dept}} courses! Add More!</h4>
   {% endif %}<br>
-
   {% for post in posts %}
-  <form method="POST">
-    <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a>
-    {% csrf_token %}
-    <input name="pk" value="{{post.pk}}" type="hidden"/>
-    
-    {% if post in user.profile.saved.all %}
-    <input class="btn btn-sm btn-secondary" id="button" name="unsave" type="submit" value="Unsave">
-    {% else %}
-    <input class="btn btn-sm btn-secondary" id="button" name="save" type="submit" value="Save">
-    {% endif %}
-  </form><br>
+    <form method="POST">
+      {% csrf_token %}
+      <input name="pk" value="{{post.pk}}" type="hidden"/>
+      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}
+      {% if post in user.profile.saved.all %}
+      <button type="submit" name="unsave" value="Unsave" class="btn btn-sm">
+        <img src="{% static 'unsave.png' %}"/>
+      </button>
+      {% else %}
+      <button type="submit" name="save" value="Save" class="btn btn-sm">
+        <img src="{% static 'save.png' %}"/>
+      </button>
+      {% endif %}
+      </a>
+    </form>
   {% endfor %}
 </div>
 
