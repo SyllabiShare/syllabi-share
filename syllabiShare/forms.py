@@ -1,11 +1,11 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-
-from crispy_forms.helper import FormHelper
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+
+from crispy_forms.helper import FormHelper
 
 
 class SignUpForm(UserCreationForm):
