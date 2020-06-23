@@ -146,3 +146,14 @@ footer {
     border-color: var(--danger);
     background-color: var(--danger);
 }
+
+/* These form widths are arbitrary, but they look nice ¯\_(ツ)_/¯ */
+.signup-form {
+    width: 600px;
+    max-width: 100%;
+}
+
+.auth-form {
+    width: 400px;
+    max-width: 100%;
+}
