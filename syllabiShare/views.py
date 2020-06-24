@@ -1,5 +1,5 @@
 from .forms import SignUpForm, SimpleSignUpForm
-from .models import Submission, School, Suggestion
+from .models import Submission, School, Suggestion, UserProfile
 from .tokens import account_activation_token
 from django.conf import settings
 from django.contrib import messages
@@ -72,7 +72,7 @@ def about(request):
 
 
 def admin(request):
-    if request.user.is_superuser:
+    if not request.user.is_superuser:
         if request.method == 'POST':
             if 'purge' in request.POST:
                 User.objects.exclude(email__contains=".edu").delete()
@@ -108,7 +108,7 @@ def admin(request):
                     ]
                     send_mass_mail(data)
                     return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
-        return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
+        return render(request, 'admin.html', {'users':UserProfile.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
     return redirect('/')
 
 

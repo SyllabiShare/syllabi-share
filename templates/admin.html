@@ -15,7 +15,7 @@
   <div style="display: inline-block; width: 100%;" id='efpjw'>
     <form method="post">
       {% csrf_token %}
-      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.dept}} {{i.number}} -- {{i.syllabus}} -- {{i.upvotes}} -- Hidden: {{i.hidden}}</p>
+      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.dept}} {{i.number}} -- {{i.title}} -- {{i.semester}} {{i.year}} -- Hidden: {{i.hidden}}</p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="delete" value="Delete" style="float: right;"/>
       <input class="btn btn-warning" type="submit" name="toggleHide" value="Toggle Hide" style="float: right;"/>
@@ -29,7 +29,7 @@
   <div style="display: inline-block; width: 100%;">
     <form method="post">
       {% csrf_token %}
-      <p style="float: left;"> {{i.domain}} -- {{i.school}} -- Reviewed: {{i.reviewed}} -- {{i.uploads}} -- Takedown: {{i.takedown}} -- {{i.reason}}<br> </p>
+      <p style="float: left;"> {{i.domain}} -- {{i.name}} -- Reviewed: {{i.reviewed}} -- Takedown: {{i.takedown}} -- {{i.reason}}<br> </p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="takedown" value="Takedown" style="float: right;"/>
       <input name="reason" style="float: right;" type="text"  value="{{i.reason}}"/>
@@ -43,7 +43,7 @@
     <div style="display: inline-block; width: 100%;">
       <form method="post">
         {% csrf_token %}
-        <p style="float: left;"> {{i.name}} -- {{i.suggestion_text|truncatechars:50}} --  <a href='{{i.github_issue}}'>{{i.github_issue}}</a> </p>
+        <p style="float: left;"> {{i.name}} -- {{i.suggestion_text|truncatechars:50}} --  <a href='{{i.github_issue}}'>Github</a> </p>
         <input name="pk" value="{{i.pk}}" type="hidden"/>
         <input class="btn btn-danger" type="submit" name="close" value="Close Feedback" style="float: right;"/>
         <input class="btn btn-warning" type="submit" name="edit" value="Edit Github Issue" style="float: right;"/>
@@ -55,7 +55,7 @@
   <a name="users"></a>
   <h3>Users: {{users.count}}</h3>
   {% for i in users %}
-    {{i.username}} -- {{i.first_name}} {{i.last_name}}  --  {{i.email}}<br>
+    {{i.user.email}} -- {{i.email_confirmed}} -- Saved: {{ i.saved.all | length}} <br>
   {%endfor%} <br>
   
   <a name="panel"></a>
