@@ -76,9 +76,9 @@ footer img {
 
 /* our search button */
 input[value="Search"] {
-    /* meets AA for small text against --gray-dark */
-    color: #42bb57;
-    border-color: #42bb57;
+    /* meets AAA for small text against --gray-dark */
+    color: #6ee47c;
+    border-color: #6ee47c;
 }
 
 /* better link and interactive element discoverability */
