@@ -72,7 +72,7 @@ def about(request):
 
 
 def admin(request):
-    if not request.user.is_superuser:
+    if request.user.is_superuser:
         if request.method == 'POST':
             if 'purge' in request.POST:
                 User.objects.exclude(email__contains=".edu").delete()
