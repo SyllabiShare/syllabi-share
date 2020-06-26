@@ -10,6 +10,9 @@
     --danger: #b40029;
 }
 
+
+/*** NAVIGATION ***/
+
 /* overwriting main navbar's css */
 .navbar-dark .navbar-nav .nav-link {
     color: white;
@@ -37,6 +40,34 @@
     color: black;
 }
 
+/*** FOOTER ***/
+
+/* footer css could probably make use of navbar css somehow? */
+footer {
+    background-color: var(--gray-dark);
+    padding: 1rem 0 0 2rem; /* in conjunction with the following footer a's margin rule */
+}
+
+footer a {
+    color: white;
+    font-weight: normal;
+    /* for nice wrapping: */
+    display: inline-block;
+    margin: 0 3rem 1rem 0;
+}
+
+footer a:hover {
+    color: white;
+}
+
+footer img {
+    height: 50px;
+    width: 50px;
+}
+
+
+/*** GENERAL ELEMENTS ***/
+
 /* overwriting for submit buttons; AA for white text and current blue bg */
 .btn-success {
     background-color: var(--success);
@@ -62,6 +93,7 @@ nav a {
 }
 /* and above we see the power of cascading */
 
+/* and below we also see the power of cascading */
 :focus {
     outline: 0.1rem solid; /* color set to text color or already specified */
     box-shadow: 0 0 0.2rem 0.2rem; /* color set to text color or already specified */
@@ -73,6 +105,13 @@ nav a {
 }
 
 
+body {
+    margin: 0;
+    height: 100vh;
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: none;
+}
+
 .group {
     margin: 2%;
 }
@@ -82,28 +121,8 @@ nav a {
     padding: 1%;
 }
 
-body {
-    margin: 0;
-    height: 100%;
-    overscroll-behavior-x: none;
-    overscroll-behavior-y: none;
-}
-
 .dropdown-hidden {
     display: none;
-}
-
-.github {
-    position: fixed;
-    right: 0px;
-    bottom: 0px;
-    height: 64px;
-    width: 64px;
-}
-
-/* Ugh, get rid of this as soon as we move those upload/back/GH buttons somewhere else */
-footer {
-    z-index: 1 !important;
 }
 
 .leaderboard {

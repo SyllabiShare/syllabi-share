@@ -19,15 +19,15 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="d-flex flex-column">
   {% if user.is_authenticated %}
     {% include 'navbar-logged-in.html' %}
   {% else %}
     {% include 'navbar-logged-out.html' %}
   {% endif %}
 
-  <div class="container my-3">
-    {# messages is used generally #}
+  <div class="container my-3 flex-fill">
+    {# variable "messages" is used generally #}
     {% if messages %}
       {% for message in messages %}
         <div class="text-center">
@@ -41,7 +41,8 @@
         </div>
       {% endfor %}
     {% endif %}
-    {# form is specifically the sign-up form #}
+    
+    {# variable "form" is specifically the sign-up form #}
     {% if form.errors and signup %}
       {# manually copying style from sign in error #}
       <div class="alert alert-block alert-danger" role="alert">Your account was not created due to the following errors:
@@ -58,5 +59,8 @@
     {% block content %}
     {% endblock %}
   </div>
+
+  {% include 'footer.html' %}
+  
 </body>
 </html>

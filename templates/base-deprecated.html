@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 
-  <body style="background-image: url({% static 'back.png' %}); background-size: cover;" class="d-flex flex-column align-items-center vh-100">
+  <body style="background-color: #82d5d9;" class="d-flex flex-column">
     {% if user.is_authenticated %}
       {% include 'navbar-logged-in.html' %}
     {% else %}
@@ -43,11 +43,7 @@
       {% endblock %}
     </div>
 
-    <a href="https://github.com/SyllabiShare/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
-
-    <footer>
-      {% block footer %}
-      {% endblock %}
-    </footer>
+    {% include 'footer.html' %}
+    
   </body>
 </html>
