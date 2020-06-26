@@ -101,15 +101,6 @@ body {
     width: 64px;
 }
 
-.left {
-    position: fixed;
-    left: 0px;
-    bottom: 0px;
-    height: 64px;
-    width: 64px;
-    padding: 2px;
-}
-
 /* Ugh, get rid of this as soon as we move those upload/back/GH buttons somewhere else */
 footer {
     z-index: 1 !important;
@@ -122,13 +113,6 @@ footer {
     margin-right: 1%;
     border-style: solid;
     text-align: center;
-}
-
-.arrow {
-    height:2%;
-    width:2%;
-    margin-bottom: 2%;
-    border: 1px solid black;
 }
 
 /* for messages */
