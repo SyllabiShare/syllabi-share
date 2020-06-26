@@ -9,7 +9,7 @@
     <ul class="navbar-nav ml-auto d-flex align-items-lg-center">
       <li class="nav-item">
         {# mt-2, mt-lg-0: provide a top margin when we're collapsed but not when expanded #}
-        <form action="/search/" method="POST" class="form-inline mt-2 mt-lg-0 ml-lg-2 mr-lg-5">
+        <form action="/search/" method="POST" role="search" class="form-inline mt-2 mt-lg-0 ml-lg-2 mr-lg-5">
           {% csrf_token %}
           {# d-inline-block & w-auto force the form to be inline at all sizes, since we only have two elements #}
           <input class="form-control form-control-sm mr-2 d-inline-block w-auto" id="search" type="search" name="search" placeholder="Search">
