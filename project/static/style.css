@@ -6,6 +6,7 @@
 /* overwriting base bootstrap colors */
 :root {
     /* AAA compliant with white text: */
+    --primary: #004cc6;
     --success: #006702;
     --danger: #b40029;
 }
@@ -81,6 +82,12 @@ input[value="Search"] {
     border-color: #6ee47c;
 }
 
+/* and the primary button */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
 /* better link and interactive element discoverability */
 a {
     font-weight: bold;
@@ -102,6 +109,11 @@ nav a {
 .form-control:focus {
     box-shadow: 0 0 0 0.1rem var(--blue),
                 0 0 0.3rem 0.3rem white;
+}
+
+/* hints with subpar visibility are like trick questions (but at least 4.45:1 isn't as bad as it could've been) */
+.text-muted {
+    color: var(--gray-dark) !important; /* I can't believe they made a non-compliant color important */
 }
 
 
