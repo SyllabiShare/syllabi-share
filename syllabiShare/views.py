@@ -303,7 +303,7 @@ def upload(request):
             messages.success(request, 'Syllabus successfully added. It will show up when we receive approval from the professor. Thank you!')
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
-        return redirect("syllabiShare:upload", {'breadcrumb': 'Upload'})  # prevents re-post on refresh problem
+        return redirect("syllabiShare:upload")  # prevents re-post on refresh problem
     return render(request, 'upload.html', {'breadcrumb': 'Upload'})
 
 
