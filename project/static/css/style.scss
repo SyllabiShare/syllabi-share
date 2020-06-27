@@ -1,0 +1,217 @@
+// Change Bootstrap stuff before the @import
+
+// Required
+@import "vendor/bootstrap/functions";
+@import "vendor/bootstrap/variables";
+@import "vendor/bootstrap/mixins";
+
+// Optional
+@import "vendor/bootstrap/root";
+@import "vendor/bootstrap/reboot";
+@import "vendor/bootstrap/type";
+//@import "vendor/bootstrap/images";
+//@import "vendor/bootstrap/code";
+@import "vendor/bootstrap/grid";
+//@import "vendor/bootstrap/tables";
+@import "vendor/bootstrap/forms";
+@import "vendor/bootstrap/buttons";
+@import "vendor/bootstrap/transitions";
+@import "vendor/bootstrap/dropdown";
+@import "vendor/bootstrap/button-group";
+@import "vendor/bootstrap/input-group";
+//@import "vendor/bootstrap/custom-forms";
+@import "vendor/bootstrap/nav";
+@import "vendor/bootstrap/navbar";
+//@import "vendor/bootstrap/card";
+@import "vendor/bootstrap/breadcrumb";
+//@import "vendor/bootstrap/pagination";
+//@import "vendor/bootstrap/badge";
+//@import "vendor/bootstrap/jumbotron";
+@import "vendor/bootstrap/alert";
+//@import "vendor/bootstrap/progress";
+//@import "vendor/bootstrap/media";
+@import "vendor/bootstrap/list-group";
+@import "vendor/bootstrap/close";
+//@import "vendor/bootstrap/toasts";
+//@import "vendor/bootstrap/modal";
+//@import "vendor/bootstrap/tooltip";
+//@import "vendor/bootstrap/popover";
+//@import "vendor/bootstrap/carousel";
+//@import "vendor/bootstrap/spinners";
+@import "vendor/bootstrap/utilities";
+@import "vendor/bootstrap/print";
+
+/* for reference:
+ * blue bg (currently an image) is #82d5d9
+ * navbar color is --gray-dark which is #343a40
+*/
+
+/* overwriting base bootstrap colors */
+:root {
+    /* AAA compliant with white text: */
+    --primary: #004cc6;
+    --success: #006702;
+    --danger: #b40029;
+}
+
+
+/*** NAVIGATION ***/
+
+/* overwriting main navbar's css */
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: white;
+}
+
+.navbar-brand {
+    /* originally, only top and bottom set to this value */
+    padding: .3125rem;
+}
+
+/* overwriting for breadcrumbs */
+.breadcrumb {
+    background-color: #B2E5E9;
+}
+
+.breadcrumb-item {
+    color: var(--gray-dark);
+}
+
+.breadcrumb-item.active {
+    color: black;
+}
+
+/*** FOOTER ***/
+
+/* footer css could probably make use of navbar css somehow? */
+footer {
+    background-color: var(--gray-dark);
+    padding: 1rem 0 0 2rem; /* in conjunction with the following footer a's margin rule */
+}
+
+footer a {
+    color: white;
+    font-weight: normal;
+    /* for nice wrapping: */
+    display: inline-block;
+    margin: 0 3rem 1rem 0;
+}
+
+footer a:hover {
+    color: white;
+}
+
+footer img {
+    height: 50px;
+    width: 50px;
+}
+
+
+/*** GENERAL ELEMENTS ***/
+
+/* overwriting for submit buttons; AA for white text and current blue bg */
+.btn-success {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+/* our search button */
+input[value="Search"] {
+    /* meets AAA for small text against --gray-dark */
+    color: #6ee47c;
+    border-color: #6ee47c;
+}
+
+/* and the primary button */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* better link and interactive element discoverability */
+a {
+    font-weight: bold;
+    color: #002899; /* meets AA against current blue bg */
+}
+
+nav a {
+    font-weight: normal;
+    color: inherit;
+}
+/* and above we see the power of cascading */
+
+/* and below we also see the power of cascading */
+:focus {
+    outline: 0.1rem solid; /* color set to text color or already specified */
+    box-shadow: 0 0 0.2rem 0.2rem; /* color set to text color or already specified */
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.1rem var(--blue),
+                0 0 0.3rem 0.3rem white;
+}
+
+/* hints with subpar visibility are like trick questions (but at least 4.45:1 isn't as bad as it could've been) */
+.text-muted {
+    color: var(--gray-dark) !important; /* I can't believe they made a non-compliant color important */
+}
+
+
+body {
+    margin: 0;
+    height: 100vh;
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: none;
+}
+
+.group {
+    margin: 2%;
+}
+
+.profile {
+    margin: 0 auto;
+    padding: 1%;
+}
+
+.dropdown-hidden {
+    display: none;
+}
+
+.leaderboard {
+    position: fixed;
+    right: 0px;
+    top: 20%;
+    margin-right: 1%;
+    border-style: solid;
+    text-align: center;
+}
+
+/* for messages */
+.success, .warning {
+    display: inline-block;
+    color: white;
+}
+
+.success {
+    border-color: var(--success);
+    background-color: var(--success);
+}
+
+.warning {
+    border-color: var(--danger);
+    background-color: var(--danger);
+}
+
+/* These form widths are arbitrary, but they look nice ¯\_(ツ)_/¯ */
+.signup-form {
+    width: 600px;
+    max-width: 100%;
+}
+
+.auth-form {
+    width: 400px;
+    max-width: 100%;
+}

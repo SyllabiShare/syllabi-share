@@ -1,13 +1,16 @@
 asgiref
 boto3
 Django
+django-compressor
 django-crispy-forms
 django-environ
 django-heroku
+django-sass-processor
 django-storages
 dj-database-url
 gunicorn
 jsonfield
+libsass
 psycopg2
 requests
 social-auth-app-django
