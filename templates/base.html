@@ -6,7 +6,7 @@
   <meta charset="utf-8">
 
   {% block title %}
-  <title>Syllabi Share</title>
+  <title>SyllabiShare</title>
   {% endblock %}
 
   <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
@@ -18,16 +18,48 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="d-flex flex-column">
   {% if user.is_authenticated %}
     {% include 'navbar-logged-in.html' %}
   {% else %}
     {% include 'navbar-logged-out.html' %}
   {% endif %}
 
-  <div class="container my-3">
+  <div class="container my-3 flex-fill">
+    {# variable "messages" is used generally #}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="text-center">
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+          <div class="alert d-inline-block success" role="alert">
+          {% else %}
+          <div class="alert d-inline-block warning" role="alert">
+          {% endif %}
+            {{ message }}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
+    {# variable "form" is specifically the sign-up form #}
+    {% if form.errors and signup %}
+      {# manually copying style from sign in error #}
+      <div class="alert alert-block alert-danger" role="alert">Your account was not created due to the following errors:
+        <ul class="m-0">
+          {% for input in form %}
+          {% for error in input.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
     {% block content %}
     {% endblock %}
   </div>
+
+  {% include 'footer.html' %}
+  
 </body>
 </html>

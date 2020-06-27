@@ -33,10 +33,12 @@ class ActivateAccount(View):
             user.profile.email_confirmed = True
             user.save()
             login(request, user)
-            messages.success(request, 'Your account has been confirmed')
+            messages.success(request, 'Your account has been confirmed.')
             return redirect('syllabiShare:index')
         else:
-            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used')
+            # TODO: Throwing them back to the home page doesn't seem too helpful here.
+            # They should have a way of regenerating an email.
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
             return redirect('syllabiShare:index')
 
 
@@ -45,19 +47,32 @@ class SignUpView(View):
     template_name = 'signup.html'
 
     def get(self, request, *args, **kwargs):
+        # No signing up while logged in! Same for post()
+        if request.user.is_authenticated:
+            return redirect('syllabiShare:index')
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('syllabiShare:index')
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.email
             user.is_active = False  # Deactivate account till it is confirmed
             user.save()
-            send_confirmation_email(user, request)
+            current_site = get_current_site(request)
+            subject = 'Activate Your SyllabiShare Account'
+            message = render_to_string('emails/account_confirmation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            user.email_user(subject, message)
             return render(request, 'confirm-account.html', {'host': settings.EMAIL_HOST_USER, 'email': user.email})
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'signup': True})
 
 
 def confirm_account(request):
@@ -106,7 +121,7 @@ def send_confirmation_email(user, request):
 
 
 def about(request):
-    return render(request, 'about.html')
+    return render(request, 'about.html', {'breadcrumb': 'About'})
 
 
 @login_required
@@ -156,8 +171,8 @@ def admin(request):
 def display(request, dept=None):
     posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
     if not dept or len(posts) == 0:
-        return redirect('syllabiShare:index')
-    return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
+        return redirect('/')
+    return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'school': request.user.profile.school.name})
 
 
 # This one can't use the decorators because it needs to differentiate between landing & index
@@ -188,7 +203,7 @@ def index(request):
     dep = set()
     for i in posts:
         dep.add(i.dept)
-    return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts)})
+    return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts), 'index':True})
 
 
 def takedown(request):
@@ -203,7 +218,7 @@ def takedown(request):
 
 
 def privacy(request):
-    return render(request, 'privacy.html')
+    return render(request, 'privacy.html', {'breadcrumb': 'Privacy Policy'})
 
 
 @login_required
@@ -226,11 +241,16 @@ def schooladmin(request, domain=None):
 def search(request):
     found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
-        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
+        if len(request.POST['search']) == 0:
+            messages.error(request, "You didn't enter anything to search!")
+            return redirect("syllabiShare:index")
+        if 'save' in request.POST:
+            request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(dept__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
-    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':request.user.profile.school.name})
+    return render(request, 'display.html', {'posts':found.order_by('dept', 'number'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search_string': request.POST['search'],'school':request.user.profile.school.name})
 
 
 @login_required
@@ -242,7 +262,7 @@ def setting(request):
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
                 return redirect('syllabiShare:index')
-    return render(request, 'settings.html')
+    return render(request, 'settings.html',{ 'breadcrumb': 'Settings'})
 
 
 @login_required
@@ -256,7 +276,7 @@ def suggest(request):
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
         return redirect("syllabiShare:suggest")  # prevents re-post on refresh problem
-    return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
+    return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all(), 'breadcrumb': 'Feedback'})
 
 
 @login_required
@@ -280,11 +300,11 @@ def upload(request):
             entry.syllabus = request.FILES['file']
             entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), entry.dept.lower(), entry.number, entry.semester, entry.year]) + '.pdf'
             entry.save()
-            messages.success(request, 'Syllabus successfully added. Thank you!')
+            messages.success(request, 'Syllabus successfully added. It will show up when we receive approval from the professor. Thank you!')
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
         return redirect("syllabiShare:upload")  # prevents re-post on refresh problem
-    return render(request, 'upload.html')
+    return render(request, 'upload.html', {'breadcrumb': 'Upload'})
 
 
 def view404(request, exception=None):

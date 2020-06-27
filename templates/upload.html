@@ -2,20 +2,6 @@
 {% load static %}
 {% block content %}
 
-{% if messages %}
-  {% for message in messages %}
-    <div class="text-center">
-      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-      <div class="alert d-inline-block success" role="alert">
-      {% else %}
-      <div class="alert d-inline-block warning" role="alert">
-      {% endif %}
-        {{ message }}
-      </div>
-    </div>
-  {% endfor %}
-{% endif %}
-
 <h3>Upload Syllabus</h3>
 <form id="form-id" action="/upload/" method="post" enctype="multipart/form-data">
   {% csrf_token %}
@@ -59,14 +45,13 @@
     </div>
   </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-4">
+    <div class="form-group">
       <label for="file"><b>Syllabus (PDFs only)</b></label>
       <input class="form-control-file" id="file" type="file" name="file" accept="application/pdf" required>
     </div>
-    <div class="form-group col-md">
-      <div id="message" class="alert d-inline-block warning" style="display: none !important;" role="alert"> </div>
-    </div>
+
+  <div class="form-group">
+    <div id="message" class="alert alert-block alert-danger" style="display: none !important;" role="alert"> </div>
   </div>
 
   <div id="message-warning" class="alert d-inline-block warning" role="alert">Misuse of uploads will be met by a ban!</div>
@@ -75,20 +60,18 @@
   
 </form>
 
-<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
-
 <script type="text/javascript">
   $(function(){
       $("#file").on('change', function(event) {
           var file = event.target.files[0];
           if(file.size>=5*1024*1024) {
-              document.getElementById('message').innerHTML = "Please upload PDFs smaller than 5 MB.";
+              document.getElementById('message').innerHTML = "<strong>Error:</strong> Please upload PDFs smaller than 5 MB.";
               document.getElementById('message').style.display = "inline-block";
               $("#form-id").get(0).reset(); 
               return;
           }
           if(!file.type.match('application/pdf.*')) {
-              document.getElementById('message').innerHTML = "PDFs only, please!";
+              document.getElementById('message').innerHTML = "<strong>Error:</strong> PDFs only, please!";
               document.getElementById('message').style.display = "inline-block";
               $("#form-id").get(0).reset(); 
               return;
