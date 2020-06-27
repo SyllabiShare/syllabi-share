@@ -121,7 +121,7 @@ def send_confirmation_email(user, request):
 
 
 def about(request):
-    return render(request, 'about.html')
+    return render(request, 'about.html', {'breadcrumb': 'About'})
 
 
 @login_required
@@ -203,7 +203,7 @@ def index(request):
     dep = set()
     for i in posts:
         dep.add(i.dept)
-    return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts)})
+    return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts), 'index':True})
 
 
 def takedown(request):
@@ -218,7 +218,7 @@ def takedown(request):
 
 
 def privacy(request):
-    return render(request, 'privacy.html')
+    return render(request, 'privacy.html', {'breadcrumb': 'Privacy Policy'})
 
 
 @login_required
@@ -262,7 +262,7 @@ def setting(request):
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
                 return redirect('syllabiShare:index')
-    return render(request, 'settings.html')
+    return render(request, 'settings.html',{ 'breadcrumb': 'Settings'})
 
 
 @login_required
@@ -276,7 +276,7 @@ def suggest(request):
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
         return redirect("syllabiShare:suggest")  # prevents re-post on refresh problem
-    return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
+    return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all(), 'breadcrumb': 'Feedback'})
 
 
 @login_required
@@ -303,8 +303,8 @@ def upload(request):
             messages.success(request, 'Syllabus successfully added. It will show up when we receive approval from the professor. Thank you!')
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
-        return redirect("syllabiShare:upload")  # prevents re-post on refresh problem
-    return render(request, 'upload.html')
+        return redirect("syllabiShare:upload", {'breadcrumb': 'Upload'})  # prevents re-post on refresh problem
+    return render(request, 'upload.html', {'breadcrumb': 'Upload'})
 
 
 def view404(request, exception=None):

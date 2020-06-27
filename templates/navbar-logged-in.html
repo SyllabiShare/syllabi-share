@@ -8,13 +8,15 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <nav aria-label="breadcrumb" >
       <ol class="breadcrumb" style="margin: auto;">
-        <li class="breadcrumb-item"><a href="/">{{school}}</a></li>
-        {% if dept or search_string %}
+        <li class="breadcrumb-item"><a href="/">{{ user.profile.school.name }}</a></li>
+        {% if not index %}
         <li class="breadcrumb-item active" aria-current="page"><!--
        -->{% if search_string %}<!-- workaround for those extra spaces
        -->Search results for "{{search_string}}"<!--
-       -->{% else %}<!--
+       -->{% elif dept %}<!--
        -->{{ dept }}<!--
+       -->{% else %}<!--
+       -->{{ breadcrumb }}<!--
        -->{% endif %}<!--
      --></li>
         {% endif %}
