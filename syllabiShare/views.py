@@ -1,20 +1,130 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import logout
-from django.utils import timezone
-from .models import Submission, School, Suggestion
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mass_mail
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.generic import View
+
+from .forms import SignUpForm, ConfirmationEmailForm
+from .models import Submission, School, Suggestion
+from .tokens import account_activation_token
+
+
+def takedown_check(user):
+    return not user.profile.school.takedown
+
+
+class ActivateAccount(View):
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.profile.email_confirmed = True
+            user.save()
+            login(request, user)
+            messages.success(request, 'Your account has been confirmed.')
+            return redirect('syllabiShare:index')
+        else:
+            # TODO: Throwing them back to the home page doesn't seem too helpful here.
+            # They should have a way of regenerating an email.
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
+            return redirect('syllabiShare:index')
+
+
+class SignUpView(View):
+    form_class = SignUpForm
+    template_name = 'signup.html'
+
+    def get(self, request, *args, **kwargs):
+        # No signing up while logged in! Same for post()
+        if request.user.is_authenticated:
+            return redirect('syllabiShare:index')
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('syllabiShare:index')
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.email
+            user.is_active = False  # Deactivate account till it is confirmed
+            user.save()
+            current_site = get_current_site(request)
+            subject = 'Activate Your SyllabiShare Account'
+            message = render_to_string('emails/account_confirmation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            user.email_user(subject, message)
+            return render(request, 'confirm-account.html', {'host': settings.EMAIL_HOST_USER, 'email': user.email})
+        return render(request, self.template_name, {'form': form, 'signup': True})
+
+
+def confirm_account(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        # Do not leak user account info -- always pretend we send an email, even if we don't
+        try:
+            user = User.objects.get(email=email)
+            if not user.profile.email_confirmed:
+                if user.profile.confirmations_sent < 3:
+                    send_confirmation_email(user, request)
+                else:
+                    # ...unless they start spamming
+                    return render(request, 'too-many-confirmations.html', {'email': settings.EMAIL_HOST_USER})
+        except User.DoesNotExist:
+            pass
+
+        return redirect('resend_confirmation_done')
+    else:
+        if request.user.is_authenticated:
+            return redirect('syllabiShare:index')
+
+        return render(request, 'resend-confirmation-email.html', {'form': ConfirmationEmailForm()})
+
+
+def confirm_account_done(request):
+    if request.user.is_authenticated:
+        return redirect('syllabiShare:index')
+
+    return render(request, 'resend-done.html')
+
+
+def send_confirmation_email(user, request):
+    current_site = get_current_site(request)
+    subject = 'Activate Your SyllabiShare Account'
+    message = render_to_string('emails/account_confirmation_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+    })
+    user.email_user(subject, message)
+
+    user.profile.confirmations_sent += 1
+    user.save()
 
 
 def about(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
-    return render(request, 'about.html')
+    return render(request, 'about.html', {'breadcrumb': 'About'})
 
+
+@login_required
 def admin(request):
     if request.user.is_superuser:
         if request.method == 'POST':
@@ -22,6 +132,10 @@ def admin(request):
                 User.objects.exclude(email__contains=".edu").delete()
             elif 'delete' in request.POST:
                 Submission.objects.get(pk=request.POST['pk']).delete()
+            elif 'toggleHide' in request.POST:
+                submission = Submission.objects.get(pk=request.POST['pk'])
+                submission.toggleHidden()
+                submission.save()
             elif 'close' in request.POST:
                 Suggestion.objects.get(pk=request.POST['pk']).delete()
             elif 'takedown' in request.POST and 'reason' in request.POST:
@@ -48,190 +162,151 @@ def admin(request):
                     ]
                     send_mass_mail(data)
                     return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
-            elif 'recalculate' in request.POST:
-                for i in School.objects.all():
-                    school = School.objects.filter(domain=i.domain)[0]
-                    school.uploads = {}
-                    school.save()
-                for i in Submission.objects.all():
-                    if len(School.objects.filter(domain=i.school)) == 0:
-                        entry = School()
-                        entry.domain = i.school
-                        entry.save()
-                    school = School.objects.filter(domain=i.school)[0]
-                    school.upload(i.user)
-                    school.save()
         return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
-    return redirect('/')
+    return redirect('syllabiShare:index')
 
-def authenticate(user):
-    if not user.is_authenticated:
-        return ('error.html', {'loggedIn': False})
-    if user.email[-4:] != '.edu':
-        return ('error.html', {'loggedIn': True})
-    domain = get_domain(user.email)
-    school = School.objects.get(domain=domain)
-    if school.takedown:
-        return ('sorry.html', {'loggedIn': True, 'reason': school.reason, 'domain':domain})
-    return (False, False)
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def display(request, dept=None):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
-    posts = Submission.objects.filter(school=get_domain(request.user.email)).filter(dept=dept.upper()).order_by('course')
+    posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
     if not dept or len(posts) == 0:
         return redirect('/')
-    return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN})
+    return render(request, 'display.html', {'posts': posts, 'dept':dept,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'school': request.user.profile.school.name})
 
 
-def get_domain(email):
-    start = email.index('@') + 1
-    end = email.index('.edu')
-    domain = email[start:end]
-    if len(School.objects.filter(domain=domain)) == 0:
-        school = School()
-        school.domain = domain
-        school.save()
-    return domain
-
-
+# This one can't use the decorators because it needs to differentiate between landing & index
 def index(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
-    domain = get_domain(request.user.email)
-    entry = School.objects.get(domain=domain)
-    user_string = str(request.user)
+    if not request.user.is_authenticated:
+        return render(request, 'landing.html', {'form': SignUpForm()})
 
+    if not takedown_check(request.user):
+        return redirect('syllabiShare:takedown')
+
+    school = request.user.profile.school
     if request.method == 'POST':
         if 'name' in request.POST:
-            entry.add_school(request.POST['name'], user_string)
+            school.add_school(request.POST['name'], request.user.username)
         else:
-            entry.review()
-        entry.save()
-       
-    school = entry.school
-    if not school:
-        return render(request, 'school.html', {'first': True})
-    elif not entry.reviewed and not user_string == entry.poster:
-        return render(request, 'school.html', {'name': school})
-    
-    if len(Submission.objects.filter(school=get_domain(request.user.email))) == 0:
-        return render(request, 'upload.html', {'message':'Misuse of uploads will be met by a ban!'})
+            school.review()
+        school.save()
 
-    posts = Submission.objects.filter(school=domain)
+    if not school.name:
+        return render(request, 'school.html', {'first': True})
+    elif not school.reviewed and not request.user.username == school.creator:
+        return render(request, 'school.html', {'name': school.name})
+
+    posts = Submission.objects.filter(school=school).filter(hidden=False)
+    if len(posts) == 0:
+        return redirect('syllabiShare:upload')
+
     dep = set()
     for i in posts:
         dep.add(i.dept)
-    return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
+    return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':school.name,'num':len(posts), 'index':True})
+
+
+def takedown(request):
+    # Make sure this request is legit
+    if request.user.is_authenticated and request.user.profile.school.takedown:
+        return render(request, 'sorry.html',
+                      {'reason': request.user.profile.school.reason,
+                       'domain': request.user.email[request.user.email.index('@') + 1:]})
+
+    # No? Redirect them to the index
+    return redirect('syllabiShare:index')
 
 
 def privacy(request):
-    return render(request, 'privacy.html')
+    return render(request, 'privacy.html', {'breadcrumb': 'Privacy Policy'})
 
 
-def schooladmin(request,school=None):
+@login_required
+def schooladmin(request, domain=None):
     if request.user.is_superuser:
         try:
-            entry = School.objects.get(domain=school)
+            school = School.objects.get(domain=domain)
         except:
-            return redirect('/')
-        posts = Submission.objects.filter(school=school)
+            return redirect('syllabiShare:index')
+        posts = Submission.objects.filter(school=school).filter(hidden=False)
         dep = set()
         for i in posts:
             dep.add(i.dept)
-        return render(request, 'index.html', {'leaderboard':entry.topFive(),'posts':sorted(list(dep)),'school':school,'num':len(posts)})
-    return redirect('/')
+        return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':domain,'num':len(posts)})
+    return redirect('syllabiShare:index')
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def search(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
-    domain = get_domain(request.user.email)
-    found = Submission.objects.filter(school=domain)
+    found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
-        found = found.filter(prof__icontains=request.POST['search']) | found.filter(course__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
+        if len(request.POST['search']) == 0:
+            messages.error(request, "You didn't enter anything to search!")
+            return redirect("syllabiShare:index")
+        if 'save' in request.POST:
+            request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+        found = found.filter(prof__icontains=request.POST['search']) | found.filter(dept__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
         dep.add(i.dept)
-    return render(request, 'display.html', {'posts':found.order_by('course'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search': True,'school':School.objects.get(domain=domain).school})
+    return render(request, 'display.html', {'posts':found.order_by('dept', 'number'),'dept':dep,'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'search_string': request.POST['search'],'school':request.user.profile.school.name})
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def setting(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        if context['loggedIn']:
-            logout(request)
-        return render(request, template, context)
-
     if request.method == 'POST':
         if 'username' in request.POST:
             if request.user.username == request.POST['username']:
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
-                return render(request, 'error.html')
-    return render(request, 'settings.html')
+                return redirect('syllabiShare:index')
+    return render(request, 'settings.html',{ 'breadcrumb': 'Settings'})
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def suggest(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
-
     if request.method == 'POST':
         suggestion = Suggestion()
         suggestion.name = request.user
         suggestion.suggestion_text = request.POST['suggestion']
-        if 'githubLink' in request.POST and 'https://github.com/verndrade/syllabi-share/issues/' in request.POST['githubLink']:
+        if 'githubLink' in request.POST and 'https://github.com/SyllabiShare/syllabi-share/issues/' in request.POST['githubLink']:
             suggestion.github_issue = request.POST['githubLink']
         suggestion.save()
-    return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all()})
+        return redirect("syllabiShare:suggest")  # prevents re-post on refresh problem
+    return render(request, 'suggest.html', {'suggestion':Suggestion.objects.all(), 'breadcrumb': 'Feedback'})
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def upload(request):
-    (template, context) = authenticate(request.user)
-    if template:
-        return render(request, template, context)
-    success = False
-    message = 'Misuse of uploads will be met by a ban!'
     if request.method == 'POST':
         prof = request.POST['prof'].strip().split()
-        goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1]) 
-        course = request.POST['course'].split()
-        goodCourse = len(course) == 2 and course[0].isalpha() and course[1].isnumeric()
-        if goodProf and goodCourse:
+        goodProf = len(prof) == 2 and all(char.isalpha() or char == '-' or char == '\'' for char in prof[0]) and all(char.isalpha() or char == '-' or char == '\'' for char in prof[1])
+        if goodProf:
             entry = Submission()
-            entry.user = request.user.username
-            entry.school = get_domain(request.user.email)
+            entry.user = request.user
+            entry.school = request.user.profile.school
             entry.prof = prof[0] + ' ' + prof[1]
-            entry.course = request.POST['course'].upper()
             entry.title = request.POST['title']
-            entry.dept = course[0].upper()
+            entry.dept = request.POST['dept'].strip().upper()
+            entry.number = request.POST['number']
             entry.semester = request.POST['semester']
             entry.year = request.POST['year']
             entry.upvotes = 1
+            entry.hidden = True
             entry.syllabus = request.FILES['file']
-            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), course[0], course[1], entry.semester, entry.year]) + '.pdf'
+            entry.syllabus.name = '_'.join([prof[0].lower(), prof[1].lower(), entry.dept.lower(), entry.number, entry.semester, entry.year]) + '.pdf'
             entry.save()
-            school = School.objects.filter(domain=entry.school)[0]
-            school.upload(request.user.username)
-            school.save()
-            success = True
-        elif goodProf:
-            message = 'Course not valid! Try "Mnemonic Number" Format'
-        elif goodCourse:
-            message = 'Professor name not valid! Try "FirstName LastName" Format'
+            messages.success(request, 'Syllabus successfully added. It will show up when we receive approval from the professor. Thank you!')
         else:
-            message = 'Input not valid! Try Again'
-    return render(request, 'upload.html', {'success': success, 'message': message})
+            messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
+        return redirect("syllabiShare:upload", {'breadcrumb': 'Upload'})  # prevents re-post on refresh problem
+    return render(request, 'upload.html', {'breadcrumb': 'Upload'})
 
 
 def view404(request, exception=None):
-    return redirect('/')
+    return redirect('syllabiShare:index')
 

@@ -1,0 +1,58 @@
+{% load upToCharacter %}
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark w-100">
+  <a class="navbar-brand" href="/">SyllabiShare</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <nav aria-label="breadcrumb" >
+      <ol class="breadcrumb" style="margin: auto;">
+        <li class="breadcrumb-item"><a href="/">{{ user.profile.school.name }}</a></li>
+        {% if not index %}
+        <li class="breadcrumb-item active" aria-current="page"><!--
+       -->{% if search_string %}<!-- workaround for those extra spaces
+       -->Search results for "{{search_string}}"<!--
+       -->{% elif dept %}<!--
+       -->{{ dept }}<!--
+       -->{% else %}<!--
+       -->{{ breadcrumb }}<!--
+       -->{% endif %}<!--
+     --></li>
+        {% endif %}
+      </ol>
+    </nav>
+    <ul class="navbar-nav ml-auto d-flex align-items-lg-center">
+      <li class="nav-item">
+        {# mt-2, mt-lg-0: provide a top margin when we're collapsed but not when expanded #}
+        <form action="/search/" method="POST" role="search" class="form-inline mt-2 mt-lg-0 ml-lg-2 mr-lg-5">
+          {% csrf_token %}
+          {# d-inline-block & w-auto force the form to be inline at all sizes, since we only have two elements #}
+          <input class="form-control form-control-sm mr-2 d-inline-block w-auto" id="search" type="search" name="search" placeholder="Search">
+          <input class="btn btn-sm btn-outline-success" id="button" type="submit" value="Search">
+        </form>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">browse</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/upload">upload</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/suggest">feedback</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/about">about</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          {{user.username | upToCharacter:"@"}}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" style="min-width: 0;">
+            <a class="dropdown-item" href="/settings">Settings</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

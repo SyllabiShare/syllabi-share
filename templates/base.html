@@ -1,72 +1,66 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title> Syllabi Share </title>
+<head>
+  <meta charset="utf-8">
 
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+  {% block title %}
+  <title>SyllabiShare</title>
+  {% endblock %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-  <body style="background-image: url({% static 'back.png' %}); background-size: cover;" class="d-flex flex-column align-items-center vh-100">
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark w-100">
-      <a class="navbar-brand" href="/">SyllabiShare</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="d-flex flex-column">
+  {% if user.is_authenticated %}
+    {% include 'navbar-logged-in.html' %}
+  {% else %}
+    {% include 'navbar-logged-out.html' %}
+  {% endif %}
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto d-flex align-items-md-center">
-          <li class="nav-item">
-            {# mt-3, mt-md-0: provide a top margin when we're collapsed but not when expanded #}
-            <form action="/search/" method="POST" class="form-inline mt-2 mt-md-0 ml-md-2 mr-md-5">
-              {% csrf_token %}
-              {# d-inline-block & w-auto force the form to be inline at all sizes, since we only have two elements #}
-              <input class="form-control form-control-sm mr-2 d-inline-block w-auto" id="search" type="search" name="search" placeholder="Search">
-              <input class="btn btn-sm btn-outline-success" id="button" type="submit" value="Search">
-            </form>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/upload">upload</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/suggest">feedback</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about">about</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-            {{user.username}}
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" style="min-width: 0;">
-              <a class="dropdown-item" href="/settings">Settings</a>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </div>
-          </li>
+  <div class="container my-3 flex-fill">
+    {# variable "messages" is used generally #}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="text-center">
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+          <div class="alert d-inline-block success" role="alert">
+          {% else %}
+          <div class="alert d-inline-block warning" role="alert">
+          {% endif %}
+            {{ message }}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
+    {# variable "form" is specifically the sign-up form #}
+    {% if form.errors and signup %}
+      {# manually copying style from sign in error #}
+      <div class="alert alert-block alert-danger" role="alert">Your account was not created due to the following errors:
+        <ul class="m-0">
+          {% for input in form %}
+          {% for error in input.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+          {% endfor %}
         </ul>
       </div>
-    </nav>
+    {% endif %}
 
-    <div class="container my-3 flex-fill">
-      {% block content %}
-      {% endblock %}
-    </div>
+    {% block content %}
+    {% endblock %}
+  </div>
 
-    <a href="https://github.com/verndrade/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
-
-    <footer>
-      {% block footer %}
-      {% endblock %}
-    </footer>
-  </body>
+  {% include 'footer.html' %}
+  
+</body>
 </html>

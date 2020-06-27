@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block content %}
 
+{% block content %}
 <h3>Getting started</h3>
 {% if first %}
   <form method="POST">
@@ -10,13 +10,13 @@
       <label for="name">What is the name of your school?</label>
       <input class="form-control" id="name" type="text" name="name" placeholder="University of Virginia" required>
     </div>
-    <input class="btn btn-success" id="button" type="submit" value="Submit">
+    <input class="btn btn-primary" id="button" type="submit" value="Submit">
   </form>
 {% else %}
   <form method="POST">
     {% csrf_token %}
     <p>Just making sure...is your school called {{ name }}?</p>
-    <input class="btn btn-success mr-2" id="button" type="submit" value="Yes">
+    <input class="btn btn-primary mr-2" id="button" type="submit" value="Yes">
     <button onclick="toggle()" class="btn btn-danger" type="button">No</button>
   </form>
 
@@ -27,7 +27,7 @@
       <label for="name">What is the real name of your school?</label>
       <input class="form-control" id="name" type="text" name="name" required>
     </div>
-    <input class="btn btn-success" id="button" type="submit" value="Submit">
+    <input class="btn btn-primary" id="button" type="submit" value="Submit">
   </form>
 
   <script>
@@ -38,5 +38,4 @@
     }
   </script>
 {% endif %}
-
 {% endblock %}

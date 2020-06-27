@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-deprecated.html' %}
 {% block content %}
 {% load static %}
 
@@ -15,9 +15,10 @@
   <div style="display: inline-block; width: 100%;" id='efpjw'>
     <form method="post">
       {% csrf_token %}
-      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.course}} -- {{i.dept}} -- {{i.syllabus}} -- {{i.upvotes}}</p>
+      <p style="float: left;"> {{i.user}} -- {{i.prof}} -- {{i.dept}} {{i.number}} -- {{i.syllabus}} -- {{i.upvotes}} -- Hidden: {{i.hidden}}</p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="delete" value="Delete" style="float: right;"/>
+      <input class="btn btn-warning" type="submit" name="toggleHide" value="Toggle Hide" style="float: right;"/>
     </form>
   </div>
   {%endfor%} <br>
@@ -28,7 +29,7 @@
   <div style="display: inline-block; width: 100%;">
     <form method="post">
       {% csrf_token %}
-      <p style="float: left;"> {{i.domain}} -- {{i.school}} -- {{i.reviewed}} -- {{i.uploads}} -- {{i.takedown}} -- {{i.reason}}<br> </p>
+      <p style="float: left;"> {{i.domain}} -- {{i.school}} -- Reviewed: {{i.reviewed}} -- {{i.uploads}} -- Takedown: {{i.takedown}} -- {{i.reason}}<br> </p>
       <input name="pk" value="{{i.pk}}" type="hidden"/>
       <input class="btn btn-danger" type="submit" name="takedown" value="Takedown" style="float: right;"/>
       <input name="reason" style="float: right;" type="text"  value="{{i.reason}}"/>
@@ -66,10 +67,6 @@
     </form> <br><br>
     <form method="post" style="width:200px; display:inline-block;">
       {% csrf_token %}
-      <input class="btn btn-danger" type="submit" name="recalculate" value="Recalculate leaderboard" />
-    </form> <br><br>
-    <form method="post" style="width:200px; display:inline-block;">
-      {% csrf_token %}
       <label for="body">Email Body: </label>
       <input type="text" name="body" value="{{emailBody}}" /><br>
       <label for="key">Email Password:</label>
@@ -80,5 +77,4 @@
   </div>
 </div>
 
-<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 {% endblock %}

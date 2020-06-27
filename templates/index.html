@@ -1,8 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'base-deprecated.html' %}
 {% load static %}
 {% block content %}
 
-<h4 class="text-center">There {{num|pluralize:"is,are"}} {{num}} Syllab{{num|pluralize:"us,i"}} for the {{school}}! Add More!</h4>
+<h4 class="text-center">There {{num|pluralize:"is,are"}} {{num}} syllab{{num|pluralize:"us,i"}} for the {{school}}!</h4>
+
+<p class="text-center">Would you like to <a href="/upload">add a syllabus</a>?</p>
 
 <div style="width: 60%; margin: auto;" class="text-center">
   {% for dept in posts %}
@@ -10,18 +12,17 @@
   {% endfor %}
 </div>
 
-<div class="leaderboard">
+<div class="leaderboard" style="display: none;">
   <table style="border: 1px solid black;">
     <tr>
       <th>Leaderboard</th>
     </tr>
-    {% for name,number in leaderboard %}
+    {% for profile in leaderboard %}
     <tr style="text-align: left;">
-      <th>{{forloop.counter}}. {{name}} with {{number}} uploads</th>
+      <th>{{ forloop.counter }}. {{ profile.user.username }} with {{ profile.submissions }} uploads</th>
     </tr>
     {% endfor %}
   </table>
 </div>
-<a href="/upload"><img class="left" src="{% static 'plus.png' %}"></a>
 
 {% endblock %}

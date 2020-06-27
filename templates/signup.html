@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="d-flex flex-fill flex-column align-items-center justify-content-center">
+  <h1 class="display-4 mb-3 text-center">Create account</h1>
+  <form method="post" class="signup-form">
+    {% crispy form %}
+    <button type="submit" class="btn btn-primary">Create account</button>
+    <div class="text-muted mt-3"><small>
+      By creating an account, you agree to the <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
+      and certify that you will only use the material for educational purposes.
+    </small></div>
+  </form>
+</div>
+{% endblock content %}
