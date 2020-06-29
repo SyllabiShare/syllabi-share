@@ -21,7 +21,7 @@ class School(models.Model):
 
 
 class Submission(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     prof = models.TextField(blank=True)
     dept = models.TextField(blank=True)
     number = models.IntegerField(blank=True, validators=[MinValueValidator(0)])
@@ -39,6 +39,7 @@ class Submission(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     email_confirmed = models.BooleanField(default=False)
+    hide_name = models.BooleanField(default=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     confirmations_sent = models.SmallIntegerField(default=0)
 

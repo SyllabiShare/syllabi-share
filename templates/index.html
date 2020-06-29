@@ -1,5 +1,6 @@
 {% extends 'base-deprecated.html' %}
 {% load static %}
+{% load upToCharacter %}
 {% block content %}
 
 <h4 class="text-center">There {{num|pluralize:"is,are"}} {{num}} syllab{{num|pluralize:"us,i"}} for the {{school}}!</h4>
@@ -12,14 +13,19 @@
   {% endfor %}
 </div>
 
-<div class="leaderboard" style="display: none;">
+<div class="leaderboard">
   <table style="border: 1px solid black;">
     <tr>
       <th>Leaderboard</th>
     </tr>
     {% for profile in leaderboard %}
     <tr style="text-align: left;">
-      <th>{{ forloop.counter }}. {{ profile.user.username }} with {{ profile.submissions }} uploads</th>
+      <th>{{ forloop.counter }}.
+        {% if profile.user.profile.hide_name %}
+          Anonymous
+        {% else %}
+          {{ profile.user.username | upToCharacter:"@" }} with {{ profile.submissions }} {{profile.submissions|pluralize:"upload,uploads"}}</th>
+        {% endif %}
     </tr>
     {% endfor %}
   </table>
