@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="d-flex flex-fill flex-column align-items-center justify-content-center">
+  <h1 class="display-4 mb-3 text-center">Resend confirmation email</h1>
+  <form method="post" class="auth-form">
+    {% crispy form %}
+    <button type="submit" class="btn btn-primary">Send email</button>
+  </form>
+</div>
+{% endblock %}

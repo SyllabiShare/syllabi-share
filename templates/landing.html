@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-  <div class="row">
+  <div class="row py-md-5">
     <div class="col-md-6 my-auto">
       <h1 class="display-4">Simplifying course selection</h1>
       <p class="lead">
@@ -12,8 +12,9 @@
       </p>
     </div>
     <div class="col-md-6 my-auto">
-      <div class="rounded bg-light p-3" style="margin-top: 5%">
+      <div class="rounded bg-light p-3">
         <form action="{% url 'signup' %}" method="post">
+          <h2>Sign up</h2>
           {% crispy form %}
           <button type="submit" class="btn btn-primary">Create account</button>
           <p class="d-lg-inline ml-lg-2"><small>Already have an account? <a href="{% url 'login' %}">Sign in</a></small></p>
@@ -25,6 +26,4 @@
       </div>
     </div>
   </div>
-
-  <a href="https://github.com/SyllabiShare/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
 {% endblock %}

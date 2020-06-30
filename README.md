@@ -6,7 +6,6 @@ SyllabiShare is a web application created at the University of Virginia after se
 
 SyllabiShare allows students to share the syllabi of classes with all the other students using the app at their school. This app streamlines the process of choosing which classes to take and be informed along the way.
 
-
 ## Usage
 
 ### Logging In and Logging Out
@@ -68,15 +67,15 @@ The developers of SyllabiShare do not pretend to be perfect and recognize that f
 
 - Language & Framework: **Python, Django**
 - Webapp Hosting:  **Heroku**, 
-- Files Storage: **AWS S3** Bucket (Northern Virginia)
+- Files Storage: **AWS S3** (Northern Virginia)
 - User Authenication: **Google OAuth**
-
-These service providers will eventually cost money, which is why we humbly ask for your financial support. 
-Please support us by clicking `Donate link` at the bottom of the screen if you are able to. 
 
 ## Authors
 
-* **Vernon Andrade** - *Development, Lead*
+* **Vernon Andrade** - *Development Lead, Founder*
+* **Winston Liu** - *Development, UI/UX*
+* **Sarah Meng** - *Development, UI/UX*
+* **Madison Flynn** - *Development*
 * **Robbie B** - *Development*
 * **Peter B** - *Documentation*
-* **Winston Liu** - *Development, UI/UX*
+

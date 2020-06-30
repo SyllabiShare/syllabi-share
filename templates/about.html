@@ -5,55 +5,55 @@
 <h2>What is SyllabiShare for?</h2>
 <p>
   SyllabiShare was developed as an open-source project to empower students to crowdsource a public repository of course syllabi that are essential to make informed course selections and to understand course policies.
-  To find out information about a course, you would usually go to a friend or RateMyProfessor, but if you didn't know anyone who took the class before and there are no online reviews for the class you would need to email the professor for a syllabus and hope they respond... yeah right good luck with that.
-  With this tool users will be able to upload, search, and download syllabi for students at their university to use.
+  To find out information about a course before the first day of class, you would usually go to a friend or RateMyProfessor, but if you didn't know anyone who took the class before and there are no online reviews for the class, you would need to email the professor for a syllabus and hope they respond... yeah right, good luck with that.
+  With this tool, users will be able to upload, search, and download syllabi for students at their university to use.
   It is ludicrous that students can pay tens of thousands of dollars to their university and not have access to such materials already.
-  Fortunately, some schools have a Syllabus repository like this already, but not nearly enough schools do it.
+  Fortunately, some schools have a syllabus repository like this already, but not nearly enough schools do.
   All of these are reasons why we made this tool and made it open-source for students of any university to adopt and improve.
-  If you can get your university to sponsor your fork of the app please do let us know and we'll redirect to yours.
+  If you can get your university to sponsor your fork of the app, please do let us know and we'll redirect to yours.
   Please feel free to add to the codebase or join the team if you feel inclined to help the effort.
 </p>
 <h2>The Team</h2>
 <div class="row row-cols-md-2 row-cols-lg-3">
   <div class="col my-2 text-center profile">
-    <img src="{% static 'vernon.jpg' %}" class="rounded-circle mb-2">
-    <h3><a class="text-body" href='https://www.linkedin.com/in/SyllabiShare'>Vernon Andrade</a></h3>
+    <img src="{% static 'vernon.jpg' %}" class="rounded-circle mb-2" alt="Headshot of Vernon Andrade." />
+    <h3><a class="text-body" href='https://www.linkedin.com/in/verndrade/'>Vernon Andrade</a></h3>
     <h4>UVA CS '21</h4>
     <h4>Lead Developer / Admin</h4>
   </div>
   <div class="col my-2 text-center profile">
-    <img src="{% static 'winston.jpg' %}" class="rounded-circle mb-2">
+    <img src="{% static 'winston.jpg' %}" class="rounded-circle mb-2" alt="Headshot of Winston Liu." />
     <h3><a class="text-body" href='https://www.linkedin.com/in/winston-liu'>Winston Liu</a></h3>
     <h4>UVA CS '20</h4>
     <h4>Developer</h4>
   </div>
   <div class="col my-2 text-center profile">
-    <img src="{% static 'unknown.png' %}" class="rounded-circle mb-2">
-    <h3><a class="text-body" href=''>Madison Flynn</a></h3>
+    <img src="{% static 'unknown.png' %}" class="rounded-circle mb-2" alt="Blank silhouette of a human's headshot." />
+    <h3>Madison Flynn</h3>
     <h4>UVA CS '21</h4>
     <h4>Developer</h4>
   </div>
   <div class="col my-2 text-center profile">
-    <img src="{% static 'hamster.jpg' %}" class="rounded-circle mb-2">
+    <img src="{% static 'hamster.jpg' %}" class="rounded-circle mb-2" alt="A hamster." />
     <h3>Robbie B</h3>
     <h4>UVA CS '26</h4>
     <h4>Hamster Intern</h4>
   </div>
   <div class="col my-2 text-center profile">
-    <img src="{% static 'hamster.jpg' %}" class="rounded-circle mb-2" style="transform: scaleX(-1);">
+    <img src="{% static 'hamster.jpg' %}" class="rounded-circle mb-2" style="transform: scaleX(-1);" alt="A hamster." />
     <h3>Peter B</h3>
     <h4>CNU '23</h4>
     <h4>Hamster Documenter</h4>
   </div>
   <div class="col my-2 text-center profile">
-    <img src="{% static 'sarahmeng.jpg' %}" class="rounded-circle mb-2" />
+    <img src="{% static 'sarahmeng.jpg' %}" class="rounded-circle mb-2" alt="Headshot of Sarah Meng." />
     <h3><a class="text-body" href="https://www.linkedin.com/in/sarahmeng">Sarah Meng</a></h3>
     <h4>UVA CS '20</h4>
     <h4>Developer</h4>
   </div>
   <div class="col my-2 text-center profile">
-    <img src="{% static 'unknown.png' %}" class="rounded-circle mb-2">
-    <h3><a class="text-body" href=''>You!</a></h3>
+    <img src="{% static 'unknown.png' %}" class="rounded-circle mb-2" alt="Blank silhouette of a human's headshot.">
+    <h3>You!</h3>
     <h4>UVA '2?</h4>
     <h4>Bug Creator</h4>
   </div>
@@ -69,7 +69,4 @@
 <p>This app was written in Python using the Django Framework and is hosted on Heroku, with files being served through an Amazon Web Services S3 Bucket in Northern Virginia. Icons are from <a href="https://icons8.com/">icons8</a>. The code is on Github <a href="https://github.com/SyllabiShare/syllabi-share">here</a> or in the bottom right corner of your screen.</p>
 <h2>Suggestions</h2>
 <p>If you have suggestions for how to make this app better or any feedback, please click <a href="{% url 'syllabiShare:suggest' %}">here</a>.</p>
-<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
-
-<a href="https://github.com/SyllabiShare/syllabi-share"><img class="github" src="{% static 'github.png' %}"></a>
 {% endblock %}

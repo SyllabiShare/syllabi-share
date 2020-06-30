@@ -9,19 +9,25 @@
     {% else %}
       <h4>You have {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} saved!</h4>
     {% endif %}
-  {% elif search %}
+  {% elif search_string %}
     {% if posts.count == 0 %}
-      <h4>There are no Syllabi matching your search sorry! <br>Try to add some!</h4>
+      <h4>Unfortunately, there are no syllabi matching your search at the {{school}}.</h4>
     {% else %}
-      <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} matching your search!</h4>
+      <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} syllab{{posts.count|pluralize:"us,i"}} matching your search at the {{school}}!</h4>
     {% endif %}
   {% else %}
-    <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} Syllab{{posts.count|pluralize:"us,i"}} for {{dept}} courses! Add More!</h4>
+    <h4>There {{posts.count|pluralize:"is,are"}} {{posts.count}} syllab{{posts.count|pluralize:"us,i"}} for {{posts.count|pluralize:"a,"}} {{dept}} course{{posts.count|pluralize:",s"}}!</h4>
+  {% endif %}
+  {% if posts.count == 0 %}
+    Would you like to <a href="/upload">add a syllabus</a>?
   {% endif %}<br>
   {% for post in posts %}
     <form method="POST">
       {% csrf_token %}
       <input name="pk" value="{{post.pk}}" type="hidden"/>
+      {% if search_string %}
+        <input name="search" value="{{search_string}}" type="hidden"/>
+      {% endif %}
       <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}} </a>
       {% if post in user.profile.saved.all %}
       <button type="submit" name="unsave" value="Unsave" title="Unsave" alt="Remove from saved" class="btn btn-link">
@@ -35,7 +41,5 @@
     </form>
   {% endfor %}
 </div>
-
-<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
 {% endblock %}

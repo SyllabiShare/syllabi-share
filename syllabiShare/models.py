@@ -40,6 +40,7 @@ class UserProfile(models.Model):
     email_confirmed = models.BooleanField(default=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     saved = models.ManyToManyField(Submission)
+    confirmations_sent = models.SmallIntegerField(default=0)
 
 
 class Suggestion(models.Model):

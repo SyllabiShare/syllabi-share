@@ -5,6 +5,7 @@
 <h3>Settings</h3>
 
 <h4>Delete account</h4>
+<p>NOTE: Deleting your account will not delete your uploads or your upload history!</p>
 <form method="post">
   {% csrf_token %}
   <div class="form-group">
@@ -15,7 +16,5 @@
   <input class="btn btn-danger" type="submit" name="recalculate" value="Delete account">
   <p class="mt-2">We're sad to see you go, but if you want to come back we will still be here!</p>
 </form>
-
-<a href="/"><img class="left" src="{% static 'left.png' %}"></a>
 
 {% endblock %}
