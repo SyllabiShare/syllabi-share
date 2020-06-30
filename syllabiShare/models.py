@@ -1,6 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.conf import settings
 
 
@@ -17,7 +17,7 @@ class School(models.Model):
     def review(self):
         self.reviewed = True
     def topFive(self):
-        return self.userprofile_set.annotate(submissions=Count('user__submission')).order_by('-submissions')[:5]
+        return self.userprofile_set.annotate(submissions=Count('user__submission', filter=Q(user__submission__hidden=False))).filter(submissions__gt=0).order_by('-submissions')[:5]
 
 
 class Submission(models.Model):
