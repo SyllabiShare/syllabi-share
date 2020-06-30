@@ -22,17 +22,16 @@
     <form method="POST">
       {% csrf_token %}
       <input name="pk" value="{{post.pk}}" type="hidden"/>
-      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}
+      <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}} </a>
       {% if post in user.profile.saved.all %}
-      <button type="submit" name="unsave" value="Unsave" class="btn btn-sm">
+      <button type="submit" name="unsave" value="Unsave" title="Unsave" alt="Remove from saved" class="btn btn-link">
         <img src="{% static 'saved.png' %}"/>
       </button>
       {% else %}
-      <button type="submit" name="save" value="Save" class="btn btn-sm">
+      <button type="submit" name="save" value="Save" title="Save" alt="Save for later" class="btn btn-link">
         <img src="{% static 'unsaved.png' %}"/>
       </button>
       {% endif %}
-      </a>
     </form>
   {% endfor %}
 </div>
