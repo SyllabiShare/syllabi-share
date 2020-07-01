@@ -1,5 +1,8 @@
 {% load static %}
-  <footer>
-    <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
-    <a class="image-link" href="https://github.com/SyllabiShare/syllabi-share"><img src="{% static 'github.png' %}" alt="GitHub repository" /></a>
-  </footer>
+<footer class="d-flex flex-wrap justify-content-sm-center mx-3 py-3 border-top">
+  <a href="{% url 'syllabiShare:about' %}">about</a>
+  |
+  <a href="{% url 'syllabiShare:privacy' %}">privacy policy</a>
+  |
+  <a href="https://github.com/SyllabiShare/syllabi-share">github</a>
+</footer>
