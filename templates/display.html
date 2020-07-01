@@ -30,12 +30,12 @@
       {% endif %}
       <a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}} </a>
       {% if post in user.profile.saved.all %}
-      <button type="submit" name="unsave" value="Unsave" title="Unsave" alt="Remove from saved" class="btn btn-link">
-        <img src="{% static 'saved.png' %}"/>
+      <button type="submit" name="unsave" value="Unsave" title="Unsave" class="btn btn-link">
+        <img alt="Remove from saved" src="{% static 'saved.png' %}"/>
       </button>
       {% else %}
-      <button type="submit" name="save" value="Save" title="Save" alt="Save for later" class="btn btn-link">
-        <img src="{% static 'unsaved.png' %}"/>
+      <button type="submit" name="save" value="Save" title="Save" class="btn btn-link">
+        <img alt="Save for later" src="{% static 'unsaved.png' %}"/>
       </button>
       {% endif %}
     </form>
