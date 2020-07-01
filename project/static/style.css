@@ -43,27 +43,18 @@
 
 /*** FOOTER ***/
 
-/* footer css could probably make use of navbar css somehow? */
 footer {
-    background-color: var(--gray-dark);
-    padding: 1rem 0 0 2rem; /* in conjunction with the following footer a's margin rule */
+    color: var(--gray);
 }
 
 footer a {
-    color: white;
+    color: var(--gray-dark);
     font-weight: normal;
-    /* for nice wrapping: */
-    display: inline-block;
-    margin: 0 3rem 1rem 0;
+    margin: 0 1rem;
 }
 
 footer a:hover {
-    color: white;
-}
-
-footer img {
-    height: 50px;
-    width: 50px;
+    color: var(--gray);
 }
 
 
