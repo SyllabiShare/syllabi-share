@@ -1,0 +1,26 @@
+{% extends 'base-deprecated.html' %}
+{% load static %}
+{% load upToCharacter %}
+{% block content %}
+
+<h3>{{user.username | upToCharacter:"@"}}'s {{posts.count}} Uploaded Syllab{{posts.count|pluralize:"us,i"}} for the {{school}}</h3>
+
+<div class="text-center">
+  {% for post in posts %}
+  <div class="syllabus">
+    <ul>
+        <li><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a></li>
+        <li>Course title: {{post.title}}</li>
+        <li>Semester: {{post.semester}} {{post.year}}</li>
+        <li>
+            Status:
+            {% if post.hidden %} We have not received approval to show this syllabus.
+            {% else %} Approval received! This syllabus should now be visible to all.
+            {% endif %}
+        </li>
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
