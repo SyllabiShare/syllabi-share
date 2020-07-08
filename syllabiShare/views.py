@@ -217,6 +217,16 @@ def takedown(request):
     return redirect('syllabiShare:index')
 
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
+def myuploads(request):
+    posts = Submission.objects.filter(school=request.user.profile.school).filter(user=request.user).order_by('number').order_by('dept')
+    if len(posts) == 0:
+        messages.error(request, 'You have not uploaded any syllabi yet.')
+        return redirect('syllabiShare:upload') # nothing to show before uploading something!
+    return render(request, 'myuploads.html', {'posts': posts, 'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN, 'school': request.user.profile.school.name})
+
+
 def privacy(request):
     return render(request, 'privacy.html', {'breadcrumb': 'Privacy Policy'})
 
