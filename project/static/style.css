@@ -165,9 +165,17 @@ body {
 }
 
 .syllabus {
-    display: inline-block;
+    width: 20rem;
+    padding: 1rem;
 }
 
 .syllabus li {
     list-style: none;
+}
+
+/* when the screen is small enough for one syllabus per line */
+@media only screen and (max-width: 55rem) {
+    .syllabus {
+        width: 100%;
+    }
 }
