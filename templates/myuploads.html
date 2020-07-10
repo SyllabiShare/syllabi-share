@@ -3,7 +3,12 @@
 {% load upToCharacter %}
 {% block content %}
 
-<h3>{{user.username | upToCharacter:"@"}}'s {{posts.count}} uploaded syllab{{posts.count|pluralize:"us,i"}} for the {{school}}</h3>
+<h3>{{user.username | upToCharacter:"@"}}'s Uploads</h3>
+
+<h4>Need to correct an error?</h4>
+<p>Please email <a href="mailto:syllabishare@gmail.com?subject=Error%20in%20syllabus">syllabishare@gmail.com</a> or <a href='https://github.com/SyllabiShare/syllabi-share/issues'>open a pull request on GitHub</a>.</p>
+
+<h4>Your {{posts.count}} uploaded syllab{{posts.count|pluralize:"us,i"}} for the {{school}}</h3>
 
 <div class="d-flex flex-wrap">
   {% for post in posts %}
@@ -23,8 +28,5 @@
   </div>
   {% endfor %}
 </div>
-
-<h4>Need to correct an error?</h4>
-<p>Please email <a href="mailto:syllabishare@gmail.com?subject=Error%20in%20syllabus">syllabishare@gmail.com</a> or <a href='https://github.com/SyllabiShare/syllabi-share/issues'>open a pull request on GitHub</a>.</p>
 
 {% endblock %}
