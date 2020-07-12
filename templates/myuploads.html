@@ -12,19 +12,19 @@
 
 <div class="d-flex flex-wrap">
   {% for post in posts %}
-  <div class="syllabus">
-    <strong>{{ post.dept }} {{ post.number }} taught by {{post.prof}}</strong>
-    <ul>
-        <li><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">Syllabus <span class="sr-only">for {{ post.dept }} {{ post.number }} taught by {{post.prof}}</span></a></li>
-        <li><strong>Course title:</strong> {{post.title}}</li>
-        <li><strong>Semester:</strong> {{post.semester|capfirst}} {{post.year}}</li>
-        <li>
+  <div class="card">
+      <h5 class="card-title card-header">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">Syllabus <span class="sr-only">for {{ post.dept }} {{ post.number }} taught by {{post.prof}}</span></a></li>
+        <li class="list-group-item"><strong>Course title:</strong> {{post.title}}</li>
+        <li class="list-group-item"><strong>Semester:</strong> {{post.semester|capfirst}} {{post.year}}</li>
+        <li class="list-group-item">
             <strong>Approved and visible?</strong>
             {% if post.hidden %} No
             {% else %} Yes
             {% endif %}
         </li>
-    </ul>
+      </ul>
   </div>
   {% endfor %}
 </div>

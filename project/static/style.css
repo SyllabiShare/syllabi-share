@@ -153,6 +153,30 @@ body {
     background-color: var(--danger);
 }
 
+
+/* overwriting card styles for syllabus info */
+.card, .card-title, .list-group-item {
+    background-color: transparent;
+    border: none;
+}
+
+.card {
+    width: 20rem;
+    margin: 0.25rem;
+    padding-bottom: 0.5rem;
+    background-color: rgba(255,255,255,0.25);
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.list-group-item {
+    padding-top: 0;
+    padding-bottom: 0.1rem;
+}
+
+
 /* These form widths are arbitrary, but they look nice ¯\_(ツ)_/¯ */
 .signup-form {
     width: 600px;
@@ -164,18 +188,9 @@ body {
     max-width: 100%;
 }
 
-.syllabus {
-    width: 20rem;
-    padding: 1rem;
-}
-
-.syllabus li {
-    list-style: none;
-}
-
 /* when the screen is small enough for one syllabus per line */
 @media only screen and (max-width: 55rem) {
-    .syllabus {
+    .card {
         width: 100%;
     }
 }
