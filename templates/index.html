@@ -3,29 +3,32 @@
 {% load upToCharacter %}
 {% block content %}
 
-<h4 class="text-center">There {{num|pluralize:"is,are"}} {{num}} syllab{{num|pluralize:"us,i"}} for the {{school}}!</h4>
-
-<p class="text-center">Would you like to <a href="/upload">add a syllabus</a>?</p>
-
-<div style="width: 60%; margin: auto;" class="text-center">
-  {% for dept in posts %}
-  <a class="btn btn-success" href="/{{dept}}" style="width: 40%; margin: 2%">{{dept}}</a>
-  {% endfor %}
-</div>
-
-<div class="leaderboard">
-  <h5>Leaderboard</h5>
-  <ol>
-    {% for profile in leaderboard %}
-      <li>
-        {% if profile.user.profile.hide_name %}
-          Anonymous
-        {% else %}
-          {{ profile.user.username | upToCharacter:"@" }} with {{ profile.submissions }} {{profile.submissions|pluralize:"upload,uploads"}}</th>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ol>
+<div class="d-md-flex justify-content-md-end">
+  <div class="flex-md-grow-1 mr-3 text-center">
+    <h4>There {{num|pluralize:"is,are"}} {{num}} syllab{{num|pluralize:"us,i"}} for the {{school}}!</h4>
+  
+    <p>Would you like to <a href="/upload">add a syllabus</a>?</p>
+    <div class="text-center">
+      {% for dept in posts %}
+      <a class="btn btn-success" href="/{{dept}}" style="width: 40%; margin: 2%">{{dept}}</a>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <div class="leaderboard align-self-start">
+    <h5>Leaderboard</h5>
+    <ol>
+      {% for profile in leaderboard %}
+        <li>
+          {% if profile.user.profile.hide_name %}
+            Anonymous
+          {% else %}
+            {{ profile.user.username | upToCharacter:"@" }} with {{ profile.submissions }} {{profile.submissions|pluralize:"upload,uploads"}}</th>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
 </div>
 
 {% endblock %}

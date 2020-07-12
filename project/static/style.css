@@ -129,10 +129,6 @@ body {
 }
 
 .leaderboard {
-    position: fixed;
-    right: 0px;
-    top: 20%;
-    margin-right: 1%;
     border: 5px solid black;
     border-radius: 1rem;
     background-color: white;
