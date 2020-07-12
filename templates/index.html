@@ -14,21 +14,18 @@
 </div>
 
 <div class="leaderboard">
-  <table style="border: 1px solid black;">
-    <tr>
-      <th>Leaderboard</th>
-    </tr>
+  <h5>Leaderboard</h5>
+  <ol>
     {% for profile in leaderboard %}
-    <tr style="text-align: left;">
-      <th>{{ forloop.counter }}.
+      <li>
         {% if profile.user.profile.hide_name %}
           Anonymous
         {% else %}
           {{ profile.user.username | upToCharacter:"@" }} with {{ profile.submissions }} {{profile.submissions|pluralize:"upload,uploads"}}</th>
         {% endif %}
-    </tr>
+      </li>
     {% endfor %}
-  </table>
+  </ol>
 </div>
 
 {% endblock %}
