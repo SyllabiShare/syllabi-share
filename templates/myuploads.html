@@ -1,21 +1,20 @@
-{% extends 'base-deprecated.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load upToCharacter %}
 {% block content %}
 
-<h3>{{user.username | upToCharacter:"@"}}'s Uploads</h3>
+<h3 class="mb-3">Your uploads</h3>
 
-<h4>Need to correct an error?</h4>
-<p>Please email <a href="mailto:syllabishare@gmail.com?subject=Error%20in%20syllabus">syllabishare@gmail.com</a> or <a href='https://github.com/SyllabiShare/syllabi-share/issues'>open a pull request on GitHub</a>.</p>
-
-<h4>Your {{posts.count}} uploaded syllab{{posts.count|pluralize:"us,i"}} for the {{school}}</h3>
+<div class="callout callout-warning">
+  <b>Need to correct an error?</b>
+  <p class="mb-0">Please email <a href="mailto:syllabishare@gmail.com?subject=Error%20in%20syllabus">syllabishare@gmail.com</a> or <a href='https://github.com/SyllabiShare/syllabi-share/issues'>open a pull request on GitHub</a>.</p>
+</div>
 
 <div class="d-flex flex-wrap">
   {% for post in posts %}
-  <div class="card">
-      <h5 class="card-title card-header">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</h5>
+  <div class="card bg-light">
+      <h5 class="card-title card-header"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a></h5>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" class="btn btn-success" target="_blank">Syllabus <span class="sr-only">for {{ post.dept }} {{ post.number }} taught by {{post.prof}}</span></a></li>
         <li class="list-group-item"><strong>Course title:</strong> {{post.title}}</li>
         <li class="list-group-item"><strong>Semester:</strong> {{post.semester|capfirst}} {{post.year}}</li>
         <li class="list-group-item">

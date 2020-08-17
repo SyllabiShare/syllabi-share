@@ -176,6 +176,14 @@ body {
     padding-bottom: 0.1rem;
 }
 
+.callout {
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+}
+
+.callout-warning {
+    border-left: 0.25rem solid var(--yellow);
+}
 
 /* These form widths are arbitrary, but they look nice ¯\_(ツ)_/¯ */
 .signup-form {
