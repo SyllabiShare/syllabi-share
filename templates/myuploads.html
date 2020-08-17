@@ -13,7 +13,7 @@
 <div class="d-flex flex-wrap">
   {% for post in posts %}
   <div class="card bg-light">
-      <h5 class="card-title card-header"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a></h5>
+      <h5 class="card-title card-header"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a></h5>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><strong>Course title:</strong> {{post.title}}</li>
         <li class="list-group-item"><strong>Semester:</strong> {{post.semester|capfirst}} {{post.year}}</li>
