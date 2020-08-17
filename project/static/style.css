@@ -41,6 +41,12 @@
     color: black;
 }
 
+/* own classes for breadcrumbs; default is showing breadcrumbs below, not in the top navbar; toggle display with media query */
+.breadcrumbs-within {
+    display: none;
+}
+
+
 /*** FOOTER ***/
 
 footer {
@@ -162,4 +168,21 @@ body {
 .auth-form {
     width: 400px;
     max-width: 100%;
+}
+
+/* for easy ref, Bootstrap's breakpoints
+ * sm - min-width: 576px
+ * md - min-width: 768px
+ * lg - min-width: 992px
+ * xl - min-width: 1200px
+ * should use Sass mixins when we get Sass in:
+ * https://getbootstrap.com/docs/4.5/layout/overview/#responsive-breakpoints
+*/
+@media only screen and (min-width: 1200px) {
+    .breadcrumbs-within {
+        display: inline-block;
+    }
+    .breadcrumbs-below {
+        display: none;
+    }
 }

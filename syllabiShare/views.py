@@ -121,7 +121,7 @@ def send_confirmation_email(user, request):
 
 
 def about(request):
-    return render(request, 'about.html', {'breadcrumb': 'About'})
+    return render(request, 'about.html')
 
 
 @login_required
@@ -304,7 +304,7 @@ def upload(request):
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
         return redirect("syllabiShare:upload")  # prevents re-post on refresh problem
-    return render(request, 'upload.html', {'breadcrumb': 'Upload'})
+    return render(request, 'upload.html')
 
 
 def view404(request, exception=None):
