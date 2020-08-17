@@ -1,0 +1,18 @@
+<nav aria-label="breadcrumb" >
+    <ol class="breadcrumb" style="margin: auto;">
+      <li class="breadcrumb-item"><a href="/">{{ user.profile.school.name }}</a></li>
+      {% if not index %}
+      <li class="breadcrumb-item active" aria-current="page"><!--
+     -->{% if search_string %}<!-- workaround for those extra spaces
+     -->Search results for "{{search_string}}"<!--
+     -->{% elif dept %}<!--
+     -->{{ dept }}<!--
+     -->{% elif breadcrumb %}<!--
+     -->{{ breadcrumb }}<!--
+     -->{% else %}<!--
+     -->{{ request.resolver_match.url_name|capfirst }}<!--
+     -->{% endif %}<!--
+   --></li>
+      {% endif %}
+    </ol>
+</nav>
