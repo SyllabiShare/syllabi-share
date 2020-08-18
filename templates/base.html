@@ -21,8 +21,10 @@
 </head>
 <body class="d-flex flex-column">
   {% if user.is_authenticated %}
+    <body style="background-image: url({% static 'back.png' %}); background-size: cover;" class="d-flex flex-column align-items-center vh-100"></body>
     {% include 'navbar-logged-in.html' %}
   {% else %}
+    <body>
     {% include 'navbar-logged-out.html' %}
   {% endif %}
 
