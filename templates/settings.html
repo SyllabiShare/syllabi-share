@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+{% load upToCharacter %}
 
-<h3>Settings</h3>
+<h3 class="text-center">Settings</h3>
+
+
+<h4>Leaderboard</h4>
+<form method="post">
+  {% csrf_token %}
+  {% if user.profile.hide_name %}
+    <p>Your username is currently hidden from other users</p>
+    <input class="btn btn-success" type="submit" name="opt" value="Show username">
+  {% else %}
+    <p>Your username is currently visible to other users</p>
+    <input class="btn btn-danger" type="submit" name="opt" value="Hide username">
+  {% endif %}
+</form> <br>
 
 <h4>Delete account</h4>
 <p>NOTE: Deleting your account will not delete your uploads or your upload history!</p>
 <form method="post">
   {% csrf_token %}
   <div class="form-group">
-    <label for="suggestion">Username</label>
-    <input class="form-control" id="suggestion" type="text" name="username" required>
-    <small class="form-text{# text-muted #}">Enter your username ({{ user.username }}) to confirm account deletion</small>
+    <label for="suggestion">Email</label>
+    <input class="form-control" id="suggestion" type="text" name="email" required>
+    <small class="form-text{# text-muted #}">Enter your email ({{ user.email }}) to confirm account deletion</small>
   </div>
   <input class="btn btn-danger" type="submit" name="recalculate" value="Delete account">
   <p class="mt-2">We're sad to see you go, but if you want to come back we will still be here!</p>

@@ -281,6 +281,9 @@ def setting(request):
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
                 return redirect('syllabiShare:index')
+        elif 'opt' in request.POST:
+            request.user.profile.hide_name = not request.user.profile.hide_name
+            request.user.profile.save()
     return render(request, 'settings.html',{ 'breadcrumb': 'Settings'})
 
 
