@@ -15,7 +15,7 @@
 {% else %}
   <form method="POST">
     {% csrf_token %}
-    <p>Just making sure...is your school called {{ name }}?</p>
+    <p>Just making sure... is your school called {{ name }}?</p>
     <input class="btn btn-primary mr-2" id="button" type="submit" value="Yes">
     <button onclick="toggle()" class="btn btn-danger" type="button">No</button>
   </form>

@@ -41,29 +41,26 @@
     color: black;
 }
 
+/* own classes for breadcrumbs; default is showing breadcrumbs below, not in the top navbar; toggle display with media query */
+.breadcrumbs-within {
+    display: none;
+}
+
+
 /*** FOOTER ***/
 
-/* footer css could probably make use of navbar css somehow? */
 footer {
-    background-color: var(--gray-dark);
-    padding: 1rem 0 0 2rem; /* in conjunction with the following footer a's margin rule */
+    color: var(--gray);
 }
 
 footer a {
-    color: white;
+    color: var(--gray-dark);
     font-weight: normal;
-    /* for nice wrapping: */
-    display: inline-block;
-    margin: 0 3rem 1rem 0;
+    margin: 0 1rem;
 }
 
 footer a:hover {
-    color: white;
-}
-
-footer img {
-    height: 50px;
-    width: 50px;
+    color: var(--gray);
 }
 
 
@@ -138,12 +135,23 @@ body {
 }
 
 .leaderboard {
-    position: fixed;
-    right: 0px;
-    top: 20%;
-    margin-right: 1%;
-    border-style: solid;
+    border: 5px solid black;
+    border-radius: 1rem;
+    background-color: white;
+}
+
+.leaderboard h5 {
     text-align: center;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.leaderboard ol {
+    padding: 0 1rem;
+}
+
+.leaderboard li {
+    list-style-position: inside;
 }
 
 /* for messages */
@@ -171,4 +179,21 @@ body {
 .auth-form {
     width: 400px;
     max-width: 100%;
+}
+
+/* for easy ref, Bootstrap's breakpoints
+ * sm - min-width: 576px
+ * md - min-width: 768px
+ * lg - min-width: 992px
+ * xl - min-width: 1200px
+ * should use Sass mixins when we get Sass in:
+ * https://getbootstrap.com/docs/4.5/layout/overview/#responsive-breakpoints
+*/
+@media only screen and (min-width: 1200px) {
+    .breadcrumbs-within {
+        display: inline-block;
+    }
+    .breadcrumbs-below {
+        display: none;
+    }
 }

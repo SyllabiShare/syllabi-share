@@ -1,6 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.conf import settings
 
 
@@ -17,11 +17,11 @@ class School(models.Model):
     def review(self):
         self.reviewed = True
     def topFive(self):
-        return self.userprofile_set.annotate(submissions=Count('user__submission')).order_by('-submissions')[:5]
+        return self.userprofile_set.annotate(submissions=Count('user__submission', filter=Q(user__submission__hidden=False))).filter(submissions__gt=0).order_by('-submissions')[:5]
 
 
 class Submission(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     prof = models.TextField(blank=True)
     dept = models.TextField(blank=True)
     number = models.IntegerField(blank=True, validators=[MinValueValidator(0)])
@@ -31,7 +31,6 @@ class Submission(models.Model):
     hidden = models.BooleanField(default=True)
     year = models.TextField(blank=True)
     syllabus = models.FileField(blank=True, upload_to=settings.UPLOAD_TO)
-    upvotes = models.IntegerField(default=1)
     def toggleHidden(self):
         self.hidden = not self.hidden
 
@@ -39,7 +38,9 @@ class Submission(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     email_confirmed = models.BooleanField(default=False)
+    hide_name = models.BooleanField(default=False)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
+    saved = models.ManyToManyField(Submission)
     confirmations_sent = models.SmallIntegerField(default=0)
 
 

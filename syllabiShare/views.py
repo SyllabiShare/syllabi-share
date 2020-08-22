@@ -121,7 +121,7 @@ def send_confirmation_email(user, request):
 
 
 def about(request):
-    return render(request, 'about.html', {'breadcrumb': 'About'})
+    return render(request, 'about.html')
 
 
 @login_required
@@ -162,13 +162,24 @@ def admin(request):
                     ]
                     send_mass_mail(data)
                     return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all(), 'mailSuccess': True})
-        return render(request, 'admin.html', {'users':User.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
-    return redirect('syllabiShare:index')
+        return render(request, 'admin.html', {'users':UserProfile.objects.all(), 'school': School.objects.all(), 'submissions': Submission.objects.all(), 'suggestions': Suggestion.objects.all()})
+    return redirect('/')
+
+
+def authenticate(user):
+    if not user.is_authenticated:
+        return ('landing.html', {'form': SimpleSignUpForm()})
 
 
 @login_required
 @user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def display(request, dept=None):
+    if request.method == 'POST':
+        if 'save' in request.POST:
+            request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+        elif 'unsave' in request.POST:
+            request.user.profile.saved.remove(Submission.objects.get(pk=request.POST['pk']))
+
     posts = Submission.objects.filter(school=request.user.profile.school).filter(dept=dept.upper()).filter(hidden=False).order_by('number')
     if not dept or len(posts) == 0:
         return redirect('/')
@@ -235,17 +246,25 @@ def schooladmin(request, domain=None):
         return render(request, 'index.html', {'leaderboard':school.topFive(),'posts':sorted(list(dep)),'school':domain,'num':len(posts)})
     return redirect('syllabiShare:index')
 
+@login_required
+@user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
+def saved(request):
+    if 'unsave' in request.POST:
+        request.user.profile.saved.remove(Submission.objects.get(pk=request.POST['pk']))
+
+    found = request.user.profile.saved.filter(hidden=False)
+
+    return render(request, 'display.html', {'posts':found.order_by('dept','number'), 'breadcrumb': 'Saved', 'AWS_S3_CUSTOM_DOMAIN':settings.AWS_S3_CUSTOM_DOMAIN,'saved': True, 'school':request.user.profile.school.name})
 
 @login_required
 @user_passes_test(takedown_check, login_url='syllabiShare:takedown', redirect_field_name=None)
 def search(request):
     found = Submission.objects.filter(school=request.user.profile.school).filter(hidden=False)
     if request.method == 'POST':
-        if len(request.POST['search']) == 0:
-            messages.error(request, "You didn't enter anything to search!")
-            return redirect("syllabiShare:index")
         if 'save' in request.POST:
             request.user.profile.saved.add(Submission.objects.get(pk=request.POST['pk']))
+        elif 'unsave' in request.POST:
+            request.user.profile.saved.remove(Submission.objects.get(pk=request.POST['pk']))
         found = found.filter(prof__icontains=request.POST['search']) | found.filter(dept__icontains=request.POST['search']) | found.filter(title__icontains=request.POST['search'])
     dep = set()
     for i in found:
@@ -262,6 +281,9 @@ def setting(request):
                 logout(request)
                 User.objects.get(username=request.POST['username']).delete()
                 return redirect('syllabiShare:index')
+        elif 'opt' in request.POST:
+            request.user.profile.hide_name = not request.user.profile.hide_name
+            request.user.profile.save()
     return render(request, 'settings.html',{ 'breadcrumb': 'Settings'})
 
 
@@ -304,7 +326,7 @@ def upload(request):
         else:
             messages.error(request, 'Please enter the professor\'s name as "FirstName LastName"')
         return redirect("syllabiShare:upload")  # prevents re-post on refresh problem
-    return render(request, 'upload.html', {'breadcrumb': 'Upload'})
+    return render(request, 'upload.html')
 
 
 def view404(request, exception=None):
