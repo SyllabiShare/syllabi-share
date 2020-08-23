@@ -10,20 +10,24 @@
   <p class="mb-0">Please email <a href="mailto:syllabishare@gmail.com?subject=Error%20in%20syllabus">syllabishare@gmail.com</a> or <a href='https://github.com/SyllabiShare/syllabi-share/issues'>open an issue on GitHub</a>.</p>
 </div>
 
-<div class="d-flex flex-wrap">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
   {% for post in posts %}
-  <div class="card bg-light">
-      <h5 class="card-title card-header"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a></h5>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><strong>Course title:</strong> {{post.title}}</li>
-        <li class="list-group-item"><strong>Semester:</strong> {{post.semester|capfirst}} {{post.year}}</li>
-        <li class="list-group-item">
-            <strong>Approved and visible?</strong>
-            {% if post.hidden %} No
-            {% else %} Yes
-            {% endif %}
+  <div class="d-flex col">
+    <div class="card my-3 flex-fill">
+      <div class="card-body bg-light">
+        <h5 class="card-title mb-0"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a></h5>
+      </div>
+      <ul class="list-unstyled pl-4 mt-2">
+        <li><strong>Course title:</strong> {{post.title}}</li>
+        <li><strong>Semester:</strong> {{post.semester|capfirst}} {{post.year}}</li>
+        <li>
+          <strong>Approved and visible?</strong>
+          {% if post.hidden %} No
+          {% else %} Yes
+          {% endif %}
         </li>
       </ul>
+    </div>
   </div>
   {% endfor %}
 </div>

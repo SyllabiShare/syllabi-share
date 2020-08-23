@@ -159,29 +159,6 @@ body {
     background-color: var(--danger);
 }
 
-
-/* overwriting card styles for syllabus info */
-.card, .card-title, .list-group-item {
-    background-color: transparent;
-    border: none;
-}
-
-.card {
-    width: 20rem;
-    margin: 0.25rem;
-    padding-bottom: 0.5rem;
-    background-color: rgba(255,255,255,0.25);
-}
-
-.card-title {
-    font-weight: bold;
-}
-
-.list-group-item {
-    padding-top: 0;
-    padding-bottom: 0.1rem;
-}
-
 /* Approximate reconstruction from the CSS from the Bootstrap docs,
 it's unfortunate that this isn't an official component */
 .callout {
