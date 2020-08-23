@@ -181,13 +181,6 @@ it's unfortunate that this isn't an official component */
     max-width: 100%;
 }
 
-/* when the screen is small enough for one syllabus per line */
-@media only screen and (max-width: 55rem) {
-    .card {
-        width: 100%;
-    }
-}
-
 /* for easy ref, Bootstrap's breakpoints
  * sm - min-width: 576px
  * md - min-width: 768px
