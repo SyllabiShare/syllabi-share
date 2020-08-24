@@ -170,6 +170,17 @@ body {
     background-color: var(--danger);
 }
 
+/* Approximate reconstruction from the CSS from the Bootstrap docs,
+it's unfortunate that this isn't an official component */
+.callout {
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+}
+
+.callout-warning {
+    border-left: 0.25rem solid var(--yellow);
+}
+
 /* These form widths are arbitrary, but they look nice ¯\_(ツ)_/¯ */
 .signup-form {
     width: 600px;

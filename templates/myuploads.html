@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load upToCharacter %}
+{% block content %}
+
+<h3 class="mb-3">Your uploads</h3>
+
+<div class="callout callout-warning">
+  <b>Need to correct an error?</b>
+  <p class="mb-0">Please email <a href="mailto:syllabishare@gmail.com?subject=Error%20in%20syllabus">syllabishare@gmail.com</a> or <a href='https://github.com/SyllabiShare/syllabi-share/issues'>open an issue on GitHub</a>.</p>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
+  {% for post in posts %}
+  <div class="col my-3">
+    <div class="card h-100">
+      <div class="card-body bg-light flex-grow-0">
+        <h5 class="card-title mb-0"><a href="https://{{AWS_S3_CUSTOM_DOMAIN}}/{{post.syllabus}}" target="_blank">{{ post.dept }} {{ post.number }} taught by {{post.prof}}</a></h5>
+      </div>
+      <ul class="list-unstyled px-4 mt-2 flex-grow-1">
+        <li><strong>Course title:</strong> {{post.title}}</li>
+        <li><strong>Semester:</strong> {{post.semester|capfirst}} {{post.year}}</li>
+        <li>
+          <strong>Approved and visible?</strong>
+          {% if post.hidden %} No
+          {% else %} Yes
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

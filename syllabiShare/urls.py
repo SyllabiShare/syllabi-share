@@ -8,6 +8,7 @@ urlpatterns = [
     path('takedown', views.takedown, name="takedown"),
     path('about/', views.about, name="about"),
     path(settings.ADMIN_URL, views.admin, name="admin"),
+    path('myuploads/', views.myuploads, name="myuploads"),
     path('privacy/', views.privacy, name="privacy"),
     path('saved/', views.saved, name="saved"),
     path('search/', views.search, name="search"),
